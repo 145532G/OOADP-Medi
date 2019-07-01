@@ -1,0 +1,82 @@
+//'require' is similar to import used in Java and Python. It brings in the libraries required to be used
+const express = require('express');
+const exphbs  = require('express-handlebars');
+const path = require('path');
+const bodyParser = require('body-parser');
+const appConfig = require('./config/config');
+
+const {test222} = require('./helpers/test222');
+
+
+
+//const session = require('express-session');
+//const MySQLStore = require('express-mysql-session')(session);
+
+//const sessionStore = new MySQLStore()
+
+
+//Loads routes file main.js in routes directory. The main.js determines which function will be called based on the HTTP request and URL.
+const mainRoute = require('./routes/main');
+
+//Creates an Express server - Express is a web application framework for creating web applications in Node JS.
+const app = express();
+
+// Bring in database connection
+const sequelizeConnection = require('./seqConn');
+// Connects to MySQL database
+sequelizeConnection.sequelizeSetup(false); // To set up database with new tables(drop all tables) set (true)
+
+// Gets which models to setup(create tables) from config.js,sequelizeModel
+for (i = 0;i<appConfig.sequelizeModels.length;i++){
+	console.log(appConfig.sequelizeModels[i])
+	require('./models/'+appConfig.sequelizeModels[i])
+}
+
+
+// Handlebars Middleware
+/*
+* 1. Handlebars is a front-end web templating engine that helps to create dynamic web pages using variables
+* from Node JS.
+*
+* 2. Node JS will look at Handlebars files under the views directory
+*
+* 3. 'defaultLayout' specifies the main.handlebars file under views/layouts as the main template
+*
+* */
+app.engine('handlebars', exphbs({
+	helpers: {
+		example1: function(){
+			return "example1";
+		},
+		example2: test222 //where test222 is imported
+	},
+	defaultLayout: 'main' // Specify default template views/layout/main.handlebar 
+}));
+app.set('view engine', 'handlebars');
+
+// Body parser middleware to parse HTTP body in order to read and use HTTP data 
+/*
+In short; body-parser extracts the entire body portion of an incoming request stream and exposes it on req.body as something easier to interface with. 
+See: https://stackoverflow.com/questions/38306569/what-does-body-parser-do-with-express
+*/
+app.use(bodyParser.urlencoded({
+	extended: false
+}));
+app.use(bodyParser.json());
+
+// Creates static folder for publicly accessible HTML, CSS and Javascript files i.e localhost/css /js
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Place to define global variables 
+app.use(function (req, res, next) {
+	next();
+});
+
+// mainRoute is declared to point to routes/main.js, This route maps the root URL to any path defined in main.js
+app.use('/', mainRoute); 
+
+
+// Starts the server and listen to port configured at appConfig
+app.listen(appConfig.applicationConfig.appPort, () => {
+	console.log(`Server started on port ${appConfig.applicationConfig.appPort} at: \x1b[36mhttp://localhost:${appConfig.applicationConfig.appPort}\x1b[0m`);
+});
