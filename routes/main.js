@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-
+const app = express();
 /*
 router.get 2 parameters (directory, arrowfunction )
 arrowfunction 2 parameters (req,res) => {
@@ -47,7 +47,26 @@ router.get('/login', (req, res) => {
 });
 
 router.post('/loginaction', (req, res) => {
-    res.render('');
+    const UserModel = require('../models/user');
+    
+
+    UserModel.findOne({where:{email:req.body.email} // isequal to SELECT * FROM user WHERE email = req.body.email
+    }).then(userRowResult => {
+        //req.session.hello = "HI";
+        console.log(JSON.stringify(userRowResult))
+        console.log(userRowResult.id)
+        res.render('dashboard',{userRow:userRowResult});// 
+    }).catch(function (error) { // catch if fail, back to login page
+        res.render('login', {"loginStatus": "LOGIN FAIL."});
+    });
+    
+    //.then(UserModel.update({password:'hello'},{where:{email:req.body.email }}))
+    
+});
+
+router.get('/profileupdate', (req, res) => {
+
+    res.render('profileupdate');
 });
 
 router.get('/profile', (req, res) => {

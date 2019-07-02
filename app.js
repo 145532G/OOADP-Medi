@@ -8,11 +8,9 @@ const appConfig = require('./config/config');
 const {test222} = require('./helpers/test222');
 
 
-
-//const session = require('express-session');
-//const MySQLStore = require('express-mysql-session')(session);
-
-//const sessionStore = new MySQLStore()
+//session stuff
+const MySQLStore=require('express-mysql-session');
+const session = require('express-session');
 
 
 //Loads routes file main.js in routes directory. The main.js determines which function will be called based on the HTTP request and URL.
@@ -80,3 +78,25 @@ app.use('/', mainRoute);
 app.listen(appConfig.applicationConfig.appPort, () => {
 	console.log(`Server started on port ${appConfig.applicationConfig.appPort} at: \x1b[36mhttp://localhost:${appConfig.applicationConfig.appPort}\x1b[0m`);
 });
+
+//session
+app.use(session({
+	key:appConfig.applicationConfig.appName+'session_key',
+	secret:appConfig.applicationConfig.appName+'session_secret',
+	store: new MySQLStore({
+		host:appConfig.databaseConfig.host,
+		port:appConfig.databaseConfig.port,
+		user:appConfig.databaseConfig.user,
+		password:appConfig.databaseConfig.password,
+		database:appConfig.databaseConfig.schema,
+		clearExpired: true,
+		// How frequently expired sessions will be cleared; milliseconds:
+		checkExpirationInterval: 900000,
+		// The maximum age of a valid session; milliseconds
+		expiration: 900000
+	}),
+	resave: false,
+	saveUninitialized:false,
+	cookie: { secure: false }// cookie will not be saved in http if true
+}));
+

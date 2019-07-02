@@ -5,7 +5,7 @@ const appConfig = require('./config/config');
 // Instantiates Sequelize with database parameters
 exports.sequelizeConnection = new Sequelize(
     appConfig.databaseConfig.schema,
-    appConfig.databaseConfig.username,
+    appConfig.databaseConfig.user,
     appConfig.databaseConfig.password,
     appConfig.sequelizeConfig
 );

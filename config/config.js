@@ -6,8 +6,9 @@ exports.applicationConfig = {
 exports.databaseConfig = {
     host: 'localhost',
     schema: 'dbmedified',
-    username: 'usermedified',
-    password: 'passmedified0'
+    user: 'usermedified',
+    password: 'passmedified0',
+    port:'3306' // only used for express-mysql-session
 }
 
 exports.sequelizeConfig = {
