@@ -24,7 +24,7 @@ const sequelizeConnection = require('./seqConn');
 // Connects to MySQL database
 sequelizeConnection.sequelizeSetup(false); // To set up database with new tables(drop all tables) set (true)
 
-// Gets which models to setup(create tables) from config.js,sequelizeModel
+// Gets which models to setup(create tables) from config.sequelizeModels
 for (i = 0;i<appConfig.sequelizeModels.length;i++){
 	console.log(appConfig.sequelizeModels[i])
 	require('./models/'+appConfig.sequelizeModels[i])
