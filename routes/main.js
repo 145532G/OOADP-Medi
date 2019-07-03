@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const app = express();
+
+const UserModel = require('../models/user');
 /*
 router.get 2 parameters (directory, arrowfunction )
 arrowfunction 2 parameters (req,res) => {
@@ -44,10 +46,11 @@ router.post('/registrationaction', (req, res) => {
 
 router.get('/login', (req, res) => {
     res.render('login');
+    res.clearCookie("user_id");
 });
 
 router.post('/loginaction', (req, res) => {
-    const UserModel = require('../models/user');
+    
     
 
     UserModel.findOne({where:{email:req.body.email} // isequal to SELECT * FROM user WHERE email = req.body.email
@@ -55,18 +58,53 @@ router.post('/loginaction', (req, res) => {
         //req.session.hello = "HI";
         console.log(JSON.stringify(userRowResult))
         console.log(userRowResult.id)
+
+        res.cookie('user_id',userRowResult.id)
         res.render('dashboard',{userRow:userRowResult});// 
     }).catch(function (error) { // catch if fail, back to login page
         res.render('login', {"loginStatus": "LOGIN FAIL."});
     });
-    
-    //.then(UserModel.update({password:'hello'},{where:{email:req.body.email }}))
-    
 });
 
-router.get('/profileupdate', (req, res) => {
+router.get('/profileupdate/:user_id', (req, res) => {
+    var user_id = req.params.user_id;
+    
+    UserModel.findOne({where:{id:user_id}
+    }).then(userResult=>{
+        res.render('profileupdate',{userResult});
+    });
+});
 
-    res.render('profileupdate');
+router.post('/profileupdatesubmit', (req, res) => {
+
+    UserModel.update({
+        email:req.body.email,
+        firstName:req.body.firstName,
+        lastName:req.body.lastName,
+        dateofbirth:req.body.dateofbirth,
+        sex:req.body.sex,
+        ethnicity:req.body.ethnicity,
+        height:req.body.height,
+        weight:req.body.weight,
+        country:req.body.country,
+        identificationNumber:req.body.identificationNumber,
+        address:req.body.address,
+        postalCode:req.body.postalCode,
+        mobileNumber:req.body.mobileNumber,
+        password:req.body.password
+    },{where:{id:req.body.id}
+    }).then(userResult=>{
+        res.redirect('profileupdate/'+req.body.id);
+    });
+});
+
+router.get('/profiledelete/:user_id', (req, res) => {
+    var user_id = req.params.user_id;
+    
+    UserModel.destroy({where:{id:user_id}
+    }).then(
+        res.redirect('../')
+    );
 });
 
 router.get('/profile', (req, res) => {
