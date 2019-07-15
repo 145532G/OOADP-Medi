@@ -5,6 +5,8 @@ const connection = require('../seqConn');
 // can consider use of google api later
 // might have to think about timezone 
 
+
+
 const Reminder = connection.sequelizeConnection.define('reminder', { //declare table name in first parameter
     // attributes
     name: {

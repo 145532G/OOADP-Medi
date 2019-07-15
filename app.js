@@ -4,7 +4,7 @@ const exphbs  = require('express-handlebars');
 const path = require('path');
 const bodyParser = require('body-parser');
 const appConfig = require('./config/config');
-
+const passport = require('passport')
 const {test222} = require('./helpers/test222');
 
 
@@ -24,12 +24,23 @@ const sequelizeConnection = require('./seqConn');
 // Connects to MySQL database
 sequelizeConnection.sequelizeSetup(false); // To set up database with new tables(drop all tables) set (true)
 
+const authenticate = require('./config/passport');
+authenticate.localStrategy(passport);
+
+//user = require('./models/user');
+//reminder = require('./models/reminder')
+
+
 // Gets which models to setup(create tables) from config.sequelizeModels
 for (i = 0;i<appConfig.sequelizeModels.length;i++){
 	console.log(appConfig.sequelizeModels[i])
-	require('./models/'+appConfig.sequelizeModels[i])
+	appConfig.sequelizeModels[i] = require('./models/'+appConfig.sequelizeModels[i])
+	console.log(appConfig.sequelizeModels[i])
 }
 
+
+//user.hasMany(reminder);
+//reminder.belongsTo(user);
 
 // Handlebars Middleware
 /*
@@ -70,15 +81,6 @@ app.use(function (req, res, next) {
 	next();
 });
 
-// mainRoute is declared to point to routes/main.js, This route maps the root URL to any path defined in main.js
-app.use('/', mainRoute); 
-
-
-// Starts the server and listen to port configured at appConfig
-app.listen(appConfig.applicationConfig.appPort, () => {
-	console.log(`Server started on port ${appConfig.applicationConfig.appPort} at: \x1b[36mhttp://localhost:${appConfig.applicationConfig.appPort}\x1b[0m`);
-});
-
 //session
 app.use(session({
 	key:appConfig.applicationConfig.appName+'session_key',
@@ -99,4 +101,18 @@ app.use(session({
 	saveUninitialized:false,
 	cookie: { secure: false }// cookie will not be saved in http if true
 }));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+
+// mainRoute is declared to point to routes/main.js, This route maps the root URL to any path defined in main.js
+app.use('/', mainRoute); 
+
+
+// Starts the server and listen to port configured at appConfig
+app.listen(appConfig.applicationConfig.appPort, () => {
+	console.log(`Server started on port ${appConfig.applicationConfig.appPort} at: \x1b[36mhttp://localhost:${appConfig.applicationConfig.appPort}\x1b[0m`);
+});
 

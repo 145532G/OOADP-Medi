@@ -19,3 +19,9 @@
     <input type="hidden" name="id" value="{{userResult.id}}"> 
     <input type="submit" value="Submit">
 </form>
+
+<br>
+
+<form action="../profiledelete/{{userResult.id}}" method="get" onsubmit="return confirm('Do you want to delete?');">
+    <input type="submit" name="upvote" value="Delete" />
+</form>
