@@ -61,9 +61,8 @@ for (i = 0;i<appConfig.sequelizeModels.length;i++){
 * */
 app.engine('handlebars', exphbs({
 	helpers: {
-		example1: function(){
-			return "example1";
-		}
+		formatDate: formatDate,
+		radioCheck: radioCheck
 	},
 	defaultLayout: 'main' // Specify default template views/layout/main.handlebar 
 }));
