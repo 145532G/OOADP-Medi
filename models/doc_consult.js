@@ -3,7 +3,7 @@ const Sequelize = require('sequelize');
 const connection = require('../seqConn');
 
 
-const doc_consult= db.define('consultation',{
+const doc_consult= connection.sequelizeConnection.define('consultation',{
     name: {
         type: Sequelize.STRING
     },

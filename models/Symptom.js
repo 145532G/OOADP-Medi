@@ -3,7 +3,7 @@ const Sequelize = require('sequelize');
 const connection = require('../seqConn');
 
 
-const Symptom = db.define('symptom', {
+const Symptom = connection.sequelizeConnection.define('symptom', {
     counter: {
         type: Sequelize.STRING
     },
