@@ -1,7 +1,7 @@
 // remember to add filename to config.js under sequelizeModels in order to create table
 const Sequelize = require('sequelize');
 const connection = require('../seqConn');
-
+const User = require('./user');
 // can consider use of google api later
 // might have to think about timezone 
 
@@ -44,4 +44,5 @@ const Reminder = connection.sequelizeConnection.define('reminder', { //declare t
         // options
     });
 
+    Reminder.belongsTo(User);
 module.exports = Reminder;

@@ -34,8 +34,6 @@ sequelizeConnection.sequelizeSetup(false); // To set up database with new tables
 const authenticate = require('./config/passport');
 authenticate.localStrategy(passport);
 
-//user = require('./models/user');
-//reminder = require('./models/reminder')
 
 
 // Gets which models to setup(create tables) from config.sequelizeModels
@@ -46,6 +44,8 @@ for (i = 0;i<appConfig.sequelizeModels.length;i++){
 }
 
 
+//user = require('./models/user');
+//reminder = require('./models/reminder')
 //user.hasMany(reminder);
 //reminder.belongsTo(user);
 

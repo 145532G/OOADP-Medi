@@ -60,5 +60,4 @@ const User = connection.sequelizeConnection.define('user', { //declare table nam
 }, {
         // options
     });
-
 module.exports = User;

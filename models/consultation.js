@@ -1,7 +1,8 @@
+// remember to add filename to config.js under sequelizeModels in order to create table
 const Sequelize = require('sequelize');
-const db = require('../config/DBConfig');
+const connection = require('../seqConn');
 
-const consultation= db.define('consultation',{
+const consultation= connection.sequelizeConnection.define('consultation',{
     queue_num: {
         type: Sequelize.INTEGER
     },
