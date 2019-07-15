@@ -85,8 +85,13 @@ router.get('/login', (req, res) => {
 router.post('/loginaction', (req, res, next) => {
     passport.authenticate('local', {
         successRedirect: './dashboard', // Route to /video/listVideos URL
-        failureRedirect: './login', // Route to /login URL
+        failureRedirect: './loginFail', // Route to /login URL
     })(req, res, next);
+});
+
+router.get('/loginFail', (req, res) => {
+    res.render('login',{loginStatus:'Unsucessful login, please try again.'});
+    res.clearCookie("user_id");
 });
 
 router.get('/logout', function(req, res){
