@@ -17,6 +17,9 @@ const User = connection.sequelizeConnection.define('user', { //declare table nam
     password: {
         type: Sequelize.STRING
     },
+    userLevel:{
+        type: Sequelize.STRING
+    },
     firstName: {
         type: Sequelize.STRING
     },
