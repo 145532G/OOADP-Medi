@@ -1,5 +1,5 @@
 <link rel="stylesheet" type="text/css" href="/css/doctor_consult.css">
-
+<script src="/javascript/doc_consult_fun.js"></script>
 <div class="container">
     <h1>Patient</h1>
     <div id="accordion">
@@ -12,22 +12,24 @@
             <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
                 <div class="card-body">
                                     <img src="...">
-                                    <p name = "patient_name">Name : niyu yu hong</p>
-                                    <p name = "patient_NIRC">NIRC : S9975358G</p>
-                                    <form>
+                                    <p id="p_name" name = "patient_name">Name : niyu yu hong</p>
+                                    <p id="p_consultID" name="p_consultID">A0001</p>
+                                    <p id="p_queueNum" name = "patient_queue_number">0001</p>
+                                    <p id="p_nric" name = "patient_NIRC">NIRC : S9975358G</p>
+                                    <form action = "/doc_consult/doc_consult" method="POST">
                                         <h3>Description</h3>
-                                        <input type = "text" id = "patient_describ">
+                                        <textarea id = "patient_description" name = "description" value="{{description}}" class = "form-group"></textarea>
                                         <h3>Medicine</h3>
                                         <div id = "medicine_box">
-                                            <input type="text" placeholder="Search.." name="search">
-                                            <button type="submit"><i class="fa fa-search"></i></button>
-                                            <div>
-                                                <input type = "checkbox" id = "Doxycyline" value = "Doxycyline (2 tablets , 3 times per day)">Doxycyline (2 tablets , 3 times per day)</br>
-                                                <input type = "checkbox" id = "Clindamycin" value = "Clindamycin (1 tablets , 3 times per day)">Clindamycin (1 tablets , 3 times per day)</br>
-                                                <input type = "checkbox" id = "Linzolid" value = "Linzolid (1 tablets, once a day)">Linzolid (1 tablets, once a day)</br>
-                                            </div>
+                                            <input type="text" id= "input_search" onkeyup="doc_medicine_search()" placeholder="Search.." name="search">
+                                            <ul id = "medicine_check">
+                                                <li><a href="#"><input type="checkbox" name="medicine_name" id="{{1}}" value="Doxycyline" ><label class="form-check-label" for="doxycyline">Doxycyline</label>
+                                                <li><a href="#"><input type="checkbox" name="medicine_name" id="{{2}}" value="Clindamycin" ><label class="form-check-label" for="clindamycin">Clindamycin</label>
+                                                <li><a href="#"><input type="checkbox" name="medicine_name" id="{{3}}" value="Linzolid" ><label class="form-check-label" for="linzolid">Linzolid</label>
+                                                
+                                            </ul>
                                         </div>
-                                        <input type = "submit" value = "submit">
+                                        <button type = "submit" class="btn btn-primary">submit</button>
                                     </form>
 
                                     <button>Next patient</button>
@@ -36,3 +38,4 @@
         </div>
     </div>
 </div>
+
