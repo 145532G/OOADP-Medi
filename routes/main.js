@@ -94,22 +94,6 @@ router.get('/logout', function(req, res){
     res.redirect('/');
 })
 
-/*
-router.post('/loginaction', (req, res) => {
-    UserModel.findOne({
-        where: { email: req.body.email } // isequal to SELECT * FROM user WHERE email = req.body.email
-    }).then(userRowResult => {
-        //req.session.hello = "HI";
-        console.log(JSON.stringify(userRowResult))
-        console.log(userRowResult.id)
-
-        res.cookie('user_id', userRowResult.id)
-        res.render('dashboard', { userRow: userRowResult });// 
-    }).catch(function (error) { // catch if fail, back to login page
-        res.render('login', { "loginStatus": "LOGIN FAIL." });
-    });
-});
-*/
 
 router.all('/profileupdate/:user_id', (req, res) => {
     var user_id = req.params.user_id;
@@ -160,34 +144,10 @@ router.get('/profile', (req, res) => {
 });
 
 
-
-router.get('/reminders', (req, res) => {
-    res.render('reminders');
-});
-
-router.get('/remindercreate', (req, res) => {
-    res.render('reminders');
-});
-
 router.get('/appointments', (req, res) => {
     res.render('appointments');
 });
 
-router.get('/billPayment', (req, res) => {
-    res.render('./templates/billPayment');
-});
-
-router.get('/creditcard', (req, res) => {
-    res.render('./templates/creditcard');
-});
-
-router.get('/debitcard', (req, res) => {
-    res.render('./templates/debitcard');
-});
-
-router.get('/queueNumber', (req, res) => {
-    res.render('./templates/queueNumber');
-})
 router.get('/doctorConsultation', (req, res) => {
     res.render('./templates/doc_consult');
 });
@@ -207,6 +167,7 @@ router.get('/symptomanswer', (req, res) => {
 router.get('/patientinformation', (req, res) => {
     res.render('./templates/patientinformation');
 })
+
 
 
 

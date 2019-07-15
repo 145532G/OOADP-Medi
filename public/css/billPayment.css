@@ -1,0 +1,73 @@
+* {
+	padding: 0px;
+	margin: 0px;
+}
+
+html {
+	font-family: Verdana;
+}
+
+body {
+	margin-bottom: 10px;
+	background-color: #cccccc;
+}
+
+.container {
+	max-width: 800px;
+	margin-top: 10px;
+}
+
+.card {
+	position: relative;
+	border: 1px solid rgba(0,0,0,0.125);
+	border-radius: 0.25rem;
+}
+
+.card-body {
+	padding: 20px;
+	margin-top: 20px;
+}
+
+.form-inline {
+	margin-bottom: 24px;
+}
+
+.form-group {
+	margin-right: 10px;
+}
+
+.row {
+	margin-top: 30px;
+}
+
+.col-sm-2 {
+	border: 1px solid rgba(0,0,0,0.125);
+	border-radius: 0.25rem;
+	margin: 5px;
+	text-align: center;
+}
+
+#title {
+	font-weight: bold;
+	text-align: center;
+}
+
+#queueNo {
+	font-weight: bold;
+	text-align: center;
+	font-size: 100px;
+}
+
+#previousNo {
+	margin-left: 50px;
+}
+
+#counter {
+	font-weight: bold;
+	text-align: center;
+	font-size: 50px;
+}
+
+#counterNo {
+	color: red;
+}

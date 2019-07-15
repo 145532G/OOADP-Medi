@@ -1,0 +1,8 @@
+#medicine_box {
+  height: 250px;
+  width: 350px; 
+  padding:3px; 
+  overflow: auto;
+  border-style: solid;
+  border-radius: 1mm;
+  }

@@ -1,0 +1,100 @@
+<link rel="stylesheet" href="/css/billPayment.css">
+
+<div class="container">
+    <div class="card card-body">
+        <div>
+            <h3>
+                <i class="fa fa-money" style="font-size:30px;color:green;"></i> Bill Payment Records</h3>
+            <h5>Click
+                <a href="/bill/billPayment" class="card-link">here</a> to pay any pending bills.</h5>
+        </div>
+        {{#if bills}} {{#each bills}}
+        <div class="card card-body">
+            <h4>
+                <strong>Payment: </strong>#{{id}}
+            </h4>
+            <div>
+                <p>
+                    <strong>Name: </strong>{{prefix}} {{first_name}} {{last_name}}</p>
+                <p>
+                    <strong>Country: </strong>{{country}}</p>
+                <p>
+                    <strong>NRIC: </strong>{{nric}}</p>
+                <p>
+                    <strong>Email: </strong>{{email}}</p>
+                <p>
+                    <strong>Address: </strong>{{address}}</p>
+                <p>
+                    <strong>Contact No: </strong>{{contact_no}}</p>
+                <p>
+                    <strong>Payment Method: </strong>{{payment_method}}</p>
+            </div>
+            <div class="row">
+                <div class="col-sm-12" id="storyAccordion">
+                    {{#if accountNo}}
+                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseOne{{id}}" aria-expanded="false"
+                        aria-controls="collapseOne">
+                        <i class="fa fa-dollar"></i> Payment Details &nbsp;&nbsp;&nbsp;
+                        <i class="fa fa-chevron-down"></i>
+                    </button>
+                    <div id="collapseOne{{id}}" class="collapse" aria-labelledby="headingOne" data-parent="#storyAccordion">
+                        <div class="card-body">
+                            <p>
+                                <strong>Card Type: </strong>{{creditcardtype}}{{debitcardtype}}</p>
+                            <p>
+                                <strong>Account No: </strong>{{accountNo}}</p>
+                            <p>
+                                <strong>Amount Paid: $</strong>{{payAmt}}</p>
+                            <p>
+                                <strong>Card No: </strong>{{cardNo}}</p>
+                            <p>
+                                <strong>Card Expiry Date: </strong>{{formatDate cardExpiry 'DD MMMM YYYY'}}</p>
+                            <p>
+                                <strong>Card Verification Code: </strong>{{cardVerify}}</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <a class="btn btn-warning" href="/bill/creditcard/{{id}}">Pay (Credit)</a>
+                        </div>
+                        <div class="col-sm-3">
+                            <a class="btn btn-success" href="/bill/debitcard/{{id}}">Pay (Debit)</a>
+                        </div>
+                        <div class="col-sm-3">
+                            <a class="btn btn-primary" href="/bill/paypal/{{id}}">Pay (Paypal)</a>
+                        </div>
+                        <div class="col-sm-3">
+                            <a class="btn btn-danger card-link" href="/bill/delete/{{id}}" data-toggle="confirmation" data-title="Confirm delete?">Delete</a>
+                        </div>
+                    </div>
+                    {{else}}
+                    <div class="card card-body bg-warning">
+                        <p>
+                            <strong>
+                                <i class="fa fa-exclamation-triangle"></i> Warning! Payment not made. Please make your payment within 7 days of record.
+                            </strong>
+                        </p>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <a class="btn btn-warning" href="/bill/creditcard/{{id}}">Pay (Credit)</a>
+                        </div>
+                        <div class="col-sm-3">
+                            <a class="btn btn-success" href="/bill/debitcard/{{id}}">Pay (Debit)</a>
+                        </div>
+                        <div class="col-sm-3">
+                            <a class="btn btn-primary" href="/bill/paypal/{{id}}">Pay (Paypal)</a>
+                        </div>
+                        <div class="col-sm-3">
+                            <a class="btn btn-danger card-link" href="/bill/delete/{{id}}" data-toggle="confirmation" data-title="Confirm delete?">Delete</a>
+                        </div>
+                    </div>
+                    {{/if}}
+                </div>
+            </div>
+        </div>
+        {{/each}} {{else}}
+        <h5>No bills payments recorded.</h5>
+        {{/if}}
+    </div>
+</div>

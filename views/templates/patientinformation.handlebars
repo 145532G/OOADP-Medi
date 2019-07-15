@@ -1,0 +1,36 @@
+<link rel="stylesheet" href="/css/symptomchecker.css">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+<div class="container">
+    <div class="card card-body">
+        <div class="goInline">
+            <div class="medicalHistory">
+                <!-- <div class="patientImage">
+                    <img src="test.png" alt="Patient Image" id="patientImage">
+                </div> -->
+                <div class="nameAge">
+                    <p>Name: </p>
+                    <p>Age: </p>
+                </div>
+            </div>
+            <div class="medicalHistory" id="history">
+                <p>Talks about the medical history of patient</p>
+            </div>
+        </div>
+        <div class="formNotes">
+            <form class="formInformation">
+                <input type="text" id="symptomNotes"
+                    placeholder="During consultaion, doctor will write symptom, sickness, etc.">
+                </br>
+                <input type="text" id="symptomPrescriptions"
+                    placeholder="During consultation, doctor will write presciptions here.">
+                </br>
+                <input type="text" id="symptomComments"
+                    placeholder="During consultaion, doctor will write comments about the patient">
+                </br>
+                <input type="submit" value="Skip" id="submitSkip" />
+                <input type="submit" value="Submit" id="submitSubmit" />
+            </form>
+        </div>
+    </div>
+</div>

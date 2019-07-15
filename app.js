@@ -4,8 +4,13 @@ const exphbs  = require('express-handlebars');
 const path = require('path');
 const bodyParser = require('body-parser');
 const appConfig = require('./config/config');
-const passport = require('passport')
-const {test222} = require('./helpers/test222');
+const passport = require('passport');
+
+const flash = require('connect-flash');
+const FlashMessenger = require('flash-messenger');
+const { formatDate } = require('./helpers/hbs');
+const { radioCheck } = require('./helpers/hbs');
+
 
 
 //session stuff
@@ -15,6 +20,8 @@ const session = require('express-session');
 
 //Loads routes file main.js in routes directory. The main.js determines which function will be called based on the HTTP request and URL.
 const mainRoute = require('./routes/main');
+const billRoute = require('./routes/bill');
+const queueRoute = require('./routes/queue');
 
 //Creates an Express server - Express is a web application framework for creating web applications in Node JS.
 const app = express();
@@ -56,8 +63,7 @@ app.engine('handlebars', exphbs({
 	helpers: {
 		example1: function(){
 			return "example1";
-		},
-		example2: test222 //where test222 is imported
+		}
 	},
 	defaultLayout: 'main' // Specify default template views/layout/main.handlebar 
 }));
@@ -105,11 +111,13 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-
+app.use(flash());
+app.use(FlashMessenger.middleware);
 
 // mainRoute is declared to point to routes/main.js, This route maps the root URL to any path defined in main.js
 app.use('/', mainRoute); 
-
+app.use('/bill', billRoute);
+app.use('/queue', queueRoute);
 
 // Starts the server and listen to port configured at appConfig
 app.listen(appConfig.applicationConfig.appPort, () => {
