@@ -34,21 +34,6 @@ sequelizeConnection.sequelizeSetup(false); // To set up database with new tables
 const authenticate = require('./config/passport');
 authenticate.localStrategy(passport);
 
-
-
-// Gets which models to setup(create tables) from config.sequelizeModels
-for (i = 0;i<appConfig.sequelizeModels.length;i++){
-	console.log(appConfig.sequelizeModels[i])
-	appConfig.sequelizeModels[i] = require('./models/'+appConfig.sequelizeModels[i])
-	console.log(appConfig.sequelizeModels[i])
-}
-
-
-//user = require('./models/user');
-//reminder = require('./models/reminder')
-//user.hasMany(reminder);
-//reminder.belongsTo(user);
-
 // Handlebars Middleware
 /*
 * 1. Handlebars is a front-end web templating engine that helps to create dynamic web pages using variables
