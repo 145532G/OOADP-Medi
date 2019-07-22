@@ -1,7 +1,61 @@
-<div class="jumbotron text-center">
+<div class="container-fluid text-center">
+	<div class="row p-3 mb-2 bg-success">
+		<div class="col-sm-4">
+			<div class="card">
+				<div class="card-body">
+					<h5 class="card-title">Symptom Checker</h5>
+					<p class="card-text">Text</p>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-4">
+			<div class="card">
+				<div class="card-body">
+					<h5 class="card-title">Find a condition</h5>
+					<p class="card-text">Text</p>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-4">
+			<div class="card">
+				<div class="card-body">
+					<h5 class="card-title">Appointments</h5>
+					<p class="card-text"><small class="text-muted">text</small></p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<br>
+	<div class="container col-lg-10">
+		<div class="row">
+			<div class="col-lg-7">
+				<div class="card bg-primary">
+					<img id="indexImageHover" src="image/largeblue.png" class="">
+				</div>
+			</div>
+			<div class="col-lg-5">
+				<div class="card h-25">
+					<div onmouseover="indexHoverChange('Patient')" class="card-body">Patients</div>
+				</div>
+				<div class="card h-25">
+					<div onmouseover="indexHoverChange('Healthcare Professionals')" class="card-body">Healthcare
+						Professionals</div>
+				</div>
+				<div class="card h-25">
+					<div onmouseover="indexHoverChange('Community Partners')" class="card-body">Community Partners</div>
+				</div>
+				<div class="card h-25">
+					<div onmouseover="indexHoverChange('else')" class="card-body">Healthcare Professionals</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
 	<div class="container">
 		<h1 class="display-4">{{title}}</h1>
-		<p class="lead">Our OOADP Project links</p>
+		<p class="lead">Our OOADP Project test links</p>
 		<p>billPayment: <a href="/billPayment" class="card-link"> link</a></p>
 		<p>creditcard: <a href="/creditcard" class="card-link"> link</a></p>
 		<p>debitcard: <a href="/debitcard" class="card-link"> link</a></p>

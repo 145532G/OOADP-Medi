@@ -83,13 +83,13 @@ app.use(session({
 		database:appConfig.databaseConfig.schema,
 		clearExpired: true,
 		// How frequently expired sessions will be cleared; milliseconds:
-		checkExpirationInterval: 900000,
+		checkExpirationInterval: 1000000,
 		// The maximum age of a valid session; milliseconds
-		expiration: 900000
+		expiration: 90000000
 	}),
 	resave: false,
 	saveUninitialized:false,
-	cookie: { secure: false }// cookie will not be saved in http if true
+	cookie: { secure: false }// cookie will not be saved in http if set to true
 }));
 
 app.use(passport.initialize());

@@ -10,42 +10,39 @@ arrowfunction 2 parameters (req,res) => {
 };
  */
 
+
 router.get('/', (req, res) => {
-    const title = 'OOADP1';
-    res.render('index', { title: title }) // renders views/index.handlebars
+    let title = 'Medified';
+
+    res.render('index', {
+        title,
+        userinfo: req.user
+    }) // renders views/index.handlebars
 });
 
-router.get('/dashboard', (req, res) => {
-    userinfo = req.user;
-    if (userinfo){ // if user found
-        console.log(userinfo)
-    res.render('dashboard',{userinfo});
-    } 
-    else{
-        res.render('unauthorised',{message:'Unauthorised user.'})
+router.get('/signUp', (req, res) => {
+    if (req.user) { // if user is logged in
+        res.redirect('dashboard')
+    } else {
+        res.render('signUp');
     }
-
-});
-
-router.get('/register', (req, res) => {
-    res.render('register');
 });
 
 
 
 
-router.post('/registrationaction', (req, res) => {
+router.post('/signUpAction', (req, res) => {
     const UserModel = require('../models/user');
     //email dont need to check as its done by seq
     //check for password
-    if (req.body.password === req.body.cfmpassword) {
+    if (req.body.inputPassword.length > 5 && req.body.inputPassword === req.body.inputConfirmPassword) {
         bcrypt.genSalt(10, function (err, salt) {
             // bcrypt.hash(passwordToStore, saltThatWasGenerated) (errorobj, salt+saltedpassword)
-            bcrypt.hash(req.body.password, salt, function (err, hash) {
+            bcrypt.hash(req.body.inputPassword, salt, function (err, hash) {
                 // Store hash in your password DB.
                 // salt not required to be saved as it is somewhat combined in hash
                 UserModel.create({
-                    email: req.body.email,
+                    email: req.body.inputEmail,
                     password: hash
                 }).then(function () { // renders only when sucessful
                     res.render('registrationresult', {
@@ -61,8 +58,7 @@ router.post('/registrationaction', (req, res) => {
                 });
             });
         });
-    }
-    else {
+    } else {
         res.render('registrationresult', {
             "registrationStatus": "Unsuccessful.",
             "message": "User creation fail."
@@ -75,14 +71,17 @@ router.post('/registrationaction', (req, res) => {
 
 });
 
-router.get('/login', (req, res) => {
-    res.render('login');
-    res.clearCookie("user_id");
+router.get('/signIn', (req, res) => {
+    if (req.user) { // if user is logged in
+        res.redirect('dashboard')
+    } else {
+        res.render('signIn');
+    }
 });
 
 
 // Login Form POST => /user/login
-router.post('/loginaction', (req, res, next) => {
+router.post('/signInAction', (req, res, next) => {
     passport.authenticate('local', {
         successRedirect: './dashboard', // Route to /video/listVideos URL
         failureRedirect: './loginFail', // Route to /login URL
@@ -90,23 +89,46 @@ router.post('/loginaction', (req, res, next) => {
 });
 
 router.get('/loginFail', (req, res) => {
-    res.render('login',{loginStatus:'Unsucessful login, please try again.'});
+    res.render('signIn', {
+        loginStatus: 'Unsucessful login, please try again.'
+    });
     res.clearCookie("user_id");
 });
 
-router.get('/logout', function(req, res){
+router.get('/signOut', function (req, res) {
     req.logOut(); //cookies on client will not be cleared but invalidated by passportjs
     res.redirect('/');
 })
+
+router.get('/dashboard', (req, res) => {
+    let title = 'Dashboard'
+    let userinfo = req.user;
+    if (userinfo) { // if user found
+        console.log(userinfo)
+        res.render('dashboard', {
+            title,
+            userinfo
+        });
+    } else {
+        res.render('unauthorised', {
+            message: 'Unauthorised user.'
+        })
+    }
+
+});
 
 
 router.all('/profileupdate/:user_id', (req, res) => {
     var user_id = req.params.user_id;
 
     UserModel.findOne({
-        where: { id: user_id }
+        where: {
+            id: user_id
+        }
     }).then(userResult => {
-        res.render('profileupdate', { userResult });
+        res.render('profileupdate', {
+            userResult
+        });
     });
 });
 
@@ -128,24 +150,48 @@ router.post('/profileupdatesubmit', (req, res) => {
         mobileNumber: req.body.mobileNumber,
         password: req.body.password
     }, {
-            where: { id: req.body.id }
-        }).then(userResult => {
-            res.redirect('profileupdate/' + req.body.id);
-        });
+        where: {
+            id: req.body.id
+        }
+    }).then(userResult => {
+        res.redirect('profileupdate/' + req.body.id);
+    });
 });
 
 router.get('/profiledelete/:user_id', (req, res) => {
     var user_id = req.params.user_id;
 
     UserModel.destroy({
-        where: { id: user_id }
+        where: {
+            id: user_id
+        }
     }).then(
         res.redirect('../')
     );
 });
 
 router.get('/profile', (req, res) => {
-    res.render('profile');
+    if (!req.user) {
+        res.redirect('../')
+    } else {
+        let profileID = req.user.id
+        let age
+        UserModel.findOne({
+            where: {
+                id: profileID
+            }
+        }).then(userResult => {
+            if (userResult.dateOfBirth) {
+                age = new Date().getFullYear() - userResult.dateOfBirth.slice(0, 4)
+            }
+            res.render('profile', {
+                userinfo: req.user,
+                userResult,
+                age: age
+            });
+        });
+    }
+
 });
 
 

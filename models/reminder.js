@@ -1,4 +1,3 @@
-// remember to add filename to config.js under sequelizeModels in order to create table
 const Sequelize = require('sequelize');
 const connection = require('../seqConn');
 const User = require('./user');

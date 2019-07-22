@@ -1,11 +1,191 @@
-{{profileupdatestatus}}
-Edit:
-<form action="" method="post">
-    email: <input type="text" name="email"><br>
-    password: <input type="text" name="password"><br>
-    confirm password: <input type="text" name="cfmpassword"><br>
-    First name: <input type="text" name="fname"><br>
-    Last name: <input type="text" name="lname"><br>
-    <input type="submit" value="Submit">
-</form>
+<div class="container-fluid col-10">
+    <div class="row">
+        <div class="col-md-12 col-lg-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <img src="/image/user/profileImage/1.jpg"class="img-thumbnail w-50 h-50">
+                    <h5 class="card-title">{{userResult.lastName}} {{userResult.firstName}} </h5>
+                    <table class="table table-borderless">
+                        <tbody>
+                            <tr>
+                                <td>Gender: </td>
+                                <td>{{userResult.sex}} {{#unless userResult.sex}} No data avaliable {{/unless}}</td>
+                            </tr>
+                            <tr>
+                                <td>Age: </td>
+                                <td>{{age}} {{#unless age}} No data avaliable {{/unless}}</td>
+                            </tr>
+                            <tr>
+                                <td>Race: </td>
+                                <td>{{userResult.race}} {{#unless userResult.race}} No data avaliable {{/unless}}</td>
+                            </tr>
+                            <tr>
+                                <td>Height: </td>
+                                <td>{{userResult.height}} {{#unless userResult.height}} No data avaliable {{/unless}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Weight: </td>
+                                <td>{{userResult.weight}} {{#unless userResult.weight}} No data avaliable {{/unless}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
 
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 col-lg-8 mb-4">
+            
+            <div class="card ">
+                <ul class="nav nav-tabs">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#">General</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">tab 2</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">tab 3</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled" href="#">tab 4 disabled</a>
+                        </li>
+                    </ul>
+                <div class="card-body">
+                    
+                    <br>
+                    <h5 class="card-title">Personal Details</h5>
+                    <table class="table table-borderless">
+                        <thead>
+                            <tr>
+                                <th>Salutation</th>
+                                <th>Last Name</th>
+                                <th>First Name</th>
+                                <th>Birthdate</th>
+                                <th>Country</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Mr</td>
+                                <td>HO</td>
+                                <td>minghan</td>
+                                <td>1993-06-17</td>
+                                <td>Singaporean</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="table table-borderless">
+                        <thead>
+                            <tr>
+                                <th>Address</th>
+                                <th>Contact</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>BLK 322 UBITAPMINESBEDOKLONGNAME AVE 1 #06-599 S400322</td>
+                                <td>6584613836</td>
+                                <td>minghanwritesminghanwrites@gmail.com</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="table table-borderless">
+                        <thead>
+                            <tr>
+                                <th>Address</th>
+                                <th>Contact</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>BLK 322 UBITAPMINESBEDOKLONGNAME AVE 1 #06-599 S400322</td>
+                                <td>6584613836</td>
+                                <td>minghanwritesminghanwrites@gmail.com</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="table table-borderless">
+                        <thead>
+                            <tr>
+                                <th>Address</th>
+                                <th>Contact</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>BLK 322 UBITAPMINESBEDOKLONGNAME AVE 1 #06-599 S400322</td>
+                                <td>6584613836</td>
+                                <td>minghanwritesminghanwrites@gmail.com</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 col-lg-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Allegies</h5>
+                    <p class="card-text">Allergy 1</p>
+                    <p class="card-text">Allergy 2</p>
+                    <p class="card-text">Allergy 3</p>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 col-lg-8 mb-4">
+            <div class="card ">
+                <div class="card-body">
+                    <h5 class="card-title">Medical History</h5>
+                    <table class="table table-borderless">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Date</th>
+                                <th>Location</th>
+                                <th>Department</th>
+                                <th>Clinic</th>
+                                <th>Doctor</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2</td>
+                                <td>23/07/2019</td>
+                                <td>Singapore General Hospital</td>
+                                <td>Orthopaedics</td>
+                                <td>Clinic H</td>
+                                <td>Dr Tan</td>
+                                <td><button class="btn btn-primary btn-sm" type="submit">Show</button></td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>14/02/2017</td>
+                                <td>Accord Medical Clinic</td>
+                                <td>General</td>
+                                <td>Clinic A</td>
+                                <td>Dr Lee</td>
+                                <td><button class="btn btn-primary btn-sm" type="submit">Show</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
