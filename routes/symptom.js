@@ -2,11 +2,11 @@ const symptom = require('../models/Symptom')
 const express = require('express');
 const router = express.Router();
 
-router.get('/symptomInsert', (req, res) => {
-    res.render('./templates/symptomInsert');
+router.get('/symptom', (req, res) => {
+    res.render('./templates/symptomanswers');
 });
 
-router.post('/symptomInsert', (req, res) => {
-    let 
-})
+// router.post('/symptom', (req, res) => {
+//     let 
+// })
 

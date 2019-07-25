@@ -207,12 +207,20 @@ router.get('/collection', (req, res) => {
     res.render('./templates/collection');
 });
 
-router.get('/symptom', (req, res) => {
+router.get('/symptomquestion', (req, res) => {
     res.render('./templates/symptomchecker');
 });
 
 router.get('/symptomanswer', (req, res) => {
     res.render('./templates/symptomanswers');
+});
+
+router.get('/symptomQuestion', (req, res) => {
+    res.render('./templates/symptomInsert');
+});
+
+router.get('/symptom', (req, res) => {
+    res.render('./templates/symptom');
 });
 
 router.get('/patientinformation', (req, res) => {
