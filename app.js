@@ -1,6 +1,7 @@
 //'require' is similar to import used in Java and Python. It brings in the libraries required to be used
 const express = require('express');
 const exphbs  = require('express-handlebars');
+const methodOverride = require('method-override');
 const path = require('path');
 const bodyParser = require('body-parser');
 const appConfig = require('./config/config');
@@ -10,7 +11,8 @@ const flash = require('connect-flash');
 const FlashMessenger = require('flash-messenger');
 const { formatDate } = require('./helpers/hbs');
 const { radioCheck } = require('./helpers/hbs');
-
+const { ifEquals } = require('./helpers/hbs');
+const { ifNotEquals } = require('./helpers/hbs');
 
 
 //session stuff
@@ -47,7 +49,9 @@ authenticate.localStrategy(passport);
 app.engine('handlebars', exphbs({
 	helpers: {
 		formatDate: formatDate,
-		radioCheck: radioCheck
+		radioCheck: radioCheck,
+		ifEquals: ifEquals,
+		ifNotEquals: ifNotEquals
 	},
 	defaultLayout: 'main' // Specify default template views/layout/main.handlebar 
 }));
@@ -65,6 +69,9 @@ app.use(bodyParser.json());
 
 // Creates static folder for publicly accessible HTML, CSS and Javascript files i.e localhost/css /js
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Method override middleware to use other HTTP methods such as PUT and DELETE
+app.use(methodOverride('_method'));
 
 // Place to define global variables 
 app.use(function (req, res, next) {
@@ -97,6 +104,14 @@ app.use(passport.session());
 
 app.use(flash());
 app.use(FlashMessenger.middleware);
+
+app.use(function(req, res, next){
+	res.locals.success_msg = req.flash('success_msg');
+	res.locals.error_msg = req.flash('error_msg');
+	res.locals.error = req.flash('error');
+	res.locals.user = req.user || null;
+	next();
+});
 
 // mainRoute is declared to point to routes/main.js, This route maps the root URL to any path defined in main.js
 app.use('/', mainRoute); 

@@ -1,0 +1,54 @@
+<link rel="stylesheet" href="/css/billPayment.css">
+
+<div class="container">
+    <div class="card card-body">
+        <h2>
+            <i class="fa fa-users" style="font-size:30px"></i> Update Queue</h2>
+        {{#if queues}} {{#each queues}} {{#ifEquals currentQueue 'Yes'}}
+        <div class="row" style="margin: auto;">
+            <div class="col-sm-12 card card-body">
+                <h3 id="title">Current Queue Number</h3>
+                <p id="counterNo">
+                    <strong>{{id}}</strong>
+                </p>
+                <p>
+                    <strong>Counter: </strong>{{counterNo}}</p>
+                <p>
+                    <strong>Name: </strong>{{name}}</p>
+                <p>
+                    <strong>NRIC No: </strong>{{nric}}</p>
+                <p>
+                    <strong>{{travelOption}} to the Middle East</strong>
+                </p>
+            </div>
+            {{/ifEquals}} {{#ifEquals currentQueue 'No'}}
+            <div class="col-sm-6 card card-body">
+                <p id="counter">
+                    {{id}}
+                </p>
+                <div class="row" style="margin: auto;">
+                    <div>
+                        <a class="btn btn-success text-white card-link" href="/queue/next/{{id}}">
+                            <i class="fa fa-hand-pointer-o"></i> Next</a>
+                    </div>
+                    <div>
+                        <a class="btn btn-danger card-link" style="margin-left:10px;" href="/queue/remove/{{id}}" data-toggle="confirmation" data-title="Confirm delete?">
+                            <i class="fa fa-trash"></i> Remove</a>
+                    </div>
+                </div>
+            </div>
+            {{/ifEquals}} {{/each}} {{else}}
+            <h3>Queue Empty</h3>
+            {{/if}}
+        <div class="col-sm-12 row">
+            <div class="col-sm-6">
+                <a class="btn btn-danger card-link" style="" href="/queue/removeAll" data-toggle="confirmation" data-title="Confirm delete?">
+                    <i class="fa fa-trash"></i> Remove All</a>
+            </div>
+            <div class="col-sm-6">
+                <a class="btn btn-primary card-link" style="" href="/queue/queueNumber">
+                    <i class="fa fa-eye"></i> View Queue</a>
+            </div>
+        </div>
+    </div>
+</div>
