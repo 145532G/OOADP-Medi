@@ -9,7 +9,7 @@
 				<label for="creditcardtype">Credit Card Type *</label>
 				<div class="form-block">
 					<div class="form-check form-check-inline" style="display: inline-block;">
-						<input class="form-check-input" type="radio" name="creditcardtype" id="visa" value="VISA" checked required>
+						<input class="form-check-input" type="radio" name="creditcardtype" id="visa" value="VISA" checked>
 						<label class="form-check-label"><i class="fa fa-cc-visa"></i> VISA</label>
 					</div>
 					<div class="form-check form-check-inline" style="display: inline-block;">
@@ -20,30 +20,34 @@
 						<input class="form-check-input" type="radio" name="creditcardtype" id="maestro" value="Maestro">
 						<label class="form-check-label"><i class="fa fa-credit-card"></i> Maestro</label>
 					</div>
+					<div class="form-check form-check-inline" style="display: inline-block;">
+						<input class="form-check-input" type="radio" name="creditcardtype" id="amex" value="American Express">
+						<label class="form-check-label"><i class="fa fa-cc-amex"></i> American Express</label>
+					</div>
 				</div>
 			</div>
 			<div class="form-group">
 				<label for="accountNo">Customer Account Number *</label>
-				<input type="number" class="form-control" name="accountNo" id="accountNo" rows="1" style="display: block;" required>
+				<input type="number" class="form-control" name="accountNo" id="accountNo" rows="1" style="display: block;">
 			</div>
 			<div class="form-group">
-				<label for="payAmt"><i class="fa fa-dollar"></i> Payment Amount *</label>
-				<input type="number" class="form-control" name="payAmt" id="payAmt" rows="1" style="display: block;" required>
+				<label for="payAmt"><i class="fa fa-dollar"></i> Payment Amount (in SGD) *</label>
+				<input type="text" class="form-control" name="payAmt" id="payAmt" rows="1" style="display: block;" placeholder="(e.g. $0.00)"/>
 			</div>
 			<div class="form-group">
 				<label for="cardNo">Credit Card Number *</label>
-				<input type="number" class="form-control" name="cardNo" id="cardNo" rows="1" style="display: block;" required>
+				<input type="number" class="form-control" name="cardNo" id="cardNo" rows="1" style="display: block;">
 				</input>
 			</div>
 
 			<div class="form-group">
 				<label for="cardExpiry"><i class="fa fa-calendar"></i> Credit Card Expiry Date *</label>
-				<input type="date" class="form-control" name="cardExpiry" id="cardExpiry" rows="1" style="display: block;" required>
+				<input type="date" class="form-control" name="cardExpiry" id="cardExpiry" rows="1" style="display: block;">
 				</input>
 			</div>
 			<div class="form-group">
 				<label for="cardVerify">Credit Card Verification Code *</label>
-				<input type="number" class="form-control" name="cardVerify" id="cardVerify" rows="1" style="display: block;" required>
+				<input type="number" class="form-control" name="cardVerify" id="cardVerify" rows="1" style="display: block;">
 				</input>
 			</div>
 

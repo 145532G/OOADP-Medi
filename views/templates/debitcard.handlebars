@@ -1,57 +1,67 @@
 <link rel="stylesheet" href="/css/billPayment.css">
 
 <div class="container">
-    <div class="card card-body">
-        <h3 id="title">Enter Payment Information</h3>
+	<div class="card card-body">
+		<h3 id="title">Enter Payment Information</h3>
 		<form action="/bill/saveDebitCard/{{bill.id}}?_method=PUT" method="post">
-		<input type="hidden" name="_method" value="PUT">
+			<input type="hidden" name="_method" value="PUT">
 			<div class="form-group">
 				<label for="debitcardtype">Debit Card Type *</label>
 				<div class="form-block">
-				<div class="form-check form-check-inline" style="display: inline-block;">
-				    <input class="form-check-input" type="radio" name="debitcardtype" id="visa" value="VISA" checked required>
-					<label class="form-check-label"><i class="fa fa-cc-visa"></i> VISA</label>
+					<div class="form-check form-check-inline" style="display: inline-block;">
+						<input class="form-check-input" type="radio" name="debitcardtype" id="visa" value="VISA" checked >
+						<label class="form-check-label">
+							<i class="fa fa-cc-visa"></i> VISA</label>
+					</div>
+					<div class="form-check form-check-inline" style="display: inline-block;">
+						<input class="form-check-input" type="radio" name="debitcardtype" id="mastercard" value="Mastercard">
+						<label class="form-check-label">
+							<i class="fa fa-cc-mastercard"></i> Mastercard</label>
+					</div>
+					<div class="form-check form-check-inline" style="display: inline-block;">
+						<input class="form-check-input" type="radio" name="debitcardtype" id="maestro" value="Maestro">
+						<label class="form-check-label">
+							<i class="fa fa-credit-card"></i> Maestro</label>
+					</div>
+					<div class="form-check form-check-inline" style="display: inline-block;">
+						<input class="form-check-input" type="radio" name="creditcardtype" id="amex" value="American Express">
+						<label class="form-check-label">
+							<i class="fa fa-cc-amex"></i> American Express</label>
+					</div>
 				</div>
-				<div class="form-check form-check-inline" style="display: inline-block;">
-					<input class="form-check-input" type="radio" name="debitcardtype" id="mastercard" value="Mastercard">
-					<label class="form-check-label"><i class="fa fa-cc-mastercard"></i> Mastercard</label>
-				</div>
-				<div class="form-check form-check-inline" style="display: inline-block;">
-					<input class="form-check-input" type="radio" name="debitcardtype" id="maestro" value="Maestro">
-					<label class="form-check-label"><i class="fa fa-credit-card"></i> Maestro</label>
-				</div>
-				</div>
-			</div>	
-			<div class="form-group">
-				<label for="accountNo">Customer Account Number *</label>
-				<input type="number" class="form-control" name="accountNo" id="accountNo" rows="1" style="display: block;" required>
 			</div>
 			<div class="form-group">
-				<label for="payAmt"><i class="fa fa-dollar"></i> Payment Amount *</label>
-				<input type="number" class="form-control" name="payAmt" id="payAmt" rows="1" style="display: block;" required>
+				<label for="accountNo">Customer Account Number *</label>
+				<input type="number" class="form-control" name="accountNo" id="accountNo" rows="1" style="display: block;" autofocus>
+			</div>
+			<div class="form-group">
+				<label for="payAmt">
+					<i class="fa fa-dollar"></i> Payment Amount (in SGD) *</label>
+				<input type="text" class="form-control" name="payAmt" id="payAmt" rows="1" style="display: block;" placeholder="(e.g. $0.00)">
 			</div>
 			<div class="form-group">
 				<label for="cardNo">Debit Card Number *</label>
-				<input type="number" class="form-control" name="cardNo" id="cardNo" rows="1" style="display: block;" required></input>
-			</div>		
-            		
-			    <div class="form-group">
-				    <label for="cardExpiry"><i class="fa fa-calendar"></i> Debit Card Expiry Date *</label>
-				    <input type="date" class="form-control" name="cardExpiry" id="cardExpiry" rows="1" style="display: block;" required></input>
-			    </div>	
-			    <div class="form-group">
-				    <label class="cardVerify">Debit Card Verification Code *</label>
-				    <input type="number" class="form-control" name="cardVerify" id="cardVerify" rows="1" style="display: block;" required></input>
-			    </div>
-            	
-		    <div class="form-inline">
-			    <div class="form-group">
-			        <button type="submit" id="payDebitCard" class="btn btn-info">Submit and Pay</button>
-			    </div>
-			    <div class="form-group">
-			        <button type="reset" id="Reset" class="btn btn-danger">Reset</button>
-			    </div>
-		    </div>			
+				<input type="number" class="form-control" name="cardNo" id="cardNo" rows="1" style="display: block;" ></input>
+			</div>
+
+			<div class="form-group">
+				<label for="cardExpiry">
+					<i class="fa fa-calendar"></i> Debit Card Expiry Date *</label>
+				<input type="date" class="form-control" name="cardExpiry" id="cardExpiry" rows="1" style="display: block;" ></input>
+			</div>
+			<div class="form-group">
+				<label class="cardVerify">Debit Card Verification Code *</label>
+				<input type="number" class="form-control" name="cardVerify" id="cardVerify" rows="1" style="display: block;" ></input>
+			</div>
+
+			<div class="form-inline">
+				<div class="form-group">
+					<button type="submit" id="payDebitCard" class="btn btn-info">Submit and Pay</button>
+				</div>
+				<div class="form-group">
+					<button type="reset" id="Reset" class="btn btn-danger">Reset</button>
+				</div>
+			</div>
 		</form>
 	</div>
 </div>

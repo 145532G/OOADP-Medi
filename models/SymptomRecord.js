@@ -3,13 +3,11 @@ const Sequelize = require('sequelize');
 const connection = require('../seqConn');
 
 
-const Symptom = db.define('symptom', {
-    Symptom: {
-        type: Sequelize.STRING
-    },
-    Symptom_Description: {
+const SymptomRecord = db.define('symptomrecord', {
+    // update and add ansered qns and delete everything after everything is done
+    List: {
         type: Sequelize.STRING
     },
 });
 
-module.exports = Symptom;
+module.exports = SymptomRecord;

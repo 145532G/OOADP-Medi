@@ -3,13 +3,16 @@ const Sequelize = require('sequelize');
 const connection = require('../seqConn');
 
 
-const Symptom = db.define('symptom', {
-    Symptom: {
+const SymptomQuestion = db.define('symptomquestion', {
+    question: {
         type: Sequelize.STRING
     },
-    Symptom_Description: {
+    answer_yes: {
+        type: Sequelize.STRING
+    },
+    answer_no: {
         type: Sequelize.STRING
     },
 });
 
-module.exports = Symptom;
+module.exports = SymptomQuestion;

@@ -16,6 +16,9 @@ const Queue = connection.sequelizeConnection.define('queue', {
     },
     counterNo: {
         type: Sequelize.STRING
+    },
+    currentQueue: {
+        type: Sequelize.STRING
     }
 });
 
