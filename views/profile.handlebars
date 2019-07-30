@@ -1,19 +1,21 @@
 <div class="container-fluid col-10">
     <div class="row">
-        <div class="col-md-12 col-lg-4 mb-4">
-            <div class="card">
+        <div class="col-md-12 col-lg-3 mb-4">
+            <div class="card h-100">
                 <div class="card-body">
-                    <img src="/image/user/profileImage/1.jpg"class="img-thumbnail w-50 h-50">
+                    <img src="/image/user/profileImage/1.jpg"class="img-thumbnail w-75 h-50">
                     <h5 class="card-title">{{userResult.lastName}} {{userResult.firstName}} </h5>
                     <table class="table table-borderless">
                         <tbody>
                             <tr>
                                 <td>Gender: </td>
-                                <td>{{userResult.sex}} {{#unless userResult.sex}} No data avaliable {{/unless}}</td>
+                                {{#if profileRetrieve}} <td>{{userResult.sex}} {{#unless userResult.sex}} No data avaliable {{/unless}}</td> {{/if}}
+                                {{#if profileUpdate}} <td><input type="text" class="form-control" placeholder="{{userResult.sex}}"></td> {{/if}}
                             </tr>
                             <tr>
                                 <td>Age: </td>
-                                <td>{{age}} {{#unless age}} No data avaliable {{/unless}}</td>
+                                {{#if profileRetrieve}}<td>{{age}} {{#unless age}} No data avaliable {{/unless}}</td>{{/if}}
+                                {{#if profileUpdate}} <td><input type="text" class="form-control" placeholder="{{age}}"></td> {{/if}}
                             </tr>
                             <tr>
                                 <td>Race: </td>
@@ -21,21 +23,22 @@
                             </tr>
                             <tr>
                                 <td>Height: </td>
-                                <td>{{userResult.height}} {{#unless userResult.height}} No data avaliable {{/unless}}
+                                <td>{{userResult.height}} {{#if userResult.height}} cm{{/if}} {{#unless userResult.height}} No data avaliable {{/unless}}
                                 </td>
                             </tr>
                             <tr>
                                 <td>Weight: </td>
-                                <td>{{userResult.weight}} {{#unless userResult.weight}} No data avaliable {{/unless}}
+                                <td>{{userResult.weight}} {{#if userResult.weight}} kg{{/if}} {{#unless userResult.weight}} No data avaliable {{/unless}}
                                 </td>
                             </tr>
+                            
                         </tbody>
                     </table>
 
                 </div>
             </div>
         </div>
-        <div class="col-md-12 col-lg-8 mb-4">
+        <div class="col-md-12 col-lg-9 mb-4">
             
             <div class="card ">
                 <ul class="nav nav-tabs">
@@ -53,9 +56,10 @@
                         </li>
                     </ul>
                 <div class="card-body">
-                    
+                    <a href="/profileUpdate/{{userResult.id}}" type="button" class="btn btn-primary float-right">Edit Profile Information</a>
                     <br>
                     <h5 class="card-title">Personal Details</h5>
+                    
                     <table class="table table-borderless">
                         <thead>
                             <tr>
@@ -68,11 +72,11 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>Mr</td>
-                                <td>HO</td>
-                                <td>minghan</td>
-                                <td>1993-06-17</td>
-                                <td>Singaporean</td>
+                                <td>{{userResult.salutation}} {{#unless userResult.salutation}} No data avaliable {{/unless}}</td>
+                                <td>{{userResult.lastName}} {{#unless userResult.lastName}} No data avaliable {{/unless}}</td>
+                                <td>{{userResult.firstName}} {{#unless userResult.firstName}} No data avaliable {{/unless}}</td>
+                                <td>{{userDOB}} {{#unless userDOB}} No data avaliable {{/unless}}</td>
+                                <td>{{userResult.country}} {{#unless userResult.country}} No data avaliable {{/unless}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -87,43 +91,9 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>BLK 322 UBITAPMINESBEDOKLONGNAME AVE 1 #06-599 S400322</td>
-                                <td>6584613836</td>
-                                <td>minghanwritesminghanwrites@gmail.com</td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <table class="table table-borderless">
-                        <thead>
-                            <tr>
-                                <th>Address</th>
-                                <th>Contact</th>
-                                <th>Email</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>BLK 322 UBITAPMINESBEDOKLONGNAME AVE 1 #06-599 S400322</td>
-                                <td>6584613836</td>
-                                <td>minghanwritesminghanwrites@gmail.com</td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <table class="table table-borderless">
-                        <thead>
-                            <tr>
-                                <th>Address</th>
-                                <th>Contact</th>
-                                <th>Email</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>BLK 322 UBITAPMINESBEDOKLONGNAME AVE 1 #06-599 S400322</td>
-                                <td>6584613836</td>
-                                <td>minghanwritesminghanwrites@gmail.com</td>
+                                <td>{{userResult.address}} {{#if userResult.postalCode}} S{{/if}}{{userResult.postalCode}} {{#unless userResult.postalCode}} No data avaliable {{/unless}}</td>
+                                <td>{{userResult.primaryContactNum}} {{#unless userResult.primaryContactNum}} No data avaliable {{/unless}}</td>
+                                <td>{{userResult.email}} {{#unless userResult.email}} No data avaliable {{/unless}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -131,8 +101,8 @@
             </div>
         </div>
 
-        <div class="col-md-12 col-lg-4 mb-4">
-            <div class="card">
+        <div class="col-md-12 col-lg-3 mb-4">
+            <div class="card h-100">
                 <div class="card-body">
                     <h5 class="card-title">Allegies</h5>
                     <p class="card-text">Allergy 1</p>
@@ -143,7 +113,7 @@
             </div>
         </div>
 
-        <div class="col-md-12 col-lg-8 mb-4">
+        <div class="col-md-12 col-lg-9 mb-4">
             <div class="card ">
                 <div class="card-body">
                     <h5 class="card-title">Medical History</h5>

@@ -118,20 +118,6 @@ router.get('/dashboard', (req, res) => {
 });
 
 
-router.all('/profileupdate/:user_id', (req, res) => {
-    var user_id = req.params.user_id;
-
-    UserModel.findOne({
-        where: {
-            id: user_id
-        }
-    }).then(userResult => {
-        res.render('profileupdate', {
-            userResult
-        });
-    });
-});
-
 router.post('/profileupdatesubmit', (req, res) => {
 
     UserModel.update({
@@ -150,12 +136,12 @@ router.post('/profileupdatesubmit', (req, res) => {
         mobileNumber: req.body.mobileNumber,
         password: req.body.password
     }, {
-        where: {
-            id: req.body.id
-        }
-    }).then(userResult => {
-        res.redirect('profileupdate/' + req.body.id);
-    });
+            where: {
+                id: req.body.id
+            }
+        }).then(userResult => {
+            res.redirect('profileupdate/' + req.body.id);
+        });
 });
 
 router.get('/profiledelete/:user_id', (req, res) => {
@@ -171,6 +157,7 @@ router.get('/profiledelete/:user_id', (req, res) => {
 });
 
 router.get('/profile', (req, res) => {
+    var profileRetrieve = "NULL" // var to tell profile handlebar to retrive and display
     if (!req.user) {
         res.redirect('../')
     } else {
@@ -182,13 +169,41 @@ router.get('/profile', (req, res) => {
             }
         }).then(userResult => {
             if (userResult.dateOfBirth) {
-                age = new Date().getFullYear() - userResult.dateOfBirth.slice(0, 4)
+                age = new Date().getFullYear() - userResult.dateOfBirth.slice(0, 4);
+                userDOB = userResult.dateOfBirth.split("-").reverse().join("-"); //format from yyyymmdd to ddmmyyyy
+                res.render('profile', {
+                    profileRetrieve,
+                    userinfo: req.user,
+                    userResult,
+                    age
+                });
             }
-            res.render('profile', {
-                userinfo: req.user,
-                userResult,
-                age: age
-            });
+            else {
+                res.render('profile', {
+                    profileRetrieve,
+                    userinfo: req.user,
+                    userResult
+                });
+            }
+        });
+    }
+});
+
+router.get('/profileUpdate/:user_id', (req, res) => {
+    var profileUpdate = "NULL" // var to tell profile handlebar to update
+    const profileUpdateTargetID = req.params.user_id;
+    const profileUpdateChangerID = req.user.id;
+    const profileUpdateChangerUserLevel = req.user.userLevel;
+    if (profileUpdateChangerID == profileUpdateTargetID) {
+        res.render('profile',{
+            profileUpdate,
+            userinfo: req.user
+        });
+    }
+    else if (profileUpdateChangerUserLevel == "Healthcare Admin"){
+        res.render('profile',{
+            profileUpdate,
+            userinfo: req.user
         });
     }
 
