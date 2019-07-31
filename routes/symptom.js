@@ -4,8 +4,15 @@ const router = express.Router();
 
 router.get('/symptom', (req, res) => {
     symptom.create({
-        Symptom: "",
-        Symptom_Description: "",
+        Symptom,
+        Symptom_Description,
+        List,
+        result_symptom,
+        result_text,
+        result_recommend,
+        question,
+        answer_yes,
+        answer_no,
     });
     res.render('./templates/symptomanswers');
 });

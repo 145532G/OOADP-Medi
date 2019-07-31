@@ -13,6 +13,24 @@ const Symptom = connection.sequelizeConnection.define('symptom', {
     List: {
         type: Sequelize.STRING
     },
+    result_symptom: {
+        type: Sequelize.STRING
+    },
+    result_text: {
+        type: Sequelize.STRING
+    },
+    result_recommend: {
+        type: Sequelize.STRING
+    },
+    question: {
+        type: Sequelize.STRING
+    },
+    answer_yes: {
+        type: Sequelize.STRING
+    },
+    answer_no: {
+        type: Sequelize.STRING
+    },
 });
 
 module.exports = Symptom;
