@@ -22,7 +22,7 @@ router.get('/', (req, res) => {
 
 router.get('/signUp', (req, res) => {
     if (req.user) { // if user is logged in
-        res.redirect('dashboard')
+        res.redirect('/dashboard')
     } else {
         res.render('signUp');
     }
@@ -54,7 +54,7 @@ router.post('/signUpAction', (req, res) => {
                         "registrationStatus": "Unsuccessful.",
                         "message": "User creation fail."
                     });
-                    console.log("Error message:", error.message); //Need to create function to catch uniques since its not a supported validator- done, custom validator
+                    console.log("Error message:", error.message); 
                 });
             });
         });
@@ -104,7 +104,6 @@ router.get('/dashboard', (req, res) => {
     let title = 'Dashboard'
     let userinfo = req.user;
     if (userinfo) { // if user found
-        console.log(userinfo)
         res.render('dashboard', {
             title,
             userinfo
@@ -144,18 +143,6 @@ router.post('/profileupdatesubmit', (req, res) => {
         });
 });
 
-router.get('/profiledelete/:user_id', (req, res) => {
-    var user_id = req.params.user_id;
-
-    UserModel.destroy({
-        where: {
-            id: user_id
-        }
-    }).then(
-        res.redirect('../')
-    );
-});
-
 router.get('/profile', (req, res) => {
     var profileRetrieve = "NULL" // var to tell profile handlebar to retrive and display
     if (!req.user) {
@@ -175,6 +162,7 @@ router.get('/profile', (req, res) => {
                     profileRetrieve,
                     userinfo: req.user,
                     userResult,
+                    userDOB,
                     age
                 });
             }
@@ -190,25 +178,117 @@ router.get('/profile', (req, res) => {
 });
 
 router.get('/profileUpdate/:user_id', (req, res) => {
+    if (!req.user) {
+        res.redirect('../')
+    }
     var profileUpdate = "NULL" // var to tell profile handlebar to update
     const profileUpdateTargetID = req.params.user_id;
     const profileUpdateChangerID = req.user.id;
     const profileUpdateChangerUserLevel = req.user.userLevel;
     if (profileUpdateChangerID == profileUpdateTargetID) {
-        res.render('profile',{
-            profileUpdate,
-            userinfo: req.user
+        var patient = "Null"
+        UserModel.findOne({
+            where: {
+                id: profileUpdateTargetID
+            }
+        }).then(userResult => {
+            if (userResult.dateOfBirth) {
+                age = new Date().getFullYear() - userResult.dateOfBirth.slice(0, 4);
+                userDOB = userResult.dateOfBirth.split("-").reverse().join("-"); //format from yyyymmdd to ddmmyyyy
+                res.render('profile', {
+                    patient,
+                    profileUpdate,
+                    userinfo: req.user,
+                    userResult,
+                    age
+                });
+            }
+            else {
+                res.render('profile', {
+                    patient,
+                    profileUpdate,
+                    userinfo: req.user,
+                    userResult
+                });
+            }
         });
     }
     else if (profileUpdateChangerUserLevel == "Healthcare Admin"){
-        res.render('profile',{
-            profileUpdate,
-            userinfo: req.user
+        var healthcareAdmin = "Null"
+        UserModel.findOne({
+            where: {
+                id: profileUpdateTargetID
+            }
+        }).then(userResult => {
+            if (userResult.dateOfBirth) {
+                age = new Date().getFullYear() - userResult.dateOfBirth.slice(0, 4);
+                userDOB = userResult.dateOfBirth.split("-").reverse().join("-"); //format from yyyymmdd to ddmmyyyy
+                res.render('profile', {
+                    healthcareAdmin,
+                    profileUpdate,
+                    userinfo: req.user,
+                    userResult,
+                    age
+                });
+            }
+            else {
+                res.render('profile', {
+                    healthcareAdmin,
+                    profileUpdate,
+                    userinfo: req.user,
+                    userResult
+                });
+            }
         });
+    }
+    else{
+        res.redirect('/dashboard')
     }
 
 });
 
+router.post('/profileUpdateAction/:user_id', (req, res) => {
+    var list = [];
+    for( i in req.body){
+        if (req.body[i]){
+            console.log(req.body[i])
+            console.log(i)
+            UserModel[i] = req.body[i]
+            
+        }
+        
+    }
+    UserModel.save().then(() => {})
+/*
+    UserModel.update({
+        email: req.body.profileUpdateEmail
+    }, {
+            where: {
+                id: req.params.user_id
+            }
+        }).then(userResult => {
+            console.log(req.body)
+            res.redirect('/profileUpdate/' + req.params.user_id);
+        });
+        */
+});
+
+router.get('/profileRemovalAction/:user_id', (req, res) => {
+    var user_id = req.params.user_id;
+    if (req.user.userLevel == "Healthcare Admin"){
+        UserModel.destroy({
+            where: {
+                id: user_id
+            }
+        }).then(
+            res.redirect('../')
+        );
+    }
+    else{
+        res.redirect('../')
+    }
+    
+});
 
 router.get('/appointments', (req, res) => {
     res.render('appointments');

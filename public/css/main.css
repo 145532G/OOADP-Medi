@@ -6,6 +6,11 @@
     padding-top: 70px;
 }
 
+.disable {
+    pointer-events: none;
+    cursor: default;
+}
+
 /* To account for fixed-top navbar*/
 body {
     padding-top: 70px;

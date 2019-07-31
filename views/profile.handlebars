@@ -2,36 +2,45 @@
     <div class="row">
         <div class="col-md-12 col-lg-3 mb-4">
             <div class="card h-100">
-                <div class="card-body">
-                    <img src="/image/user/profileImage/1.jpg"class="img-thumbnail w-75 h-50">
-                    <h5 class="card-title">{{userResult.lastName}} {{userResult.firstName}} </h5>
+                <div class="card-body shadow">
+                    {{#if profileUpdate}} <form action="/profileUpdateAction/{{userResult.id}}" method="post">{{/if}}
+                    <img src="/image/user/profileImage/1.jpg"class="img-thumbnail w-50 h-25 mx-auto d-block shadow-sm">
+                    <h5 class="card-title text-center">{{userResult.lastName}} {{userResult.firstName}} </h5>
                     <table class="table table-borderless">
                         <tbody>
                             <tr>
                                 <td>Gender: </td>
                                 {{#if profileRetrieve}} <td>{{userResult.sex}} {{#unless userResult.sex}} No data avaliable {{/unless}}</td> {{/if}}
-                                {{#if profileUpdate}} <td><input type="text" class="form-control" placeholder="{{userResult.sex}}"></td> {{/if}}
+                                {{#if profileUpdate}} <td><input type="text" class="form-control form-control-sm" name="profileUpdateSex" placeholder="{{userResult.sex}}"></td> {{/if}}
                             </tr>
                             <tr>
                                 <td>Age: </td>
                                 {{#if profileRetrieve}}<td>{{age}} {{#unless age}} No data avaliable {{/unless}}</td>{{/if}}
-                                {{#if profileUpdate}} <td><input type="text" class="form-control" placeholder="{{age}}"></td> {{/if}}
+                                {{#if profileUpdate}} <td><input type="text" class="form-control form-control-sm" name="" placeholder="{{age}}" disabled></td> {{/if}}
                             </tr>
                             <tr>
                                 <td>Race: </td>
-                                <td>{{userResult.race}} {{#unless userResult.race}} No data avaliable {{/unless}}</td>
+                                {{#if profileRetrieve}}<td>{{userResult.race}} {{#unless userResult.race}} No data avaliable {{/unless}}</td> {{/if}}
+                                {{#if profileUpdate}}<td><input type="text" class="form-control form-control-sm" name="profileUpdateRace" placeholder="{{userResult.race}}"></td> {{/if}}
                             </tr>
                             <tr>
                                 <td>Height: </td>
-                                <td>{{userResult.height}} {{#if userResult.height}} cm{{/if}} {{#unless userResult.height}} No data avaliable {{/unless}}
-                                </td>
+                                {{#if profileRetrieve}}<td>{{userResult.height}} {{#if userResult.height}} cm{{/if}} {{#unless userResult.height}} No data avaliable {{/unless}}</td>{{/if}}
+                                {{#if profileUpdate}}<td><input type="text" class="form-control form-control-sm" name="profileUpdateHeight" placeholder="{{userResult.height}}"></td> {{/if}}
+                                
                             </tr>
                             <tr>
                                 <td>Weight: </td>
-                                <td>{{userResult.weight}} {{#if userResult.weight}} kg{{/if}} {{#unless userResult.weight}} No data avaliable {{/unless}}
-                                </td>
+                                {{#if profileRetrieve}}<td>{{userResult.weight}} {{#if userResult.weight}} kg{{/if}} {{#unless userResult.weight}} No data avaliable {{/unless}}</td>{{/if}}
+                                {{#if profileUpdate}}<td><input type="text" class="form-control form-control-sm" name="profileUpdateWeight" placeholder="{{userResult.weight}}"></td> {{/if}}
                             </tr>
                             
+                            <tr>
+                                <td>Blood Type: </td>
+                                {{#if profileRetrieve}}<td>{{userResult.bloodType}} {{#if userResult.bloodType}}{{/if}} {{#unless userResult.bloodType}} No data avaliable {{/unless}}</td>{{/if}}
+                                {{#if profileUpdate}}<td><input type="text" class="form-control form-control-sm" name="profileUpdateBloodType" placeholder="{{userResult.bloodType}}"></td> {{/if}}
+                            </tr>
+
                         </tbody>
                     </table>
 
@@ -40,83 +49,135 @@
         </div>
         <div class="col-md-12 col-lg-9 mb-4">
             
-            <div class="card ">
-                <ul class="nav nav-tabs">
+            <div class="card shadow">
+                <ul class="nav nav-tabs ">
                         <li class="nav-item">
-                            <a class="nav-link active" href="#">General</a>
+                            <a class="nav-link active" data-toggle="tab" href="#general">General</a>
                         </li>
+
                         <li class="nav-item">
-                            <a class="nav-link" href="#">tab 2</a>
+                            <a class="nav-link {{#if profileUpdate}} disabled {{/if}}" data-toggle="tab" href="#allergy">Allergy</a>
                         </li>
+
                         <li class="nav-item">
-                            <a class="nav-link" href="#">tab 3</a>
+                            <a class="nav-link {{#if profileUpdate}} disabled {{/if}}" data-toggle="tab" href="#medication">Medication</a>
                         </li>
+
                         <li class="nav-item">
-                            <a class="nav-link disabled" href="#">tab 4 disabled</a>
+                            <a class="nav-link {{#if profileUpdate}} disabled {{/if}}" data-toggle="tab" href="#consultationSummary">Consultation Summary</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link {{#if profileUpdate}} disabled {{/if}}" data-toggle="tab" href="#consultationHistory">Consultation History</a>
                         </li>
                     </ul>
-                <div class="card-body">
-                    <a href="/profileUpdate/{{userResult.id}}" type="button" class="btn btn-primary float-right">Edit Profile Information</a>
-                    <br>
-                    <h5 class="card-title">Personal Details</h5>
-                    
-                    <table class="table table-borderless">
-                        <thead>
-                            <tr>
-                                <th>Salutation</th>
-                                <th>Last Name</th>
-                                <th>First Name</th>
-                                <th>Birthdate</th>
-                                <th>Country</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>{{userResult.salutation}} {{#unless userResult.salutation}} No data avaliable {{/unless}}</td>
-                                <td>{{userResult.lastName}} {{#unless userResult.lastName}} No data avaliable {{/unless}}</td>
-                                <td>{{userResult.firstName}} {{#unless userResult.firstName}} No data avaliable {{/unless}}</td>
-                                <td>{{userDOB}} {{#unless userDOB}} No data avaliable {{/unless}}</td>
-                                <td>{{userResult.country}} {{#unless userResult.country}} No data avaliable {{/unless}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="card-body shadow tab-content">
+                    <div id="general" class="tab-pane fade show active">
+                        {{#if profileRetrieve}}<a href="/profileUpdate/{{userResult.id}}" type="button" class="btn btn-primary float-right">Edit Profile Information</a>{{/if}}
+                        {{#if profileUpdate}} 
+                            <button type="submit" class="btn btn-success float-right ml-2">Save changes</button>
+                            {{#if healthcareAdmin}} 
+                            
+                            <a href="/adminShowUsers" type="button" class="btn btn-secondary float-right ml-2">Back to profile</a>
+                            <button type="button" class="btn btn-danger float-right" data-toggle="modal" data-target="#exampleModalCenter">Remove Profile</button>
 
-                    <table class="table table-borderless">
-                        <thead>
-                            <tr>
-                                <th>Address</th>
-                                <th>Contact</th>
-                                <th>Email</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>{{userResult.address}} {{#if userResult.postalCode}} S{{/if}}{{userResult.postalCode}} {{#unless userResult.postalCode}} No data avaliable {{/unless}}</td>
-                                <td>{{userResult.primaryContactNum}} {{#unless userResult.primaryContactNum}} No data avaliable {{/unless}}</td>
-                                <td>{{userResult.email}} {{#unless userResult.email}} No data avaliable {{/unless}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+                            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLongTitle">Are you sure?</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Deleating {{userResult.lastName}} {{userResult.firstName}}'s profile. <br>
+                                        Identification Number: {{userResult.identificationNumber}}
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <a class="btn btn-danger" href="/profileRemovalAction/{{userResult.id}}" role="button">Confirm</a>
+                                    </div>
+                                    </div>
+                                </div>
+                                </div>
+                            {{/if}}
+                            {{#if patient}}<a href="/profile" type="button" class="btn btn-secondary float-right">Back to profile</a>{{/if}}
+                        
+                        {{/if}}
+                        <br>
+                        <h5 class="card-title">Personal Details</h5>
+                        
+                        <table class="table table-borderless">
+                            <thead>
+                                <tr>
+                                    <th>Identification</th>
+                                    <th>Salutation</th>
+                                    <th>Last Name</th>
+                                    <th>First Name</th>
+                                    <th>Birthdate</th>
+                                    <th>Country</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    {{#if profileRetrieve}}<td>{{userResult.identificationNumber}} {{#unless userResult.identificationNumber}} No data avaliable {{/unless}}</td>{{/if}}
+                                    {{#if profileUpdate}}<td><input type="text" class="form-control form-control-sm" name="profileUpdateIdentificationNumber" placeholder="{{userResult.identificationNumber}}"></td> {{/if}}
+                                    {{#if profileRetrieve}}<td>{{userResult.salutation}} {{#unless userResult.salutation}} No data avaliable {{/unless}}</td>{{/if}}
+                                    {{#if profileUpdate}}<td><input type="text" class="form-control form-control-sm" name="profileUpdateSalutation" placeholder="{{userResult.salutation}}"></td> {{/if}}
+                                    {{#if profileRetrieve}}<td>{{userResult.lastName}} {{#unless userResult.lastName}} No data avaliable {{/unless}}</td>{{/if}}
+                                    {{#if profileUpdate}}<td><input type="text" class="form-control form-control-sm" name="profileUpdateLastName" placeholder="{{userResult.lastName}}"></td> {{/if}}
+                                    {{#if profileRetrieve}}<td>{{userResult.firstName}} {{#unless userResult.firstName}} No data avaliable {{/unless}}</td>{{/if}}
+                                    {{#if profileUpdate}}<td><input type="text" class="form-control form-control-sm" name="profileUpdateFirstName" placeholder="{{userResult.firstName}}"></td> {{/if}}
+                                    {{#if profileRetrieve}}<td>{{userDOB}} {{#unless userDOB}} No data avaliable {{/unless}}</td>{{/if}}
+                                    {{#if profileUpdate}}<td><input type="date" class="form-control form-control-sm" name="profileUpdateDateOfBirth" value="{{userResult.dateOfBirth}}"></td> {{/if}}
+                                    {{#if profileRetrieve}}<td>{{userResult.country}} {{#unless userResult.country}} No data avaliable {{/unless}}</td>{{/if}}
+                                    {{#if profileUpdate}}<td><input type="text" class="form-control form-control-sm" name="profileUpdateCountry" placeholder="{{userResult.country}}"></td> {{/if}}
+                                </tr>
+                            </tbody>
+                        </table>
+                        <hr>
+                        <table class="table table-borderless">
+                            <thead>
+                                <tr>
+                                    {{#if profileRetrieve}}<th>Address</th>{{/if}}
+                                    {{#if profileUpdate}}<th>Address</th><th>Postal code</th>{{/if}}
+                                    <th>Contact</th>
+                                    <th>Email</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    {{#if profileRetrieve}}<td>{{userResult.address}} {{#if userResult.postalCode}} S{{/if}}{{userResult.postalCode}} {{#unless userResult.postalCode}} No data avaliable {{/unless}}</td>{{/if}}
+                                    {{#if profileUpdate}}
+                                    <td><input type="text" class="form-control form-control-sm" name="profileUpdateAddress" placeholder="{{userResult.address}}"></td> 
+                                    <td><input type="text" class="form-control form-control-sm" name="profileUpdatePostalCode" placeholder="{{userResult.postalCode}}"></td> 
+                                    {{/if}}
+                                    {{#if profileRetrieve}}<td>{{userResult.primaryContactNum}} {{#unless userResult.primaryContactNum}} No data avaliable {{/unless}}</td>{{/if}}
+                                    {{#if profileUpdate}}<td><input type="text" class="form-control form-control-sm" name="profilePrimaryContactNum" placeholder="{{userResult.primaryContactNum}}"></td> {{/if}}
+                                    {{#if profileRetrieve}}<td>{{userResult.email}} {{#unless userResult.email}} No data avaliable {{/unless}}</td>{{/if}}
+                                    {{#if profileUpdate}}<td><input type="text" class="form-control form-control-sm" name="profileUpdateEmail" placeholder="{{userResult.email}}"></td> {{/if}}
+                                </tr>
+                            </tbody>
+                        </table>
+                        <hr>
+                        </form>
+                    </div>
 
-        <div class="col-md-12 col-lg-3 mb-4">
-            <div class="card h-100">
-                <div class="card-body">
-                    <h5 class="card-title">Allegies</h5>
-                    <p class="card-text">Allergy 1</p>
-                    <p class="card-text">Allergy 2</p>
-                    <p class="card-text">Allergy 3</p>
+                    <div id="allergy" class="tab-pane fade in active">
+                        allergy
+                    </div>
 
-                </div>
-            </div>
-        </div>
+                    <div id="medication" class="tab-pane fade in active">
+                        medication
+                    </div>
 
-        <div class="col-md-12 col-lg-9 mb-4">
-            <div class="card ">
-                <div class="card-body">
-                    <h5 class="card-title">Medical History</h5>
+                    <div id="consultationSummary" class="tab-pane fade in active">
+                        summary
+                    </div>
+
+                    <div id="consultationHistory" class="tab-pane fade in active">
+                        <h5 class="card-title">Consultation History</h5>
                     <table class="table table-borderless">
                         <thead>
                             <tr>
@@ -150,6 +211,28 @@
                             </tr>
                         </tbody>
                     </table>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 col-lg-3 mb-4">
+            <div class="card h-100">
+                <div class="card-body shadow">
+                    <h5 class="card-title">Allegies</h5>
+                    <p class="card-text">Allergy 1</p>
+                    <p class="card-text">Allergy 2</p>
+                    <p class="card-text">Allergy 3</p>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 col-lg-9 mb-4">
+            <div class="card ">
+                <div class="card-body shadow">
+                    
                     
                 </div>
             </div>

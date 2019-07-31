@@ -1,6 +1,14 @@
 <div class="container-fluid">
     <div class="container col-10">
         <div class="card-columns">
+            {{#if HealthcareAdmin}}
+            <div class="card bg-light">
+                <div class="card-body text-center">
+                    <h4 class="card-title"><a href="/profile" class="card-link">Profile</a></h4>
+                    <p class="card-text">{{ userinfo.email }}Profile page: <a href="/profile" class="card-link"> link</a></p>
+                </div>
+            </div>
+            {{/if}}
             <div class="card bg-light">
                 <div class="card-body text-center">
                     <h4 class="card-title"><a href="/profile" class="card-link">Profile</a></h4>

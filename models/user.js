@@ -44,6 +44,9 @@ const User = connection.sequelizeConnection.define('user', { //declare table nam
     weight: {
         type: Sequelize.INTEGER
     },
+    bloodType: {
+        type: Sequelize.STRING
+    },
     country: {
         type: Sequelize.STRING
     },

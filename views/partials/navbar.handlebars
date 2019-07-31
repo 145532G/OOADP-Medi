@@ -9,8 +9,10 @@
 			{{#if userinfo}}
 			<a class="nav-item nav-link" href="/dashboard">Dashboard</a>
 			{{/if}}
+			{{#unless userinfo}}
 			<a class="nav-item nav-link" href="/signIn">Sign In</a>
 			<a class="nav-item nav-link" href="/signUp">Sign Up</a>
+			{{/unless}}
 		</div>
 
 
