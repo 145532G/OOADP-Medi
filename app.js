@@ -31,7 +31,7 @@ const app = express();
 // Bring in database connection
 const sequelizeConnection = require('./seqConn');
 // Connects to MySQL database
-sequelizeConnection.sequelizeSetup(false); // To set up database with new tables(drop all tables) set (true)
+sequelizeConnection.sequelizeSetup(true); // To set up database with new tables(drop all tables) set (true)
 
 const authenticate = require('./config/passport');
 authenticate.localStrategy(passport);

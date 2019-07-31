@@ -1,4 +1,5 @@
-const symptomrecord = require('../models/SymptomQuestion')
+const symptomquestion = require('../models/SymptomQuestion')
+// const symptom (continue later)
 const express = require('express');
 const router = express.Router();
 

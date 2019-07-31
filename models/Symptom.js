@@ -3,11 +3,14 @@ const Sequelize = require('sequelize');
 const connection = require('../seqConn');
 
 
-const Symptom = db.define('symptom', {
+const Symptom = connection.sequelizeConnection.define('symptom', {
     Symptom: {
         type: Sequelize.STRING
     },
     Symptom_Description: {
+        type: Sequelize.STRING
+    },
+    List: {
         type: Sequelize.STRING
     },
 });
