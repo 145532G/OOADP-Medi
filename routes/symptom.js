@@ -14,4 +14,4 @@ router.get('/symptom', (req, res) => {
 //     let 
 // })
 
-module.exports = Symptom;
+module.exports = router;

@@ -24,6 +24,7 @@ const session = require('express-session');
 const mainRoute = require('./routes/main');
 const billRoute = require('./routes/bill');
 const queueRoute = require('./routes/queue');
+const symptomRoute = require('./routes/symptom')
 
 //Creates an Express server - Express is a web application framework for creating web applications in Node JS.
 const app = express();
@@ -31,7 +32,7 @@ const app = express();
 // Bring in database connection
 const sequelizeConnection = require('./seqConn');
 // Connects to MySQL database
-sequelizeConnection.sequelizeSetup(true); // To set up database with new tables(drop all tables) set (true)
+sequelizeConnection.sequelizeSetup(false); // To set up database with new tables(drop all tables) set (true)
 
 const authenticate = require('./config/passport');
 authenticate.localStrategy(passport);
@@ -117,6 +118,7 @@ app.use(function(req, res, next){
 app.use('/', mainRoute); 
 app.use('/bill', billRoute);
 app.use('/queue', queueRoute);
+app.use('/symptom', symptomRoute)
 
 // Starts the server and listen to port configured at appConfig
 app.listen(appConfig.applicationConfig.appPort, () => {
