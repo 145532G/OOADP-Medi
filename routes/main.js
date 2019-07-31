@@ -3,6 +3,8 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const UserModel = require('../models/user');
+const ReminderModel = require('../models/reminder')
+const AppointmentModel = require('../models/appointment')
 /*
 router.get 2 parameters (directory, arrowfunction )
 arrowfunction 2 parameters (req,res) => {
@@ -290,8 +292,9 @@ router.get('/profileRemovalAction/:user_id', (req, res) => {
     
 });
 
-router.get('/appointments', (req, res) => {
-    res.render('appointments');
+router.get('/appointment', (req, res) => {
+
+    res.render('appointment');
 });
 
 router.get('/doctorConsultation', (req, res) => {

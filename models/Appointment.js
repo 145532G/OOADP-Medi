@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const connection = require('../seqConn');
+const User = require('./user');
 
 const Appointment = connection.sequelizeConnection.define('appointment', { //declare table name in first parameter
     dateTime: {
@@ -29,4 +30,5 @@ const Appointment = connection.sequelizeConnection.define('appointment', { //dec
 }, {
     // options
 });
+Appointment.belongsTo(User);
 module.exports = Appointment;
