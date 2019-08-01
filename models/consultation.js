@@ -10,5 +10,6 @@ const consultation= connection.sequelizeConnection.define('consultation',{
         type: Sequelize.DATE
     }
     
+    
 });
 module.exports = consultation;

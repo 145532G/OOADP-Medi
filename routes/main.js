@@ -3,6 +3,8 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const UserModel = require('../models/user');
+const medicine = require('../models/medicine');
+const con_med = require('../models/consultation_med');
 /*
 router.get 2 parameters (directory, arrowfunction )
 arrowfunction 2 parameters (req,res) => {
@@ -153,12 +155,25 @@ router.get('/appointments', (req, res) => {
     res.render('appointments');
 });
 
-router.get('/doctorConsultation', (req, res) => {
-    res.render('./templates/doc_consult');
-});
 
 router.get('/collection', (req, res) => {
-    res.render('./templates/collection');
+    con_med.findAll({
+        where: {
+            consultationId: 3
+        },
+        order:[
+            ['medicine_id','asc']
+        ],
+    
+
+
+    }).then((result)=>{
+        
+        res.render('./templates/collection',{result});
+
+    })
+   
+    
 });
 
 router.get('/symptom', (req, res) => {

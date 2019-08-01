@@ -22,6 +22,7 @@ const session = require('express-session');
 const mainRoute = require('./routes/main');
 const billRoute = require('./routes/bill');
 const queueRoute = require('./routes/queue');
+const docRoute = require('./routes/doc_consult')
 
 //Creates an Express server - Express is a web application framework for creating web applications in Node JS.
 const app = express();
@@ -117,6 +118,7 @@ app.use(FlashMessenger.middleware);
 app.use('/', mainRoute); 
 app.use('/bill', billRoute);
 app.use('/queue', queueRoute);
+app.use('/doc_consult', docRoute);
 
 // Starts the server and listen to port configured at appConfig
 app.listen(appConfig.applicationConfig.appPort, () => {

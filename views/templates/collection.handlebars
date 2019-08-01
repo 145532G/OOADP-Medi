@@ -37,18 +37,12 @@
                         <col class="col-md-7">
                     </colgroup>
                     <tbody>
+                        {{#each result}}
                         <tr>
-                            <td>Doxycyline (2 tablets , 3 times per day)</td>
-                            <td><input type="checkbox" value="Doxycyline (2 tablets , 3 times per day)"></td>
+                            <td>{{this.medicine_id}}</td>
+                            <td><input type="checkbox" value="{{this.medicine_id}}"></td>
                         </tr>
-                        <tr>
-                            <td>Clindamycin (1 tablets , 3 times per day)</td>
-                            <td><input type="checkbox" value="Clindamycin (1 tablets , 3 times per day)"></td>
-                        </tr>
-                        <tr>
-                            <td>Linzolid (1 tablets, once a day)</td>
-                            <td><input type="checkbox" value="Linzolid (1 tablets, once a day)"></td>
-                        </tr>
+                        {{/each}}
                     </tbody>
                 </table>
             </div>

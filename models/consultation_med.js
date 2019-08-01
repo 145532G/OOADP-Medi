@@ -6,9 +6,7 @@ const consultation = require('../models/consultation')
 const medicine = require('../models/medicine')
 
 const con_med = connection.sequelizeConnection.define('con_med', {
-    consultation_id : {
-        type: Sequelize.INTEGER
-    },
+    
     medicine_id: {
         type: Sequelize.INTEGER
     },
@@ -19,5 +17,6 @@ const con_med = connection.sequelizeConnection.define('con_med', {
     
 
 });
+con_med.belongsTo(consultation)
 
 module.exports = con_med;
