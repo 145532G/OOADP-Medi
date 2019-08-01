@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
+const alertMessage = require('../helpers/messenger');
 const UserModel = require('../models/user');
 const ReminderModel = require('../models/reminder')
 const AppointmentModel = require('../models/appointment')
@@ -56,24 +57,21 @@ router.post('/signUpAction', (req, res) => {
                     email: req.body.inputEmail,
                     password: hash
                 }).then(function () { // renders only when sucessful
-                    res.render('registrationresult', {
-                        "registrationStatus": "Successful.",
-                        "message": "User created successfully."
+                    alertMessage(res, 'success', 'Account created successfully, Please Sign In.', 'fa fa-check', true);
+                    res.render('signIn', {
+                        signInAutoEmail:req.body.inputEmail
                     });
                 }).catch(function (error) { // catch the error, consolelog error and render fail
-                    res.render('registrationresult', {
-                        "registrationStatus": "Unsuccessful.",
-                        "message": "User creation fail."
-                    });
-                    console.log("Error message:", error.message); 
+                    alertMessage(res, 'danger', 'Unsuccessful, email is already registered.', 'fa fa-check', true);
+                    res.render('signUp', {
+                        signUpFailEmail:req.body.inputEmail});
+                    console.log("Error message:", error.message);
                 });
             });
         });
     } else {
-        res.render('registrationresult', {
-            "registrationStatus": "Unsuccessful.",
-            "message": "User creation fail."
-        });
+        alertMessage(res, 'danger', 'Please enter a password more than 6 characters. Please make sure your passwords match', 'fa fa-check', true);
+        res.render('signUp',{signUpFailEmail:req.body.inputEmail});
     }
 
 
@@ -94,8 +92,9 @@ router.get('/signIn', (req, res) => {
 // Login Form POST => /user/login
 router.post('/signInAction', (req, res, next) => {
     passport.authenticate('local', {
-        successRedirect: './dashboard', // Route to /video/listVideos URL
-        failureRedirect: './loginFail', // Route to /login URL
+        successRedirect: './dashboard',
+        failureRedirect: './signIn',
+        failureFlash: true
     })(req, res, next);
 });
 
@@ -259,6 +258,7 @@ router.get('/profileUpdate/:user_id', (req, res) => {
 });
 
 router.post('/profileUpdateAction/:user_id', (req, res) => {
+    /*
     var list = [];
     for( i in req.body){
         if (req.body[i]){
@@ -270,7 +270,7 @@ router.post('/profileUpdateAction/:user_id', (req, res) => {
         
     }
     UserModel.save().then(() => {})
-/*
+*/
     UserModel.update({
         email: req.body.profileUpdateEmail
     }, {
@@ -281,7 +281,6 @@ router.post('/profileUpdateAction/:user_id', (req, res) => {
             console.log(req.body)
             res.redirect('/profileUpdate/' + req.params.user_id);
         });
-        */
 });
 
 router.get('/profileRemovalAction/:user_id', (req, res) => {
