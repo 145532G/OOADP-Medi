@@ -5,6 +5,7 @@ const passport = require('passport');
 const UserModel = require('../models/user');
 const ReminderModel = require('../models/reminder')
 const AppointmentModel = require('../models/appointment')
+const MedicalLocationModel = require('../models/medicalLocation')
 /*
 router.get 2 parameters (directory, arrowfunction )
 arrowfunction 2 parameters (req,res) => {
@@ -12,6 +13,14 @@ arrowfunction 2 parameters (req,res) => {
 };
  */
 
+function userLoggedInCheck(){
+    if (!req.user){
+        res.redirect('/')
+    }
+    else{
+        return false
+    }
+}
 
 router.get('/', (req, res) => {
     let title = 'Medified';
@@ -276,11 +285,11 @@ router.post('/profileUpdateAction/:user_id', (req, res) => {
 });
 
 router.get('/profileRemovalAction/:user_id', (req, res) => {
-    var user_id = req.params.user_id;
+    var profileRemovalTargetId = req.params.user_id;
     if (req.user.userLevel == "Healthcare Admin"){
         UserModel.destroy({
             where: {
-                id: user_id
+                id: profileRemovalTargetId
             }
         }).then(
             res.redirect('../')
@@ -292,9 +301,29 @@ router.get('/profileRemovalAction/:user_id', (req, res) => {
     
 });
 
-router.get('/appointment', (req, res) => {
+router.get('/appointmentMain', (req, res) => {
+    let userinfo = req.user;
+    if(!userinfo){
+        res.redirect('/')
+    }
+    else{
+        res.render('appointmentMain',{userinfo});
+    }
+});
 
-    res.render('appointment');
+router.get('/appointmentBooking/:user_id', (req, res) => {
+    var appointmentBookingTargetId = req.params.user_id;
+    UserModel.findOne({
+        where: {
+            id: appointmentBookingTargetId
+        }
+    }).then(userResult => {
+
+        res.render('appointmentBooking', {
+            userinfo: req.user,
+            userResult
+        });
+    });
 });
 
 router.get('/doctorConsultation', (req, res) => {
