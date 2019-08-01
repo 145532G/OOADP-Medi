@@ -363,15 +363,11 @@ router.get('/collection', (req, res) => {
     
 });
 
-router.get('/symptomquestion', (req, res) => {
-    res.render('./templates/symptomchecker');
-});
-
 router.get('/symptomanswer', (req, res) => {
     res.render('./templates/symptomanswers');
 });
 
-router.get('/symptomQuestion', (req, res) => {
+router.get('/symptomInsert', (req, res) => {
     res.render('./templates/symptomInsert');
 });
 
