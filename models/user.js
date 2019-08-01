@@ -20,6 +20,9 @@ const User = connection.sequelizeConnection.define('user', { //declare table nam
         type: Sequelize.STRING,
         defaultValue: "Patient"
     },
+    image:{
+        type: Sequelize.STRING
+    },
     firstName: {
         type: Sequelize.STRING
     },

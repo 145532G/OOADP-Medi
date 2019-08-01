@@ -23,9 +23,11 @@
                                         <div id = "medicine_box">
                                             <input type="text" id= "input_search" onkeyup="doc_medicine_search()" placeholder="Search.." name="search">
                                             <ul id = "medicine_check">
-                                                <li><a href="#"><input type="checkbox" name="medicine_name" id="{{1}}" value="Doxycyline" ><label class="form-check-label" for="doxycyline">Doxycyline</label>
-                                                <li><a href="#"><input type="checkbox" name="medicine_name" id="{{2}}" value="Clindamycin" ><label class="form-check-label" for="clindamycin">Clindamycin</label>
-                                                <li><a href="#"><input type="checkbox" name="medicine_name" id="{{3}}" value="Linzolid" ><label class="form-check-label" for="linzolid">Linzolid</label>
+                                                {{#each result}}
+                                                <input type="hidden" name="medicine_id" value="{{this.medicine_id}}">
+                                                <input type="hidden" name="medicine_name" value="{{this.medicine_name}}">
+                                                <li><a href="#"><input type="checkbox" name="medicine_name" id="medicine_name" value="{{this.medicine_name}}" ><label class="form-check-label" for="doxycyline">{{this.medicine_name}}</label>
+                                                {{/each}}
                                                 
                                             </ul>
                                         </div>

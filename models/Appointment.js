@@ -1,25 +1,18 @@
 const Sequelize = require('sequelize');
 const connection = require('../seqConn');
 const User = require('./user');
+const MedicalLocation = require('./medicalLocation');
 
 const Appointment = connection.sequelizeConnection.define('appointment', { //declare table name in first parameter
     dateTime: {
         type: Sequelize.DATE
     },
-    location: {
-        type: Sequelize.STRING
-    },
-    department: {
-        type: Sequelize.STRING
-    },
-    clinic: {
-        type: Sequelize.STRING
-    },
     symptoms: {
         type: Sequelize.STRING
     },
-    status: {
-        type: Sequelize.STRING
+    status: { // Status: Open, Confirmed, Onhold, Closed, Cancelled
+        type: Sequelize.STRING,
+        defaultValue: "Open"
     },
     bookedBy: {
         type: Sequelize.STRING
@@ -31,4 +24,5 @@ const Appointment = connection.sequelizeConnection.define('appointment', { //dec
     // options
 });
 Appointment.belongsTo(User);
+Appointment.belongsTo(MedicalLocation);
 module.exports = Appointment;
