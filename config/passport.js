@@ -1,5 +1,3 @@
-
-
 const LocalStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
 // Load user model
@@ -7,7 +5,6 @@ const User = require('../models/user');
 function localStrategy(passport) {
     passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password,
         done) => {
-
         User.findOne({ where: { email: email } })
             .then(user => {
                 if (!user) {

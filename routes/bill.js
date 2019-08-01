@@ -3,21 +3,35 @@ const router = express.Router();
 const moment = require('moment');
 const Bill = require('../models/BillPayment');
 const alertMessage = require('../helpers/messenger');
+function hasNumbers(t) {
+    return /\d/.test(t);
+}
+
+function validateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
+
+function moneyCheck(num) {
+    var regex  = /^\d+(?:\.\d{0,2})$/;
+    return regex.test(num)
+}
 
 router.get('/billList', (req, res) => {
-    Bill.findAll({
-        raw: true
-    }).then((bills) => {
-        res.render('./templates/billList', {
-            bills: bills
+        Bill.findAll({
+            raw: true
+        }).then((bills) => {
+            res.render('./templates/billList', {
+                bills: bills
+            })
         })
-    })
-        .catch(err => console.log(err))
-
+            .catch(err => console.log(err)) 
+    
 });
 
 router.get('/billPayment', (req, res) => {
-    res.render('./templates/billPayment');
+        res.render('./templates/billPayment');
+
 });
 
 router.get('/billList', (req, res) => {
@@ -35,21 +49,55 @@ router.post('/billPayment', (req, res) => {
     let contact_no = req.body.contact_no;
     let payment_method = req.body.payment_method;
     // Multi-value components return array of strings or undefined
-    Bill.create({
-        prefix,
-        first_name,
-        last_name,
-        country,
-        nric,
-        email,
-        address,
-        contact_no,
-        payment_method
-    }).then(bill => {
-        alertMessage(res, 'success', 'Bill record created', 'fa fa-check', true);
-        res.redirect('/bill/billList')
-    })
-        .catch(err => console.log(err))
+    if (first_name == "" || last_name == "" || country == "" || nric == "" || email == "" || contact_no == "" || payment_method == null) {
+        res.render('./templates/billPayment', {
+            error: 'Missing field(s). Please try again.'
+        })
+    } else if (nric.length < 9) {
+        res.render('./templates/billPayment', {
+            error: 'NRIC or passport number must contain 9 or more characters. Please try again.'
+        })
+    } else if (contact_no.length < 8) {
+        res.render('./templates/billPayment', {
+            error: 'Contact number must contain 8 or more digits. Please try again.'
+        })
+    } else if (hasNumbers(first_name) == true) {
+        res.render('./templates/billPayment', {
+            error: 'First name cannot contain number. Please try again.'
+        })
+    } else if (hasNumbers(last_name) == true) {
+        res.render('./templates/billPayment', {
+            error: 'Last name cannot contain number. Please try again.'
+        })
+    } else if (hasNumbers(first_name) == true && hasNumbers(last_name) == true) {
+        res.render('./templates/billPayment', {
+            error: 'First and last name cannot contain number. Please try again.'
+        })
+    } else if (validateEmail(email) == false) {
+        res.render('./templates/billPayment', {
+            error: 'Invalid email entered. Please try again.'
+        })
+    } 
+    else {
+        if (address == "") {
+            address = "Not Stated";
+        }
+        Bill.create({
+            prefix,
+            first_name,
+            last_name,
+            country,
+            nric,
+            email,
+            address,
+            contact_no,
+            payment_method
+        }).then(bill => {
+            alertMessage(res, 'success', 'Bill record created', 'fa fa-check', true);
+            res.redirect('/bill/billList')
+        })
+            .catch(err => console.log(err))
+    }
 });
 
 router.get('/creditcard/:id', (req, res) => {
@@ -64,33 +112,109 @@ router.get('/creditcard/:id', (req, res) => {
     }).catch(err => console.log(err));
 });
 
+router.get('/creditcard', (req, res) => {
+    res.render('./templates/creditcard');
+})
+
+router.get('/debitcard', (req, res) => {
+    res.render('./templates/debitcard');
+})
+
 router.put('/saveCreditCard/:id', (req, res) => {
     let creditcardtype = req.body.creditcardtype;
     let debitcardtype = null;
     let accountNo = req.body.accountNo;
-    let payAmt = req.body.payAmt;
+    let payAmt = parseFloat(req.body.payAmt).toFixed(2);
     let cardNo = req.body.cardNo;
-    let cardExpiry = moment(req.body.cardExpiry, 'DD/MM/YYYY');
+    let cardExpiry = moment(req.body.cardExpiry, 'YYYY-MM-DD');
     let cardVerify = req.body.cardVerify;
     let payment_method = 'Credit Card';
-    Bill.update({
-        creditcardtype,
-        debitcardtype,
-        accountNo,
-        payAmt,
-        cardNo,
-        cardExpiry,
-        cardVerify,
-        payment_method
-    }, {
+    if (creditcardtype == null || accountNo == "" || payAmt == "" || cardNo == "" || cardVerify == "") {
+        Bill.findOne({
             where: {
                 id: req.params.id
             }
-        }).then(bill => {
-            alertMessage(res, 'success', 'Credit Card Payment Successful', 'fa fa-check', true);
-            res.redirect('/bill/billList');
-        })
-        .catch(err => console.log(err))
+        }).then((bill) => {
+            res.render('./templates/creditcard', {
+                bill: bill,
+                error: 'Missing field(s). Please try again.'
+            });
+        }).catch(err => console.log(err));
+    } else if (cardVerify.length != 3) {
+        Bill.findOne({
+            where: {
+                id: req.params.id
+            }
+        }).then((bill) => {
+            res.render('./templates/creditcard', {
+                bill: bill,
+                error: 'Card verification code must only contain 3 digits. Please try again.'
+            });
+        }).catch(err => console.log(err));
+    } else if (accountNo.length < 8 || accountNo.length > 19) {
+        Bill.findOne({
+            where: {
+                id: req.params.id
+            }
+        }).then((bill) => {
+            res.render('./templates/creditcard', {
+                bill: bill,
+                error: 'Account number must contain between 8 to 19 digits. Please try again.'
+            });
+        }).catch(err => console.log(err));
+    } else if (cardNo.length < 13 || cardNo.length > 19) {
+        Bill.findOne({
+            where: {
+                id: req.params.id
+            }
+        }).then((bill) => {
+            res.render('./templates/creditcard', {
+                bill: bill,
+                error: 'Credit card number must contain between 13 to 19 digits. Please try again.'
+            });
+        }).catch(err => console.log(err));
+    } else if (moneyCheck(payAmt) == false) {
+        Bill.findOne({
+            where: {
+                id: req.params.id
+            }
+        }).then((bill) => {
+            res.render('./templates/creditcard', {
+                bill: bill,
+                error: 'Invalid payment amount entered. Please try again.'
+            });
+        }).catch(err => console.log(err));         
+    } else if (moment(new Date(), 'YYYY-MM-DD').diff(moment(cardExpiry, 'YYYY-MM-DD')) > 0) {
+        Bill.findOne({
+            where: {
+                id: req.params.id
+            }
+        }).then((bill) => {
+            res.render('./templates/creditcard', {
+                bill: bill,
+                error: 'You cannot use expired credit card. Please try again.'
+            });
+        }).catch(err => console.log(err)); 
+    } else {
+        Bill.update({
+            creditcardtype,
+            debitcardtype,
+            accountNo,
+            payAmt,
+            cardNo,
+            cardExpiry,
+            cardVerify,
+            payment_method
+        }, {
+                where: {
+                    id: req.params.id
+                }
+            }).then(bill => {
+                alertMessage(res, 'success', 'Credit Card Payment Successful', 'fa fa-check', true);
+                res.redirect('/bill/billList');
+            })
+            .catch(err => console.log(err))
+    }
 });
 
 router.get('/debitcard/:id', (req, res) => {
@@ -109,29 +233,97 @@ router.put('/saveDebitCard/:id', (req, res) => {
     let creditcardtype = null;
     let debitcardtype = req.body.debitcardtype;
     let accountNo = req.body.accountNo;
-    let payAmt = req.body.payAmt;
+    let payAmt = parseFloat(req.body.payAmt).toFixed(2);
     let cardNo = req.body.cardNo;
-    let cardExpiry = moment(req.body.cardExpiry, 'DD/MM/YYYY');
+    let cardExpiry = moment(req.body.cardExpiry, 'YYYY-MM-DD');
     let cardVerify = req.body.cardVerify;
     let payment_method = 'Debit Card';
-    Bill.update({
-        creditcardtype,
-        debitcardtype,
-        accountNo,
-        payAmt,
-        cardNo,
-        cardExpiry,
-        cardVerify,
-        payment_method
-    }, {
+    if (debitcardtype == null || accountNo == "" || payAmt == "" || cardNo == "" || cardVerify == "") {
+        Bill.findOne({
             where: {
                 id: req.params.id
             }
-        }).then(bill => {
-            alertMessage(res, 'success', 'Debit Card Payment Successful', 'fa fa-check', true);
-            res.redirect('/bill/billList');
-        })
-        .catch(err => console.log(err))
+        }).then((bill) => {
+            res.render('./templates/debitcard', {
+                bill: bill,
+                error: 'Missing field(s). Please try again.'
+            });
+        }).catch(err => console.log(err));
+    } else if (cardVerify.length != 3) {
+        Bill.findOne({
+            where: {
+                id: req.params.id
+            }
+        }).then((bill) => {
+            res.render('./templates/debitcard', {
+                bill: bill,
+                error: 'Card verification code must only contain 3 digits. Please try again.'
+            });
+        }).catch(err => console.log(err));
+    } else if (accountNo.length < 8 || accountNo.length > 19) {
+        Bill.findOne({
+            where: {
+                id: req.params.id
+            }
+        }).then((bill) => {
+            res.render('./templates/debitcard', {
+                bill: bill,
+                error: 'Account number must contain between 8 to 19 digits. Please try again.'
+            });
+        }).catch(err => console.log(err));
+    } else if (cardNo.length < 13 || cardNo.length > 19) {
+        Bill.findOne({
+            where: {
+                id: req.params.id
+            }
+        }).then((bill) => {
+            res.render('./templates/debitcard', {
+                bill: bill,
+                error: 'Debit card number must contain between 13 to 19 digits. Please try again.'
+            });
+        }).catch(err => console.log(err));
+    } else if (moneyCheck(payAmt) == false) {
+        Bill.findOne({
+            where: {
+                id: req.params.id
+            }
+        }).then((bill) => {
+            res.render('./templates/debitcard', {
+                bill: bill,
+                error: 'Invalid payment amount entered. Please try again.'
+            });
+        }).catch(err => console.log(err));         
+    } else if (moment(new Date(), 'YYYY-MM-DD').diff(moment(cardExpiry, 'YYYY-MM-DD')) > 0) {
+        Bill.findOne({
+            where: {
+                id: req.params.id
+            }
+        }).then((bill) => {
+            res.render('./templates/debitcard', {
+                bill: bill,
+                error: 'You cannot use expired debit card. Please try again.'
+            });
+        }).catch(err => console.log(err)); 
+    } else {
+        Bill.update({
+            creditcardtype,
+            debitcardtype,
+            accountNo,
+            payAmt,
+            cardNo,
+            cardExpiry,
+            cardVerify,
+            payment_method
+        }, {
+                where: {
+                    id: req.params.id
+                }
+            }).then(bill => {
+                alertMessage(res, 'success', 'Debit Card Payment Successful', 'fa fa-check', true);
+                res.redirect('/bill/billList');
+            })
+            .catch(err => console.log(err))
+    }
 })
 
 router.get('/paypal/:id', (req, res, next) => {

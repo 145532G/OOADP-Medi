@@ -1,4 +1,3 @@
-// remember to add filename to config.js under sequelizeModels in order to create table
 const Sequelize = require('sequelize');
 const connection = require('../seqConn');
 const User = require('./user');
@@ -34,15 +33,16 @@ const Reminder = connection.sequelizeConnection.define('reminder', { //declare t
     recurrenceCountCurr: { // how many times occured
         type: Sequelize.INTEGER
     },
-    date: { 
+    date: {
         type: Sequelize.DATE
     },
     time: {
         type: Sequelize.TIME
     }
 }, {
-        // options
-    });
+    // options
+});
 
-    Reminder.belongsTo(User);
+
+Reminder.belongsTo(User);
 module.exports = Reminder;

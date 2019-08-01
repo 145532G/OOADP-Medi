@@ -10,4 +10,14 @@ module.exports = {
             return '';
         }
     },
+    ifEquals: function (a, b, options) {
+        if (a == b) { return options.fn(this); }
+        return options.inverse(this);
+    },
+    ifNotEquals: function (a, b, options) {
+        if (a != b) { return options.fn(this); }
+        else {
+            return options.inverse(this);
+        }
+    }
 }

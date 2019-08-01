@@ -4,22 +4,31 @@ const connection = require('../seqConn');
 
 
 const Symptom = connection.sequelizeConnection.define('symptom', {
-    counter: {
+    Symptom: {
+        type: Sequelize.STRING
+    },
+    Symptom_Description: {
+        type: Sequelize.STRING
+    },
+    List: {
+        type: Sequelize.STRING
+    },
+    result_symptom: {
+        type: Sequelize.STRING
+    },
+    result_text: {
+        type: Sequelize.STRING
+    },
+    result_recommend: {
         type: Sequelize.STRING
     },
     question: {
         type: Sequelize.STRING
     },
-    answer_one: {
+    answer_yes: {
         type: Sequelize.STRING
     },
-    answer_two: {
-        type: Sequelize.STRING
-    },
-    answer_three: {
-        type: Sequelize.STRING
-    },
-    answer_four: {
+    answer_no: {
         type: Sequelize.STRING
     },
 });

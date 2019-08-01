@@ -12,10 +12,12 @@
 	
 	<!-- Fontawesome  -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.9.0/css/all.css">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+	 crossorigin="anonymous">
 
-	<!-- Self CSS -->
-	<link rel="stylesheet" href="css/main.css">
-
+	<!-- Main CSS & JS -->
+	<link rel="stylesheet" href="/css/main.css">
+	<script src="/javascript/main.js"></script> 
 	<title>
 		{{#if title}}
 		{{title}}
@@ -27,6 +29,9 @@
 
 <body>
 	{{>navbar }}
+	{{> flashMsg}} 
+    {{> _msg}} 
+	{{> _errors}} 
 	{{{body}}}
 	<!-- Optional JavaScript placed below to reduce load time-->
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->

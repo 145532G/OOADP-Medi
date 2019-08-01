@@ -1,6 +1,7 @@
 //'require' is similar to import used in Java and Python. It brings in the libraries required to be used
 const express = require('express');
 const exphbs  = require('express-handlebars');
+const methodOverride = require('method-override');
 const path = require('path');
 const bodyParser = require('body-parser');
 const appConfig = require('./config/config');
@@ -10,7 +11,8 @@ const flash = require('connect-flash');
 const FlashMessenger = require('flash-messenger');
 const { formatDate } = require('./helpers/hbs');
 const { radioCheck } = require('./helpers/hbs');
-
+const { ifEquals } = require('./helpers/hbs');
+const { ifNotEquals } = require('./helpers/hbs');
 
 
 //session stuff
@@ -23,6 +25,8 @@ const mainRoute = require('./routes/main');
 const billRoute = require('./routes/bill');
 const queueRoute = require('./routes/queue');
 const docRoute = require('./routes/doc_consult')
+const symptomRoute = require('./routes/symptom')
+const patientInformation = require('./routes/doctor') 
 
 //Creates an Express server - Express is a web application framework for creating web applications in Node JS.
 const app = express();
@@ -34,21 +38,6 @@ sequelizeConnection.sequelizeSetup(false); // To set up database with new tables
 
 const authenticate = require('./config/passport');
 authenticate.localStrategy(passport);
-
-
-
-// Gets which models to setup(create tables) from config.sequelizeModels
-for (i = 0;i<appConfig.sequelizeModels.length;i++){
-	console.log(appConfig.sequelizeModels[i])
-	appConfig.sequelizeModels[i] = require('./models/'+appConfig.sequelizeModels[i])
-	console.log(appConfig.sequelizeModels[i])
-}
-
-
-//user = require('./models/user');
-//reminder = require('./models/reminder')
-//user.hasMany(reminder);
-//reminder.belongsTo(user);
 
 // Handlebars Middleware
 /*
@@ -63,7 +52,9 @@ for (i = 0;i<appConfig.sequelizeModels.length;i++){
 app.engine('handlebars', exphbs({
 	helpers: {
 		formatDate: formatDate,
-		radioCheck: radioCheck
+		radioCheck: radioCheck,
+		ifEquals: ifEquals,
+		ifNotEquals: ifNotEquals
 	},
 	defaultLayout: 'main' // Specify default template views/layout/main.handlebar 
 }));
@@ -82,6 +73,9 @@ app.use(bodyParser.json());
 // Creates static folder for publicly accessible HTML, CSS and Javascript files i.e localhost/css /js
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Method override middleware to use other HTTP methods such as PUT and DELETE
+app.use(methodOverride('_method'));
+
 // Place to define global variables 
 app.use(function (req, res, next) {
 	next();
@@ -99,13 +93,13 @@ app.use(session({
 		database:appConfig.databaseConfig.schema,
 		clearExpired: true,
 		// How frequently expired sessions will be cleared; milliseconds:
-		checkExpirationInterval: 900000,
+		checkExpirationInterval: 1000000,
 		// The maximum age of a valid session; milliseconds
-		expiration: 900000
+		expiration: 90000000
 	}),
 	resave: false,
 	saveUninitialized:false,
-	cookie: { secure: false }// cookie will not be saved in http if true
+	cookie: { secure: false }// cookie will not be saved in http if set to true
 }));
 
 app.use(passport.initialize());
@@ -114,11 +108,21 @@ app.use(passport.session());
 app.use(flash());
 app.use(FlashMessenger.middleware);
 
+app.use(function(req, res, next){
+	res.locals.success_msg = req.flash('success_msg');
+	res.locals.error_msg = req.flash('error_msg');
+	res.locals.error = req.flash('error');
+	res.locals.user = req.user || null;
+	next();
+});
+
 // mainRoute is declared to point to routes/main.js, This route maps the root URL to any path defined in main.js
 app.use('/', mainRoute); 
 app.use('/bill', billRoute);
 app.use('/queue', queueRoute);
 app.use('/doc_consult', docRoute);
+app.use('/symptom', symptomRoute)
+app.use('/doctor', patientInformation)
 
 // Starts the server and listen to port configured at appConfig
 app.listen(appConfig.applicationConfig.appPort, () => {

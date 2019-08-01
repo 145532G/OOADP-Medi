@@ -1,28 +1,23 @@
-<!--To extend rest of body due to sticky nav -->
-<nav class="navbar navbar-static-top">
-	<a class="navbar-brand" href="#">s</a>
-</nav>
-
-
-<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
-	<a class="navbar-brand" href="#">Temporary Navbar</a>
+<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-white border-bottom rounded-bottom">
+	<a class="navbar-brand" href="/">Medified</a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
 	</button>
 	<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-	<div class="navbar-nav">
-		<a class="nav-item nav-link active" href="/">Home <span class="sr-only">(current)</span></a>
-		<a class="nav-item nav-link" href="/dashboard">Dashboard</a>
-		<a class="nav-item nav-link" href="#">Pricing</a>
-		<a class="nav-item nav-link disabled" href="#">Disabled</a>
-		<a class="nav-item nav-link" href="/login">Login</a>
-		<a class="nav-item nav-link" href="/register">Register</a>
-    </div>
+		<div class="navbar-nav">
+			<a class="nav-item nav-link active" href="/">Home <span class="sr-only">(current)</span></a>
+			{{#if userinfo}}
+			<a class="nav-item nav-link" href="/dashboard">Dashboard</a>
+			{{/if}}
+			{{#unless userinfo}}
+			<a class="nav-item nav-link" href="/signIn">Sign In</a>
+			<a class="nav-item nav-link" href="/signUp">Sign Up</a>
+			{{/unless}}
+		</div>
 
 
 
 	</div>
-	<!-- Load an icon library -->
 	{{#if userinfo}}
 	<div>Welcome back, {{userinfo.firstName}} {{userinfo.lastName}} &nbsp</div>
 
@@ -31,7 +26,7 @@
 		<div class="dropdown-menu dropdown-menu-right mt-3" aria-labelledby="dropdownMenuButton">
 	<a class="dropdown-item" href="/profileupdate/{{userinfo.id}}">Profile Settings</a>
 	<div class="dropdown-divider"></div>
-    <a class="dropdown-item" href="/logout">Logout</a>
+    <a class="dropdown-item" href="/signOut">Sign Out</a>
 	</div>
 	</li>
 	{{/if}}

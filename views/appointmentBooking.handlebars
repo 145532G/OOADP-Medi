@@ -1,0 +1,48 @@
+{{userinfo.email}}
+{{userResult.email}}
+<div class="container text-center push-down">
+
+    <div class="shadow p-3 mb-5 bg-white rounded col-lg-6 mx-auto">
+        <h2>Booking an appointment</h2>
+        <p><small class="text-muted">Already have an account with us? Click on the Sign Up tab</small></p>
+
+        <form action="/appointmentBookingAction" method="post">
+            <div class="form-group">
+                <label>Patient Name</label>
+                <input type="text" class="form-control text-center" value="{{userResult.firstName}} {{userResult.lastName}}" name="inputEmail">
+            </div>
+            <div class="form-group">
+                <label>Patient Indentification</label>
+                <input type="text" class="form-control text-center" value="{{userResult.identificationNumber}}" name="inputEmail">
+            </div>
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="text" class="form-control text-center" value="{{userResult.primaryContactNum}}"  name="inputEmail">
+            </div>
+            <div class="form-group">
+                <label>Location</label>
+                <input type="text" class="form-control text-center" id="inputEmail"  name="inputEmail">
+            </div>
+            <div class="form-group">
+                <label>Department</label>
+                <input type="text" class="form-control text-center" id="inputEmail"  name="inputEmail">
+            </div>
+
+            <div class="form-group">
+                <label>Date</label>
+                <input type="text" class="form-control text-center" id="inputEmail"  name="inputEmail">
+            </div>
+            <div class="form-group">
+                <label>Time</label>
+                <input type="text" class="form-control text-center" id="inputEmail"  name="inputEmail">
+            </div>
+
+            <div class="form-group">
+                <label>Additional Information</label>
+                <textarea class="form-control" rows="5" id="comment" name="inputEmail"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Book an appointment</button>
+        </form>
+    </div>
+
+</div>

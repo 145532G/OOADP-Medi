@@ -1,4 +1,3 @@
-// remember to add filename to config.js under sequelizeModels in order to create table
 const Sequelize = require('sequelize');
 const connection = require('../seqConn');
 
@@ -16,6 +15,9 @@ const Queue = connection.sequelizeConnection.define('queue', {
         type: Sequelize.STRING
     },
     counterNo: {
+        type: Sequelize.STRING
+    },
+    currentQueue: {
         type: Sequelize.STRING
     }
 });

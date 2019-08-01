@@ -25,8 +25,6 @@ exports.sequelizeConfig = {
     }
 }
 
-// Declare models that are used here
-exports.sequelizeModels = ['user','reminder']
 
 /*
 exports.sessionConfig = {

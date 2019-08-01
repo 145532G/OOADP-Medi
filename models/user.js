@@ -1,4 +1,3 @@
-// remember to add filename to config.js under sequelizeModels in order to create table
 const Sequelize = require('sequelize');
 const connection = require('../seqConn');
 
@@ -17,7 +16,11 @@ const User = connection.sequelizeConnection.define('user', { //declare table nam
     password: {
         type: Sequelize.STRING
     },
-    userLevel:{
+    userLevel: {
+        type: Sequelize.STRING,
+        defaultValue: "Patient"
+    },
+    image:{
         type: Sequelize.STRING
     },
     firstName: {
@@ -26,13 +29,16 @@ const User = connection.sequelizeConnection.define('user', { //declare table nam
     lastName: {
         type: Sequelize.STRING
     },
+    salutation: {
+        type: Sequelize.STRING
+    },
     dateOfBirth: {
         type: Sequelize.DATEONLY
     },
     sex: {
         type: Sequelize.STRING
     },
-    ethnicity: {
+    race: {
         type: Sequelize.STRING
     },
     height: {
@@ -40,6 +46,9 @@ const User = connection.sequelizeConnection.define('user', { //declare table nam
     },
     weight: {
         type: Sequelize.INTEGER
+    },
+    bloodType: {
+        type: Sequelize.STRING
     },
     country: {
         type: Sequelize.STRING
@@ -52,12 +61,16 @@ const User = connection.sequelizeConnection.define('user', { //declare table nam
         type: Sequelize.STRING
     },
     postalCode: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER
     },
-    mobileNumber: {
-        type: Sequelize.STRING
+    primaryContactNum: {
+        type: Sequelize.INTEGER
+    },
+    mobileContactNum: {
+        type: Sequelize.INTEGER,
+        unique: true
     }
 }, {
-        // options
-    });
+    // options
+});
 module.exports = User;
