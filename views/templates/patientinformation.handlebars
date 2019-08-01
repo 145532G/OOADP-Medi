@@ -18,14 +18,14 @@
             </div>
         </div>
         <div class="formNotes">
-            <form class="formInformation">
-                <input type="text" id="symptomNotes"
+            <form action="/doctor/patientinformation" method="POST" class="formInformation">
+                <input type="text" id="symptomNotes" name="symptomNotes"
                     placeholder="During consultaion, doctor will write symptom, sickness, etc.">
                 </br>
-                <input type="text" id="symptomPrescriptions"
+                <input type="text" id="symptomPrescriptions" name="symptomPrescriptions"
                     placeholder="During consultation, doctor will write presciptions here.">
                 </br>
-                <input type="text" id="symptomComments"
+                <input type="text" id="symptomComments" name="symptomComments"
                     placeholder="During consultaion, doctor will write comments about the patient">
                 </br>
                 <input type="submit" value="Skip" id="submitSkip" />

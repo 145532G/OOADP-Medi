@@ -4,16 +4,9 @@
 <div class="container">
     <div class="form">
         <form>
-            <label>Type what question you want to insert</label><br>
+            <label></label><br>
             <input type="text" name="symptomquestioninsert" placeholder="Type the question here"><br>
             <input type="submit" value="Submit">
         </form>
     </div>
 </div>
-{{#if result}}
-{{#each result}}
-<div class="container">
-    <p>{{question}}</p>
-</div>
-{{/each}}
-{{/if}}

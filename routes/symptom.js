@@ -3,6 +3,27 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/symptom', (req, res) => {
+    symptom.findAll({
+        })
+        .then((result)=>{
+            res.render('./templates/symptom',{
+                result
+            });
+    })
+});
+
+router.get('/symptomInsert', (req, res) => {
+    symptom.findAll({
+        })
+        .then((result)=>{
+            res.render('./templates/symptomInsert',{
+                result
+            })
+        })
+});
+
+
+router.get('/symptomInsert', (req, res) => {
     symptom.create({
         Symptom,
         Symptom_Description,

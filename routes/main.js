@@ -7,6 +7,7 @@ const UserModel = require('../models/user');
 const ReminderModel = require('../models/reminder')
 const AppointmentModel = require('../models/appointment')
 const MedicalLocationModel = require('../models/medicalLocation')
+const op = require('sequelize').Op
 /*
 router.get 2 parameters (directory, arrowfunction )
 arrowfunction 2 parameters (req,res) => {
@@ -366,18 +367,44 @@ router.get('/doctorConsultation', (req, res) => {
 });
 
 router.get('/collection', (req, res) => {
-    res.render('./templates/collection');
-});
+    con_med.findAll({
+        where: {
+            consultationId: 1
+        },  
+        order:[
+            ['medicine_id','asc']
+        ],
+    
 
-router.get('/symptomquestion', (req, res) => {
-    res.render('./templates/symptomchecker');
+
+    }).then((result)=>{
+        let id = [];
+        for (const med of result) {
+            id.push(med.medicine_id);
+        }
+
+        medicine.findAll({
+            where:{
+                medicine_id: {[op.in]: id}
+            },
+            raw: true
+        }).then(data => {
+            console.log(data)
+            res.render('./templates/collection',{result: data});
+        })
+        // console.log(result)
+        
+
+    })
+   
+    
 });
 
 router.get('/symptomanswer', (req, res) => {
     res.render('./templates/symptomanswers');
 });
 
-router.get('/symptomQuestion', (req, res) => {
+router.get('/symptomInsert', (req, res) => {
     res.render('./templates/symptomInsert');
 });
 
