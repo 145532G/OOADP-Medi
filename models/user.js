@@ -24,22 +24,42 @@ const User = connection.sequelizeConnection.define('user', { //declare table nam
         type: Sequelize.STRING
     },
     firstName: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        validate: {
+            isAlpha: true
+
+        }
     },
     lastName: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        validate: {
+            isAlpha: true
+
+        }
     },
     salutation: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        validate: {
+            isIn: [['Mx', 'Ms','Mr','Dr','Mrs']]
+
+        }
     },
     dateOfBirth: {
         type: Sequelize.DATEONLY
     },
     sex: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        validate: {
+            isIn: [['Male', 'Female']]
+
+        }
     },
     race: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        validate: {
+            isAlpha: true
+
+        }
     },
     height: {
         type: Sequelize.INTEGER
@@ -48,7 +68,11 @@ const User = connection.sequelizeConnection.define('user', { //declare table nam
         type: Sequelize.INTEGER
     },
     bloodType: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        validate: {
+            isIn: [['A+','A-','B+', 'B-','AB+','AB-','O+','O-']]
+
+        }
     },
     country: {
         type: Sequelize.STRING

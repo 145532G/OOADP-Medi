@@ -4,8 +4,6 @@ const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const alertMessage = require('../helpers/messenger');
 const UserModel = require('../models/user');
-const medicine = require('../models/medicine');
-const con_med = require('../models/consultation_med');
 const ReminderModel = require('../models/reminder')
 const AppointmentModel = require('../models/appointment')
 const MedicalLocationModel = require('../models/medicalLocation')
@@ -260,21 +258,38 @@ router.get('/profileUpdate/:user_id', (req, res) => {
 });
 
 router.post('/profileUpdateAction/:user_id', (req, res) => {
-    /*
-    var list = [];
-    for( i in req.body){
-        if (req.body[i]){
-            console.log(req.body[i])
-            console.log(i)
-            UserModel[i] = req.body[i]
-            
-        }
-        
-    }
-    UserModel.save().then(() => {})
-*/
+    let email = req.body.profileUpdateEmail
+    let firstName = req.body.profileUpdateFirstName
+    let lastName = req.body.profileUpdateLastName
+    let salutation = req.body.profileUpdateSalutation
+    let dateOfBirth = req.body.profileUpdateDateOfBirth
+    let sex = req.body.profileUpdateSex
+    let race = req.body.profileUpdateRace
+    let height = req.body.profileUpdateHeight
+    let weight = req.body.profileUpdateWeight
+    let bloodType = req.body.profileUpdateBloodType
+    let country = req.body.profileUpdateCountry
+    let identificationNumber = req.body.profileUpdateIdentificationNumber
+    let address = req.body.profileUpdateAddress
+    let postalCode = req.body.profileUpdatePostalCode
+    let primaryContactNumber = req.body.profileUpdatePrimaryContactNumber
+
     UserModel.update({
-        email: req.body.profileUpdateEmail
+        email,
+        firstName,
+        lastName,
+        salutation,
+        dateOfBirth,
+        sex,
+        race,
+        height,
+        weight,
+        bloodType,
+        country,
+        identificationNumber,
+        address,
+        postalCode,
+        primaryContactNumber
     }, {
             where: {
                 id: req.params.user_id
@@ -282,6 +297,25 @@ router.post('/profileUpdateAction/:user_id', (req, res) => {
         }).then(userResult => {
             console.log(req.body)
             res.redirect('/profileUpdate/' + req.params.user_id);
+        }).catch(function (error) { // catch the error, consolelog error and render fail
+            alertMessage(res, 'danger', 'Unsuccessful:'+error.message, 'fa fa-check', true);
+            res.redirect('/profileUpdate/' + req.params.user_id,{
+                email,
+                firstName,
+                lastName,
+                salutation,
+                dateOfBirth,
+                sex,
+                race,
+                height,
+                weight,
+                bloodType,
+                country,
+                identificationNumber,
+                address,
+                postalCode,
+                primaryContactNumber});
+            console.log("Error message:", error.message);
         });
 });
 
@@ -327,25 +361,12 @@ router.get('/appointmentBooking/:user_id', (req, res) => {
     });
 });
 
+router.get('/doctorConsultation', (req, res) => {
+    res.render('./templates/doc_consult');
+});
 
 router.get('/collection', (req, res) => {
-    con_med.findAll({
-        where: {
-            consultationId: 3
-        },
-        order:[
-            ['medicine_id','asc']
-        ],
-    
-
-
-    }).then((result)=>{
-        
-        res.render('./templates/collection',{result});
-
-    })
-   
-    
+    res.render('./templates/collection');
 });
 
 router.get('/symptomquestion', (req, res) => {
