@@ -2,12 +2,24 @@ const symptom = require('../models/Symptom');
 const express = require('express');
 const router = express.Router();
 
-router.get('/symptomInsert', (req, res) => {
-    symptom.findOne({
-        where: {
-            id: req.symptom.id
-        }
+router.get('/symptom', (req, res) => {
+    symptom.findAll({
+        })
+        .then((result)=>{
+            res.render('./templates/symptom',{
+                result
+            });
     })
+});
+
+router.get('/symptomInsert', (req, res) => {
+    symptom.findAll({
+        })
+        .then((result)=>{
+            res.render('./templates/symptomInsert',{
+                result
+            })
+        })
 });
 
 
