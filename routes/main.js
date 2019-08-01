@@ -4,6 +4,8 @@ const bcrypt = require('bcryptjs');
 const passport = require('passport');
 const alertMessage = require('../helpers/messenger');
 const UserModel = require('../models/user');
+const medicine = require('../models/medicine');
+const con_med = require('../models/consultation_med');
 const ReminderModel = require('../models/reminder')
 const AppointmentModel = require('../models/appointment')
 const MedicalLocationModel = require('../models/medicalLocation')
@@ -325,12 +327,25 @@ router.get('/appointmentBooking/:user_id', (req, res) => {
     });
 });
 
-router.get('/doctorConsultation', (req, res) => {
-    res.render('./templates/doc_consult');
-});
 
 router.get('/collection', (req, res) => {
-    res.render('./templates/collection');
+    con_med.findAll({
+        where: {
+            consultationId: 3
+        },
+        order:[
+            ['medicine_id','asc']
+        ],
+    
+
+
+    }).then((result)=>{
+        
+        res.render('./templates/collection',{result});
+
+    })
+   
+    
 });
 
 router.get('/symptomquestion', (req, res) => {

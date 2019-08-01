@@ -24,6 +24,7 @@ const session = require('express-session');
 const mainRoute = require('./routes/main');
 const billRoute = require('./routes/bill');
 const queueRoute = require('./routes/queue');
+const docRoute = require('./routes/doc_consult')
 const symptomRoute = require('./routes/symptom')
 const patientInformation = require('./routes/doctor') 
 
@@ -119,6 +120,7 @@ app.use(function(req, res, next){
 app.use('/', mainRoute); 
 app.use('/bill', billRoute);
 app.use('/queue', queueRoute);
+app.use('/doc_consult', docRoute);
 app.use('/symptom', symptomRoute)
 app.use('/doctor', patientInformation)
 
