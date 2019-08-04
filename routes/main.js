@@ -301,6 +301,15 @@ router.get('/appointmentMain', (req, res) => {
             include:[MedicalLocationModel]
         }).then(appointmentResult=>{
             //console.log(appointmentResult[0]["medicalLocation"]["name"])
+            // splitting dateTime for formatting
+            for (i in appointmentResult){
+                console.log(appointmentResult[i]["dateTime"])
+                appointmentResult[i]["dateOnly"] = moment(appointmentResult[i].dateTime).format('Do MMMM YYYY')
+                appointmentResult[i]["timeOnly"] = moment(appointmentResult[i].dateTime).format('hh:mm A')
+                appointmentResult[i]["dayOnly"] = moment(appointmentResult[i].dateTime).format('dddd')
+                
+            }
+            console.log('test'+ appointmentResult[4]["timeOnly"])
             res.render('appointmentMain',{
                 userinfo,
                 appointmentResult
@@ -440,6 +449,9 @@ router.post('/appointmentRescheduleAction/:appointment_id', (req,res)=>{
             
             if (req.body.inputDescription){
                 appointmentResult.description = req.body.inputDescription
+            }
+            if (req.body.inputDate|| req.body.inputTime){
+                appointmentResult.dateTime = new Date(req.body.inputDate + " " + req.body.inputTime)
             }
             appointmentResult.save()
             .then(function(result){
