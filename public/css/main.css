@@ -10,14 +10,9 @@
     pointer-events: none;
     cursor: default;
 }
-.background-PeachPuff95 {
-    background-color: #fff1e6 
-}
-.background-white {
-    background-color: #FFFFFF 
-}
+
 /* To account for fixed-top navbar*/
 body {
     padding-top: 57px;
-    background-color: #fff7f0 
+    background-color: #fff7f0;
 }

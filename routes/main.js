@@ -66,7 +66,6 @@ router.post('/signUpAction', (req, res) => {
                     alertMessage(res, 'danger', 'Unsuccessful, email is already registered.', 'fa fa-check', true);
                     res.render('signUp', {
                         signUpFailEmail:req.body.inputEmail});
-                    console.log("Error message:", error.message);
                 });
             });
         });
@@ -74,10 +73,6 @@ router.post('/signUpAction', (req, res) => {
         alertMessage(res, 'danger', 'Please enter a password more than 6 characters. Please make sure your passwords match', 'fa fa-check', true);
         res.render('signUp',{signUpFailEmail:req.body.inputEmail});
     }
-
-
-
-
 
 });
 
@@ -99,13 +94,6 @@ router.post('/signInAction', (req, res, next) => {
     })(req, res, next);
 });
 
-router.get('/loginFail', (req, res) => {
-    res.render('signIn', {
-        loginStatus: 'Unsucessful login, please try again.'
-    });
-    res.clearCookie("user_id");
-});
-
 router.get('/signOut', function (req, res) {
     req.logOut(); //cookies on client will not be cleared but invalidated by passportjs
     res.redirect('/');
@@ -125,33 +113,6 @@ router.get('/dashboard', (req, res) => {
         })
     }
 
-});
-
-
-router.post('/profileupdatesubmit', (req, res) => {
-
-    UserModel.update({
-        email: req.body.email,
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        dateofbirth: req.body.dateofbirth,
-        sex: req.body.sex,
-        ethnicity: req.body.ethnicity,
-        height: req.body.height,
-        weight: req.body.weight,
-        country: req.body.country,
-        identificationNumber: req.body.identificationNumber,
-        address: req.body.address,
-        postalCode: req.body.postalCode,
-        mobileNumber: req.body.mobileNumber,
-        password: req.body.password
-    }, {
-            where: {
-                id: req.body.id
-            }
-        }).then(userResult => {
-            res.redirect('profileupdate/' + req.body.id);
-        });
 });
 
 router.get('/profile', (req, res) => {
@@ -231,7 +192,11 @@ router.get('/profileUpdate/:user_id', (req, res) => {
                 id: profileUpdateTargetID
             }
         }).then(userResult => {
-            if (userResult.dateOfBirth) {
+            if (!userResult){
+                alertMessage(res, 'danger', 'Profile not found', true); 
+                res.redirect('/') //TODO remember to redirect to admin page 
+            }
+            else if (userResult.dateOfBirth) {
                 age = new Date().getFullYear() - userResult.dateOfBirth.slice(0, 4);
                 userDOB = userResult.dateOfBirth.split("-").reverse().join("-"); //format from yyyymmdd to ddmmyyyy
                 res.render('profile', {
@@ -259,65 +224,45 @@ router.get('/profileUpdate/:user_id', (req, res) => {
 });
 
 router.post('/profileUpdateAction/:user_id', (req, res) => {
-    let email = req.body.profileUpdateEmail
-    let firstName = req.body.profileUpdateFirstName
-    let lastName = req.body.profileUpdateLastName
-    let salutation = req.body.profileUpdateSalutation
-    let dateOfBirth = req.body.profileUpdateDateOfBirth
-    let sex = req.body.profileUpdateSex
-    let race = req.body.profileUpdateRace
-    let height = req.body.profileUpdateHeight
-    let weight = req.body.profileUpdateWeight
-    let bloodType = req.body.profileUpdateBloodType
-    let country = req.body.profileUpdateCountry
-    let identificationNumber = req.body.profileUpdateIdentificationNumber
-    let address = req.body.profileUpdateAddress
-    let postalCode = req.body.profileUpdatePostalCode
-    let primaryContactNumber = req.body.profileUpdatePrimaryContactNumber
-
-    UserModel.update({
-        email,
-        firstName,
-        lastName,
-        salutation,
-        dateOfBirth,
-        sex,
-        race,
-        height,
-        weight,
-        bloodType,
-        country,
-        identificationNumber,
-        address,
-        postalCode,
-        primaryContactNumber
-    }, {
-            where: {
-                id: req.params.user_id
+    UserModel.findOne({
+        where: {
+            id: req.params.user_id
+        }
+    }).then(targetObject =>{
+        var updateAllowedAttributes = {
+            email:req.body.profileUpdateEmail,
+            firstName:req.body.profileUpdateFirstName,
+            lastName:req.body.profileUpdateLastName,
+            salutation:req.body.profileUpdateSalutation,
+            dateOfBirth:req.body.profileUpdateDateOfBirth,
+            sex:req.body.profileUpdateSex,
+            race:req.body.profileUpdateRace,
+            height:req.body.profileUpdateHeight,
+            weight:req.body.profileUpdateWeight,
+            bloodType:req.body.profileUpdateBloodType,
+            country:req.body.profileUpdateCountry,
+            identificationNumber:req.body.profileUpdateIdentificationNumber,
+            address:req.body.profileUpdateAddress,
+            postalCode:req.body.profileUpdatePostalCode,
+            primaryContactNum:req.body.profileUpdatePrimaryContactNum
+        };
+        for (var i in updateAllowedAttributes){
+            if (updateAllowedAttributes[i]){
+                targetObject[i] = updateAllowedAttributes[i]
             }
-        }).then(userResult => {
-            console.log(req.body)
-            res.redirect('/profileUpdate/' + req.params.user_id);
-        }).catch(function (error) { // catch the error, consolelog error and render fail
-            alertMessage(res, 'danger', 'Unsuccessful:'+error.message, 'fa fa-check', true);
-            res.redirect('/profileUpdate/' + req.params.user_id,{
-                email,
-                firstName,
-                lastName,
-                salutation,
-                dateOfBirth,
-                sex,
-                race,
-                height,
-                weight,
-                bloodType,
-                country,
-                identificationNumber,
-                address,
-                postalCode,
-                primaryContactNumber});
-            console.log("Error message:", error.message);
-        });
+        }
+        targetObject.save()
+        .then(function(result){
+                if (result){
+                    alertMessage(res, 'success', 'Profile information updated successfully.', 'fa fa-check', true);
+                    res.redirect('/profileUpdate/' + req.params.user_id);
+                }
+            }).catch(function (error) { // catch the error, consolelog error and render fail
+                alertMessage(res, 'danger', 'Unsuccessful:'+error.message, 'fa fa-check', true);
+                res.redirect('/profileUpdate/' + req.params.user_id);
+                console.log("Error message:", error.message);
+            });
+    });
 });
 
 router.get('/profileRemovalAction/:user_id', (req, res) => {
@@ -327,12 +272,13 @@ router.get('/profileRemovalAction/:user_id', (req, res) => {
             where: {
                 id: profileRemovalTargetId
             }
-        }).then(
+        }).then(value =>{
+            alertMessage(res, 'success', 'Account removed.', 'fa fa-check', true);
             res.redirect('../')
-        );
+        });
     }
     else{
-        res.redirect('../')
+        res.redirect('../') // redirect if user level is not enough. 
     }
     
 });
