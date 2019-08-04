@@ -295,6 +295,9 @@ router.get('/appointmentMain', (req, res) => {
                 userId: req.user.id,// where userId field in appointment table equals to current logged in user
                 status: "Open" // only show appointments that are open
             },
+            order: [
+                ['dateTime', 'ASC']
+            ],
             include:[MedicalLocationModel]
         }).then(appointmentResult=>{
             //console.log(appointmentResult[0]["medicalLocation"]["name"])
@@ -309,23 +312,25 @@ router.get('/appointmentMain', (req, res) => {
 
 router.get('/appointmentBooking/:user_id', (req, res) => {
     var appointmentBookingTargetId = req.params.user_id;
-
-    MedicalLocationModel.findAll().then(medicalLocationResult =>{
-        UserModel.findOne({
-            where: {
-                id: appointmentBookingTargetId
-            }
-        }).then(userResult => {
-    
-            res.render('appointmentBooking', {
-                userinfo: req.user,
-                medicalLocationResult,
-                userResult
+    if(req.user.id == req.params.user_id || req.user.userLevel == "Healthcare Admin"){
+        MedicalLocationModel.findAll().then(medicalLocationResult =>{
+            UserModel.findOne({
+                where: {
+                    id: appointmentBookingTargetId
+                }
+            }).then(userResult => {
+        
+                res.render('appointment', {
+                    userinfo: req.user,
+                    medicalLocationResult,
+                    userResult
+                });
             });
-        });
-    })
-
-    
+        })
+    }
+    else{
+        res.redirect('/')
+    }
 });
 
 router.post('/appointmentBookingAction', (req,res)=>{
@@ -354,27 +359,107 @@ router.post('/appointmentBookingAction', (req,res)=>{
         let userId = req.body.targetUserId
         let medicalLocationId = req.body.inputMedicalLocation
         
-        AppointmentModel.create({
-            department,
-            clinic,
-            dateTime,
-            symptoms,
-            status,
-            bookedBy,
-            urgency,
-            alternateContactNumber,
-            description,
-            additionalInformation,
-            userId,
-            medicalLocationId
-
-        }).then(appointmentResult =>{
-            alertMessage(res, 'success', 'Appointment booked successfully.', 'fa fa-check', true);
-            res.redirect('/appointmentMain');
-        })
+        if(req.user.id == req.body.targetUserId || req.user.userLevel == "Healthcare Admin"){
+            AppointmentModel.create({
+                department,
+                clinic,
+                dateTime,
+                symptoms,
+                status,
+                bookedBy,
+                urgency,
+                alternateContactNumber,
+                description,
+                additionalInformation,
+                userId,
+                medicalLocationId
+    
+            }).then(appointmentResult =>{
+                alertMessage(res, 'success', 'Appointment booked successfully.', 'fa fa-check', true);
+                res.redirect('/appointmentMain');
+            })
+        }
+        else{
+            res.redirect('/')
+        }
     })
     
 })
+
+router.get('/appointmentReschedule/:appointment_id', (req, res) => {
+    var appointmentBookingTargetId = req.params.appointment_id;
+        MedicalLocationModel.findAll().then(medicalLocationResult =>{
+            AppointmentModel.findOne({
+                where: {
+                    id: appointmentBookingTargetId
+                },
+                include:[UserModel]
+            }).then(appointmentResult => {
+                if (req.user.id == appointmentResult["user"].id || req.user.userLevel=="Healthcare Admin"){
+                    console.log('test')
+                    var appointmentResultMedicalLocationName = medicalLocationResult[(appointmentResult.medicalLocationId -1)].name
+                    console.log(appointmentResultMedicalLocationName)
+                    var formattedDate = moment(appointmentResult.dateTime).format('YYYY-MM-DD')
+                    var formattedTime = moment(appointmentResult.dateTime).format('hh:mm A') // HH for 24 hour format, hh for 12 hour format. mm for minutes MM is for months >:(
+                    let userResult = appointmentResult["user"]
+                    res.render('appointment', {
+                        userinfo: req.user,
+                        userResult,
+                        medicalLocationResult,
+                        appointmentResult,
+                        formattedDate,
+                        formattedTime,
+                        appointmentResultMedicalLocationName
+                    });
+                }
+                else{
+                    res.redirect('/')
+                }
+                
+            });
+        })
+});
+
+router.post('/appointmentRescheduleAction/:appointment_id', (req,res)=>{
+    AppointmentModel.findOne({
+        where:{
+            id: req.params.appointment_id
+        },
+        include:[UserModel]
+    }).then(appointmentResult=>{
+        if (req.user.id == appointmentResult["user"].id || req.user.userLevel=="Healthcare Admin"){
+            if (req.body.inputAlternateContactNumber){
+                appointmentResult.alternateContactNumber=req.body.inputAlternateContactNumber
+            }
+            if (req.body.inputMedicalLocation){
+                appointmentResult.medicalLocation = req.body.inputMedicalLocation
+            }
+            if (req.body.inputDepartment){
+                appointmentResult.department = req.body.inputDepartment
+            }
+            
+            if (req.body.inputDescription){
+                appointmentResult.description = req.body.inputDescription
+            }
+            appointmentResult.save()
+            .then(function(result){
+                if (result){
+                    alertMessage(res, 'success', 'Appointment rescheduled.', 'fa fa-check', true);
+                    res.redirect('/appointmentMain/');
+                }
+            }).catch(function (error) { // catch the error, consolelog error and render fail
+                alertMessage(res, 'danger', 'Unsuccessful:'+error.message, 'fa fa-check', true);
+                res.redirect('/appointmentMain/');
+                console.log("Error message:", error.message);
+            });
+        }
+        else{
+            res.redirect('/')
+        }
+    })
+    
+})
+
 
 router.get('/appointmentCancelAction/:appointment_id', (req, res) => {
     AppointmentModel.findOne({
