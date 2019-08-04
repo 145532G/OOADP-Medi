@@ -370,27 +370,51 @@ router.post('/appointmentBookingAction', (req,res)=>{
 
         }).then(appointmentResult =>{
             alertMessage(res, 'success', 'Appointment booked successfully.', 'fa fa-check', true);
-            res.redirect('appointmentMain');
+            res.redirect('/appointmentMain');
         })
     })
     
 })
 
-router.get('/profileRemovalAction/:user_id', (req, res) => {
-    var profileRemovalTargetId = req.params.user_id;
-    if (req.user.userLevel == "Healthcare Admin"){
-        UserModel.destroy({
-            where: {
-                id: profileRemovalTargetId
-            }
-        }).then(value =>{
-            alertMessage(res, 'success', 'Account removed.', 'fa fa-check', true);
-            res.redirect('../')
-        });
-    }
-    else{
-        res.redirect('../') // redirect if user level is not enough. 
-    }
+router.get('/appointmentCancelAction/:appointment_id', (req, res) => {
+    AppointmentModel.findOne({
+        where:{
+            id: req.params.appointment_id
+        }
+    }).then(result=>{
+        if (req.user.userLevel == "Healthcare Admin"){
+            AppointmentModel.update({
+                status:'Cancelled',
+                cancelledBy: req.user.id
+            },
+            {
+                where:{
+                    id: req.params.appointment_id
+                }
+            }).then(value =>{
+                alertMessage(res, 'success', 'Appointment cancelled.', 'fa fa-check', true);
+                res.redirect('/appointmentMain')
+            });
+        }
+        else if (result.userId == req.user.id){
+            AppointmentModel.update({
+                status:'Cancelled',
+                cancelledBy: req.user.id
+            },
+            {
+                where:{
+                    id: req.params.appointment_id
+                }
+            }).then(value =>{
+                alertMessage(res, 'success', 'Appointment cancelled.', 'fa fa-check', true);
+                res.redirect('/appointmentMain')
+            });
+        }
+        else{
+            res.redirect('../') // redirect if user is not authorized
+        }
+    })
+    
     
 });
 

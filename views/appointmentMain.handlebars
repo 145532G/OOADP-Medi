@@ -10,6 +10,14 @@
         </P>
         <br>
     </div>
+    {{#unless appointmentResult}}
+        <div class="container col-lg-8 mx-auto border bg-light rounded mb-5 text-center shadow">
+        <br>
+        You have no upcomming appointments.
+        <br>
+        <br>
+        </div>
+    {{/unless}}
     {{#each appointmentResult}}
     <div class="container col-lg-8 mx-auto border bg-light rounded mb-5 shadow">
         <br>
@@ -50,7 +58,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <a class="btn btn-danger" href="/profileRemovalAction/{{userResult.id}}" role="button">Confirm</a>
+                                <a class="btn btn-danger" href="/appointmentCancelAction/{{this.id}}" role="button">Confirm</a>
                             </div>
                             </div>
                         </div>
