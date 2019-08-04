@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
+var moment = require('moment');
 const alertMessage = require('../helpers/messenger');
 const UserModel = require('../models/user');
 const ReminderModel = require('../models/reminder')
@@ -229,7 +230,7 @@ router.post('/profileUpdateAction/:user_id', (req, res) => {
             id: req.params.user_id
         }
     }).then(targetObject =>{
-        var updateAllowedAttributes = {
+        var updateAllowedAttributes = { // check which attributes are allowed to be changed and pair with form results
             email:req.body.profileUpdateEmail,
             firstName:req.body.profileUpdateFirstName,
             lastName:req.body.profileUpdateLastName,
@@ -247,7 +248,7 @@ router.post('/profileUpdateAction/:user_id', (req, res) => {
             primaryContactNum:req.body.profileUpdatePrimaryContactNum
         };
         for (var i in updateAllowedAttributes){
-            if (updateAllowedAttributes[i]){
+            if (updateAllowedAttributes[i]){// update only new attributes that are entered
                 targetObject[i] = updateAllowedAttributes[i]
             }
         }
@@ -289,23 +290,108 @@ router.get('/appointmentMain', (req, res) => {
         res.redirect('/')
     }
     else{
-        res.render('appointmentMain',{userinfo});
+        AppointmentModel.findAll({ // find everything from appointment table
+            where:{
+                userId: req.user.id,// where userId field in appointment table equals to current logged in user
+                status: "Open" // only show appointments that are open
+            },
+            include:[MedicalLocationModel]
+        }).then(appointmentResult=>{
+            //console.log(appointmentResult[0]["medicalLocation"]["name"])
+            res.render('appointmentMain',{
+                userinfo,
+                appointmentResult
+            });
+        })
+        
     }
 });
 
 router.get('/appointmentBooking/:user_id', (req, res) => {
     var appointmentBookingTargetId = req.params.user_id;
-    UserModel.findOne({
-        where: {
-            id: appointmentBookingTargetId
-        }
-    }).then(userResult => {
 
-        res.render('appointmentBooking', {
-            userinfo: req.user,
-            userResult
+    MedicalLocationModel.findAll().then(medicalLocationResult =>{
+        UserModel.findOne({
+            where: {
+                id: appointmentBookingTargetId
+            }
+        }).then(userResult => {
+    
+            res.render('appointmentBooking', {
+                userinfo: req.user,
+                medicalLocationResult,
+                userResult
+            });
         });
-    });
+    })
+
+    
+});
+
+router.post('/appointmentBookingAction', (req,res)=>{
+    MedicalLocationModel.findOne({
+        where:{
+            id: req.body.inputMedicalLocation
+        }
+    }).then(medicalLocationResult=>{
+        let department = req.body.inputDepartment
+        let clinic = null
+        var dateTime = new Date(req.body.inputDate + " " + req.body.inputTime) // will be converted to UTC in database
+        //let dateTime = new moment(originalDateTime).add(medicalLocationResult.timezone, 'h').toDate(); // to account for timezone for locations. nevermind, handlebars will convert back
+        let symptoms = null
+        let status = "Open"
+        let bookedBy = req.user.id
+        let urgency = null
+        let alternateContactNumber = null
+        if (req.body.inputAlternateContactNumber){
+            alternateContactNumber = req.body.inputAlternateContactNumber
+        }
+        let description = null
+        if (req.body.inputDescription){
+            description = req.body.inputDescription
+        }
+        let additionalInformation = null
+        let userId = req.body.targetUserId
+        let medicalLocationId = req.body.inputMedicalLocation
+        
+        AppointmentModel.create({
+            department,
+            clinic,
+            dateTime,
+            symptoms,
+            status,
+            bookedBy,
+            urgency,
+            alternateContactNumber,
+            description,
+            additionalInformation,
+            userId,
+            medicalLocationId
+
+        }).then(appointmentResult =>{
+            alertMessage(res, 'success', 'Appointment booked successfully.', 'fa fa-check', true);
+            res.redirect('appointmentMain');
+        })
+    })
+    
+})
+
+router.get('/profileRemovalAction/:user_id', (req, res) => {
+    var profileRemovalTargetId = req.params.user_id;
+    if (req.user.userLevel == "Healthcare Admin"){
+        UserModel.destroy({
+            where: {
+                id: profileRemovalTargetId
+            }
+        }).then(value =>{
+            alertMessage(res, 'success', 'Account removed.', 'fa fa-check', true);
+            res.redirect('../')
+        });
+    }
+    else{
+        res.redirect('../') // redirect if user level is not enough. 
+    }
+    
 });
 
 router.get('/doctorConsultation', (req, res) => {

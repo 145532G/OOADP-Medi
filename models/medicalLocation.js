@@ -1,7 +1,16 @@
 const Sequelize = require('sequelize');
 const connection = require('../seqConn');
 
-const Location = connection.sequelizeConnection.define('location', { //declare table name in first parameter
+const medicalLocation = connection.sequelizeConnection.define('medicalLocation', { //declare table name in first parameter
+    country: {
+        type: Sequelize.STRING
+    },
+    state: {
+        type: Sequelize.STRING
+    },
+    timezone: {
+        type: Sequelize.INTEGER //timezone where medical location is based in +8gmt for singapore
+    },
     name: {
         type: Sequelize.STRING
     },
@@ -10,14 +19,9 @@ const Location = connection.sequelizeConnection.define('location', { //declare t
     },
     detail: {
         type: Sequelize.STRING
-    },
-    department: {
-        type: Sequelize.STRING
-    },
-    clinic: {
-        type: Sequelize.STRING
     }
+    
 }, {
     // options
 });
-module.exports = Location;
+module.exports = medicalLocation;

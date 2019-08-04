@@ -4,6 +4,12 @@ const User = require('./user');
 const MedicalLocation = require('./medicalLocation');
 
 const Appointment = connection.sequelizeConnection.define('appointment', { //declare table name in first parameter
+    department: {
+        type: Sequelize.STRING
+    },
+    clinic: {
+        type: Sequelize.STRING
+    },
     dateTime: {
         type: Sequelize.DATE
     },
@@ -15,9 +21,21 @@ const Appointment = connection.sequelizeConnection.define('appointment', { //dec
         defaultValue: "Open"
     },
     bookedBy: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER,
+    },
+    cancelledBy:{
+        type: Sequelize.INTEGER,
     },
     urgency: {
+        type: Sequelize.STRING
+    },
+    alternateContactNumber: {
+        type: Sequelize.INTEGER
+    },
+    description:{
+        type: Sequelize.STRING
+    },
+    additionalInformation:{
         type: Sequelize.STRING
     }
 }, {

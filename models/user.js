@@ -23,15 +23,15 @@ const User = connection.sequelizeConnection.define('user', { //declare table nam
     },
     firstName: {
         type: Sequelize.STRING,
-        validate: {
-            isAlpha: true
+        validate: { //only allow Alpha with space. dont remove the space in the expression
+            is: /^[a-zA-Z ]*$/
 
         }
     },
     lastName: {
         type: Sequelize.STRING,
-        validate: {
-            isAlpha: true
+        validate: { //only allow Alpha with space. dont remove the space in the expression
+            is: /^[a-zA-Z ]*$/
 
         }
     },

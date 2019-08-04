@@ -1,35 +1,64 @@
 <div class="container-fluid">
     <br>
-    <div class="container col-lg-8 mx-auto background-white rounded mb-5">
+    <div class="container col-lg-8 mx-auto border bg-light rounded mb-4 shadow-sm">
         <br>
         <a href="/appointmentBooking/{{userinfo.id}}" type="button" class="rounded btn-lg btn-primary float-right">Create Appointment</a>
+        
         <P>
-            Filler text
+            <img src="/image/user/profileImage/1.jpg"class="img-fluid img-thumbnail shadow-sm icon-profile">
+            Name: {{userinfo.firstName}} {{userinfo.lastName}} ({{userinfo.identificationNumber}})
         </P>
         <br>
     </div>
-
-    <div class="container col-lg-8 mx-auto background-white rounded mb-5">
+    {{#each appointmentResult}}
+    <div class="container col-lg-8 mx-auto border bg-light rounded mb-5 shadow">
         <br>
         <div class="row">
             <div class="col-1 border-right">
-                <img src="..." alt="..." class="img-thumbnail">
+                {{#if medicalLocation.icon}}
+                    <img src="/image/medicalLocation/{{medicalLocation.icon}}" class="img-thumbnail icon-standard">
+                {{/if}}
+                {{#unless medicalLocation.icon}}
+                    <img src="/image/medicalLocation/default.png" class="img-thumbnail icon-standard">
+                {{/unless}}
             </div>
             <div class="col">
-                28/04/2019 (Tuesday) <br>
-                01:40 PM
+                {{this.dateTime}}
             </div>
         </div>
         <hr class="my-4">
         <p>
-            Singapore General Hospital<br>
-            Department of Something<br>
-            Clinic A
+            {{this.medicalLocation.name}}<br>
+            Department of {{this.department}}<br>
+            {{this.clinic}}
         </p>
         <div class="input-group">
-            <button type="button" class="rounded btn-secondary btn-lg form-control mr-3">Cancel Appointment</button>
+            <button type="button" class="rounded btn-secondary btn-lg form-control mr-3" data-toggle="modal" data-target="#cancelAppointment_{{this.id}}">Cancel Appointment</button>
+                    <div class="modal fade" id="cancelAppointment_{{this.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLongTitle">Are you sure?</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                Appointment on: {{this.dateTime}} <br>
+                                At {{this.medicalLocation.name}} <br>
+                                Department of {{this.department}} <br>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <a class="btn btn-danger" href="/profileRemovalAction/{{userResult.id}}" role="button">Confirm</a>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+            
             <button type="button" class="rounded btn-info btn-lg form-control">Reschedule Appointment</button>
         </div>
         <br>
     </div>
+    {{/each}}
 </div>

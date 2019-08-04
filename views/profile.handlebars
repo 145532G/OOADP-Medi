@@ -115,7 +115,7 @@
                                         </button>
                                     </div>
                                     <div class="modal-body">
-                                        Deleating {{userResult.lastName}} {{userResult.firstName}}'s profile. <br>
+                                        Deleting {{userResult.lastName}} {{userResult.firstName}}'s profile. <br>
                                         Identification Number: {{userResult.identificationNumber}}
                                     </div>
                                     <div class="modal-footer">
@@ -124,7 +124,7 @@
                                     </div>
                                     </div>
                                 </div>
-                                </div>
+                            </div>
                             {{/if}}
                             {{#if patient}}<a href="/profile" type="button" class="btn btn-secondary float-right">Back to profile</a>{{/if}}
                         
@@ -151,7 +151,7 @@
                                     {{#if profileUpdate}}
                                         <td>
                                             <select class="form-control form-control-sm" name="profileUpdateSalutation">
-                                                <option hidden>{{userResult.salutation}}</option> {{! this instead of making a helper to find which to select }}
+                                                <option hidden disabled>{{userResult.salutation}}</option> {{! this instead of making a helper to find which to select }}
                                                 <option>Mr</option>
                                                 <option>Ms</option>
                                                 <option>Miss</option>
