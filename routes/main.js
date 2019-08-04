@@ -309,7 +309,6 @@ router.get('/appointmentMain', (req, res) => {
                 appointmentResult[i]["dayOnly"] = moment(appointmentResult[i].dateTime).format('dddd')
                 
             }
-            console.log('test'+ appointmentResult[4]["timeOnly"])
             res.render('appointmentMain',{
                 userinfo,
                 appointmentResult
@@ -441,7 +440,7 @@ router.post('/appointmentRescheduleAction/:appointment_id', (req,res)=>{
                 appointmentResult.alternateContactNumber=req.body.inputAlternateContactNumber
             }
             if (req.body.inputMedicalLocation){
-                appointmentResult.medicalLocation = req.body.inputMedicalLocation
+                appointmentResult.medicalLocationId = req.body.inputMedicalLocation
             }
             if (req.body.inputDepartment){
                 appointmentResult.department = req.body.inputDepartment
