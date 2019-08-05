@@ -55,8 +55,21 @@ router.get('/symptomInserttemp', (req, res) => {
 
 router.get('/symptomRecording', (req, res) => {
     symptom.findAll({
-        })
-        .then((result)=>{
+    })
+    if (object[1].SymptomTempList == "") {
+        result = object[1].question
+    } else {
+        for (i = 1; i ;i++) {
+            if (object[1].SymptomTempList.length == i) {
+                result = object[i+1].question;
+                break;
+            } else {
+                console.log(err)
+            }
+        }
+    }
+    symptom.findAll({
+        }).then((result)=>{
             res.render('./templates/symptomRecording',{
                 result
             })
