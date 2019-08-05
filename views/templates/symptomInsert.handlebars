@@ -13,7 +13,17 @@
 {{#if result}}
 {{#each result}}
 <div class="container">
-    <p>{{question}}</p>
+    <div class="form">
+        <div class="inline">
+            <form>
+                <input type="button" value="Delete">   
+            </form>
+            <form action="/symptom/symptomEdit" method="POST">
+                <input type="button" value="Edit">
+            </form>
+        </div>  
+        <p>{{question}}</p>
+    </div>
 </div>
 {{/each}}
 {{/if}}

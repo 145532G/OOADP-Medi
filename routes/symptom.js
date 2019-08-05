@@ -53,27 +53,61 @@ router.get('/symptomInserttemp', (req, res) => {
     res.render('./templates/symptomanswers');
 });
 
-router.get('/symptomRecording', (req, res) => {
+router.get('/symptomDelete', (req, res) => {
+    symptom.findAll({
+    }).then(result =>{
+        symptom.destroy
+    }).then(result =>{
+        res.render('./templates/symptomInsert')
+    })
+});
+
+router.get('/symptomEditing', (req, res) => {
+    symptom.findAll({
+    }).then(result =>{
+        res.redirect('/symptom/symptomEdit')
+    })
+});
+
+router.get('/symptomEdit', (req, res) => {
     symptom.findAll({
     })
-    if (object[1].SymptomTempList == "") {
-        result = object[1].question
-    } else {
-        for (i = 1; i ;i++) {
-            if (object[1].SymptomTempList.length == i) {
-                result = object[i+1].question;
-                break;
-            } else {
-                res.render('./templates/symptomanswers')
+    symptom.update({
+        question: req.body.symptomquestionedit
+    },
+    {
+        where: {
+            id: req.params.id
+        }
+    }).then(result =>{
+        alertMessage(res, 'success', 'fa fa-check', true);
+        res.redirect('/symptom/symptomInsert')
+    })
+});
+
+router.get('/symptomRecording', (req, res) => {
+    symptom.findAll({
+    }).then((result)=>{
+        if (result[1].SymptomTempList == "") {
+            questionResult = result[1].question
+            res.render('./templates/symptomRecording',{
+                questionResult
+            })
+        } else if (result[1].SymptomTempList != null) {
+            let questionNumber = result[1].SymptomTempList.length
+            questionResult = result[questionNumber].question
+            res.render('./templates/symptomRecording',{
+                questionResult
+            })
+        } else {
+            for (i = 1; i ;i++) {
+                if (result[i].List == result[1].SymptomTempList) {
+
+                }
             }
         }
-    }
-    symptom.findAll({
-        }).then((result)=>{
-            res.render('./templates/symptomRecording',{
-                result
-            })
-        })
+    })
+
 });
 
 // router.post('/symptom', (req, res) => {
