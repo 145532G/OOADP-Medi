@@ -535,7 +535,7 @@ router.get('/collection', (req, res) => {
             id.push(med.medicine_id);
         }
 
-        medicine.findAll({
+        medicine.findAll({  
             where:{
                 medicine_id: {[op.in]: id}
             },

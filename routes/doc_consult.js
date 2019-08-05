@@ -18,6 +18,7 @@ router.get('/doctorConsultation', (req, res) => {
         res.render('./templates/doc_consult',{result});
 
     })
+
    
 });
 
