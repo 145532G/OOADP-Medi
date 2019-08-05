@@ -1,0 +1,44 @@
+<div class="container-fluid">
+    <div class="container col-lg-10 mx-auto border bg-light rounded mt-5 p-5 shadow-sm">
+        <form action="/adminProfileSearch" method="post" class="form-inline">
+            <div class="form-group mx-auto">
+                <label>Search by Identification Number</label>
+                <input type="text" class="form-control mx-sm-3" name="inputIdentificationNumber">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+            
+        </form>
+    </div>
+    <div class="container col-lg-10 mx-auto border bg-light rounded mt-5 shadow-sm">
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">User Id</th>
+                    <th scope="col">User Level</th>
+                    <th scope="col">Email address</th>
+                    <th scope="col">Identification Number</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Edit Profile</th>
+                    <th scope="col">Show Appointments</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each findAllUsersResult}}
+                <tr>
+                    <th scope="row">{{this.id}}</th>
+                    <td>{{this.userLevel}}</td>
+                    <td>{{this.email}}</td>
+                    <td>{{this.identificationNumber}}</td>
+                    <td>{{this.firstName}}</td>
+                    <td>{{this.lastName}}</td>
+                    <td><a href="/profileUpdate/{{this.id}}" type="button" class="btn btn-primary">Edit Profile</a></td>
+                    <td><a href="/adminShowUserAppointments/{{this.id}}" type="button" class="btn btn-primary">Show appointments</a></td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+
+</div>

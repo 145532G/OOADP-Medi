@@ -13,12 +13,19 @@
 .background-white {
     background-color: #FFFFFF ;
 }
+.background-light-yellow{
+    background-color: #ffd79a;
+}
 .icon-profile{
     width:100px;
 }
 .icon-standard{
     width:75px;
 }
+.img-height-600{
+    height:600px;
+}
+
 /* To account for fixed-top navbar*/
 body {
     padding-top: 57px;

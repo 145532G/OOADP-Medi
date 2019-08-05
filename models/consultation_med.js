@@ -12,6 +12,12 @@ const con_med = connection.sequelizeConnection.define('con_med', {
     description: {
         type: Sequelize.STRING
     },
+    dosage: {
+        type: Sequelize.STRING
+    },
+    frequency: {
+        type: Sequelize.STRING
+    }
     
     
 

@@ -12,6 +12,9 @@ const medicine = connection.sequelizeConnection.define('medicine', {
     },
     medicine_description: {
         type: Sequelize.STRING
+    },
+    medicine_cost: {
+        type: Sequelize.INTEGER
     }
 
 });

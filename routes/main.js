@@ -8,7 +8,7 @@ const UserModel = require('../models/user');
 const ReminderModel = require('../models/reminder')
 const AppointmentModel = require('../models/appointment')
 const MedicalLocationModel = require('../models/medicalLocation')
-const op = require('sequelize').Op
+const Op = require('sequelize').Op
 const con_med = require('../models/consultation_med')
 const medicine = require('../models/medicine')
 const consultationModel = require('../models/consultation');
@@ -107,21 +107,25 @@ router.get('/signOut', function (req, res) {
 router.get('/dashboard', (req, res) => {
     let title = 'Dashboard'
     let userinfo = req.user;
-    if (userinfo) { // if user found
+    if (!req.user) {
+        alertMessage(res, 'danger', 'Invalid authorization, please sign in.', true); 
+        res.redirect('../')
+    }
+    else{
+        if(req.user.userLevel == "Healthcare Admin"){
+            var healthcareAdmin = true;
+        }
         res.render('dashboard', {
             title,
-            userinfo
+            userinfo,
+            healthcareAdmin
         });
-    } else {
-        res.render('unauthorised', {
-            message: 'Unauthorised user.'
-        })
     }
 
 });
 
 router.get('/profile', (req, res) => {
-    var profileRetrieve = "NULL" // var to tell profile handlebar to retrive and display
+    var profileRetrieve = true; // var to tell profile handlebar to retrive and display
     if (!req.user) {
         res.redirect('../')
     } else {
@@ -158,12 +162,12 @@ router.get('/profileUpdate/:user_id', (req, res) => {
     if (!req.user) {
         res.redirect('../')
     }
-    var profileUpdate = "NULL" // var to tell profile handlebar to update
+    var profileUpdate = true; // var to tell profile handlebar to update
     const profileUpdateTargetID = req.params.user_id;
     const profileUpdateChangerID = req.user.id;
     const profileUpdateChangerUserLevel = req.user.userLevel;
     if (profileUpdateChangerID == profileUpdateTargetID) {
-        var patient = "Null"
+        var patient = true;
         UserModel.findOne({
             where: {
                 id: profileUpdateTargetID
@@ -191,7 +195,7 @@ router.get('/profileUpdate/:user_id', (req, res) => {
         });
     }
     else if (profileUpdateChangerUserLevel == "Healthcare Admin"){
-        var healthcareAdmin = "Null"
+        var healthcareAdmin = true;
         UserModel.findOne({
             where: {
                 id: profileUpdateTargetID
@@ -288,7 +292,7 @@ router.get('/profileRemovalAction/:user_id', (req, res) => {
     
 });
 
-router.get('/appointmentMain', (req, res) => {
+router.get('/appointment', (req, res) => {
     let userinfo = req.user;
     if(!userinfo){
         res.redirect('/')
@@ -297,7 +301,9 @@ router.get('/appointmentMain', (req, res) => {
         AppointmentModel.findAll({ // find everything from appointment table
             where:{
                 userId: req.user.id,// where userId field in appointment table equals to current logged in user
-                status: "Open" // only show appointments that are open
+                status: {
+                    [Op.or]: ['Open', 'Confirmed']// only show appointments that are open or confirmed
+                } 
             },
             order: [
                 ['dateTime', 'ASC']
@@ -312,7 +318,7 @@ router.get('/appointmentMain', (req, res) => {
                 appointmentResult[i]["dayOnly"] = moment(appointmentResult[i].dateTime).format('dddd')
                 
             }
-            res.render('appointmentMain',{
+            res.render('appointment',{
                 userinfo,
                 appointmentResult
             });
@@ -331,7 +337,7 @@ router.get('/appointmentBooking/:user_id', (req, res) => {
                 }
             }).then(userResult => {
         
-                res.render('appointment', {
+                res.render('appointmentBooking', {
                     userinfo: req.user,
                     medicalLocationResult,
                     userResult
@@ -386,8 +392,15 @@ router.post('/appointmentBookingAction', (req,res)=>{
                 medicalLocationId
     
             }).then(appointmentResult =>{
+                
                 alertMessage(res, 'success', 'Appointment booked successfully.', 'fa fa-check', true);
-                res.redirect('/appointmentMain');
+                if (appointmentResult.bookedBy != appointmentResult.userId){
+                    res.redirect('/adminShowUserAppointments/'+appointmentResult.userId);
+                }
+                else{
+                    res.redirect('/appointment');
+                }
+                
             })
         }
         else{
@@ -413,7 +426,7 @@ router.get('/appointmentReschedule/:appointment_id', (req, res) => {
                     var formattedDate = moment(appointmentResult.dateTime).format('YYYY-MM-DD')
                     var formattedTime = moment(appointmentResult.dateTime).format('hh:mm A') // HH for 24 hour format, hh for 12 hour format. mm for minutes MM is for months >:(
                     let userResult = appointmentResult["user"]
-                    res.render('appointment', {
+                    res.render('appointmentBooking', {
                         userinfo: req.user,
                         userResult,
                         medicalLocationResult,
@@ -459,11 +472,11 @@ router.post('/appointmentRescheduleAction/:appointment_id', (req,res)=>{
             .then(function(result){
                 if (result){
                     alertMessage(res, 'success', 'Appointment rescheduled.', 'fa fa-check', true);
-                    res.redirect('/appointmentMain/');
+                    res.redirect('/appointment/');
                 }
             }).catch(function (error) { // catch the error, consolelog error and render fail
                 alertMessage(res, 'danger', 'Unsuccessful:'+error.message, 'fa fa-check', true);
-                res.redirect('/appointmentMain/');
+                res.redirect('/appointment/');
                 console.log("Error message:", error.message);
             });
         }
@@ -492,7 +505,7 @@ router.get('/appointmentCancelAction/:appointment_id', (req, res) => {
                 }
             }).then(value =>{
                 alertMessage(res, 'success', 'Appointment cancelled.', 'fa fa-check', true);
-                res.redirect('/appointmentMain')
+                res.redirect('/appointment')
             });
         }
         else if (result.userId == req.user.id){
@@ -506,7 +519,7 @@ router.get('/appointmentCancelAction/:appointment_id', (req, res) => {
                 }
             }).then(value =>{
                 alertMessage(res, 'success', 'Appointment cancelled.', 'fa fa-check', true);
-                res.redirect('/appointmentMain')
+                res.redirect('/appointment')
             });
         }
         else{
@@ -515,6 +528,12 @@ router.get('/appointmentCancelAction/:appointment_id', (req, res) => {
     })
     
     
+});
+
+router.get('/reminder', (req, res) => {
+    res.render('./reminder',{
+        userinfo:req.user
+    });
 });
 
 router.get('/doctorConsultation', (req, res) => {
@@ -538,7 +557,7 @@ router.get('/collection', (req, res) => {
 
         medicine.findAll({  
             where:{
-                medicine_id: {[op.in]: id}
+                medicine_id: {[Op.in]: id}
             },
             raw: true
         }).then(data => {
@@ -564,6 +583,106 @@ router.get('/collection', (req, res) => {
     
 });
 
+router.get('/adminShowUsers', (req, res) => {
+    if (!req.user ) {
+        res.redirect('../')
+    }
+    else if (req.user.userLevel != "Healthcare Admin"){
+        res.redirect('../')
+    }
+    else {
+        UserModel.findAll().then(findAllUsersResult=>{
+            res.render('adminShowUsers',{
+                userinfo: req.user,
+                findAllUsersResult
+            })
+        })
+    }
+});
+
+router.post('/adminProfileSearch', (req, res) => {
+    if (!req.user ) {
+        res.redirect('../')
+    }
+    else if (req.user.userLevel != "Healthcare Admin"){
+        res.redirect('../')
+    }
+    else {
+        UserModel.findOne({
+            where:{
+                identificationNumber:req.body.inputIdentificationNumber
+            }
+        }).then(userResult=>{
+            if (userResult){
+                res.redirect('profileUpdate/'+userResult.id)
+            }
+            else{
+                alertMessage(res, 'danger', 'No profile with the identification number found.', 'fa fa-check', true);
+                res.redirect('adminShowUsers/')
+            }
+            
+        })
+    }
+});
+
+router.get('/adminShowUserAppointments/:user_id', (req, res) => {
+    if (!req.user ) {
+        res.redirect('../')
+    }
+    else if (req.user.userLevel != "Healthcare Admin"){
+        res.redirect('../')
+    }
+    else {
+        UserModel.findOne({
+            where:{
+                id : req.params.user_id
+            }
+        }).then(userResult=>{
+            AppointmentModel.findAll({ // find everything from appointment table
+                where:{
+                    userId: req.params.user_id,// where userId field in appointment table equals to current logged in user
+                },
+                order: [
+                    ['dateTime', 'ASC']
+                ],
+                include:[MedicalLocationModel]
+            }).then(appointmentResult=>{
+                //console.log(appointmentResult[0]["medicalLocation"]["name"])
+                // splitting dateTime for formatting
+                for (i in appointmentResult){
+                    appointmentResult[i]["dateOnly"] = moment(appointmentResult[i].dateTime).format('Do MMMM YYYY')
+                    appointmentResult[i]["timeOnly"] = moment(appointmentResult[i].dateTime).format('hh:mm A')
+                    appointmentResult[i]["dayOnly"] = moment(appointmentResult[i].dateTime).format('dddd')
+                    
+                }
+                res.render('appointment',{
+                    userinfo:req.user,
+                    userResult,
+                    appointmentResult
+                });
+            })
+        })
+        
+    }
+});
+
+router.get('/adminMedicalLocation', (req, res) => {
+    if (!req.user ) {
+        res.redirect('../')
+    }
+    else if (req.user.userLevel != "Healthcare Admin"){
+        res.redirect('../')
+    }
+    else {
+        UserModel.findAll().then(findAllUsersResult=>{
+            res.render('adminShowUsers',{
+                userinfo: req.user,
+                findAllUsersResult
+            })
+        })
+    }
+});
+
 router.get('/symptomanswer', (req, res) => {
     res.render('./templates/symptomanswers');
 });
@@ -581,8 +700,22 @@ router.get('/patientinformation', (req, res) => {
 })
 
 
-
-
+//Populate admin account username:admin@medified.com password:admin@medified.com
+bcrypt.genSalt(10, function (err, salt) {
+    // bcrypt.hash(passwordToStore, saltThatWasGenerated) (errorobj, salt+saltedpassword)
+    bcrypt.hash('admin@medified.com', salt, function (err, hashpassword) {
+        UserModel.create({
+            email:'admin@medified.com',
+            password:hashpassword,
+            userLevel:'Healthcare Admin',
+            firstName:'Admin',
+            lastName:'Medified',
+            identificationNumber:'S0000000Z'
+        }).catch(function(error) {
+            //leave empty sequelize will report dupe entry if not caught
+          })
+    })
+})
 
 
 module.exports = router;
