@@ -20,10 +20,15 @@
     <div class="row">
         <div class="col-sm-6">
         <br>
-            <img src = "...">
-            <div id = "id">Niyu Yu Hong</div>
-            <div id = "NRIC">S9975358G</div>
-            <div id = "medical_hist">Medical History</div>
+            {{#if QueueUserResult.user.image}}
+                    <img src="/image/user/profileImage/{{QueueUserResult.user.image}}">
+                    {{/if}}
+                    {{#unless QueueUserResult.user.image}}
+                        <img src="/image/user/profileImage/default.png">
+                    {{/unless}}
+                    <p id="p_name" name = "patient_name">Name : {{QueueUserResult.user.firstName}} {{QueueUserResult.user.lastName}}</p>
+                    <p id="p_queueNum" name = "patient_queue_number">Queue Number: {{QueueUserResult.id}}</p>
+                    <p id="p_nric" name = "patient_NIRC">NIRC : {{QueueUserResult.user.identificationNumber}}</p>
             <div>
                 <table class="table table-bordered table-striped">
                     <thead>
@@ -49,8 +54,6 @@
         </div>    
     
             <div class="col-sm-4">
-                <p>Allergy</p>
-                <p id = "allergy_container">He is allergy to peanut</p>
                 <button id = "Button_done">Done</button>
             </div>
     </div>

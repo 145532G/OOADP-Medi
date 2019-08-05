@@ -9,6 +9,8 @@ const ReminderModel = require('../models/reminder')
 const AppointmentModel = require('../models/appointment')
 const MedicalLocationModel = require('../models/medicalLocation')
 const op = require('sequelize').Op
+const con_med = require('../models/consultation_med')
+const medicine = require('../models/medicine')
 /*
 router.get 2 parameters (directory, arrowfunction )
 arrowfunction 2 parameters (req,res) => {
@@ -521,7 +523,7 @@ router.get('/doctorConsultation', (req, res) => {
 router.get('/collection', (req, res) => {
     con_med.findAll({
         where: {
-            consultationId: 1
+            consultationId: 2
         },  
         order:[
             ['medicine_id','asc']
