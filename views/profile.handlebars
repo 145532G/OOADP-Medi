@@ -5,7 +5,12 @@
             <div class="card h-100">
                 <div class="card-body shadow">
                     {{#if profileUpdate}} <form action="/profileUpdateAction/{{userResult.id}}" method="post">{{/if}}
-                    <img src="/image/user/profileImage/1.jpg"class="img-fluid img-thumbnail mx-auto d-block shadow-sm">
+                    {{#if userResult.image}}
+                        <img src="/image/user/profileImage/{{userResult.image}}"class="img-fluid img-thumbnail mx-auto d-block shadow-sm">
+                    {{/if}}
+                    {{#unless userResult.image}}
+                        <img src="/image/user/profileImage/default.png"class="img-fluid img-thumbnail mx-auto d-block shadow-sm">
+                    {{/unless}}
                     <h5 class="card-title text-center">{{userResult.lastName}} {{userResult.firstName}} </h5>
                     <table class="table table-borderless">
                         <tbody>
