@@ -44,7 +44,7 @@
                     <div class="col-sm-12 col-md-6 col-lg-4">
                         <p class="font-italic">Contact No.</p>
                         <p class="text-info">
-                            {{contact_no}}
+                            {{addSpace contact_no}}
                         </p>
                     </div>
                     <div class="col-sm-12 col-md-6 col-lg-4">
@@ -74,7 +74,7 @@
                             <div class="col-sm-12 col-md-12 col-lg-4">
                                 <p class="font-italic">Account No.</p>
                                 <p class="text-info">
-                                    {{accountNo}}
+                                    {{addSpace accountNo}}
                                 </p>
                             </div>
                             <div class="col-sm-12 col-md-12 col-lg-4">
@@ -86,7 +86,7 @@
                             <div class="col-sm-12 col-md-12 col-lg-4">
                                 <p class="font-italic">Card No.</p>
                                 <p class="text-info">
-                                    {{cardNo}}
+                                    {{addSpace cardNo}}
                                 </p>
                             </div>
                             <div class="col-sm-12 col-md-12 col-lg-4">
@@ -104,7 +104,7 @@
                         </div>
                     </div>
                     <div style="margin-top: 10px;">
-                        <a class="btn btn-danger card-link" href="/bill/delete/{{id}}" data-toggle="confirmation" data-title="Confirm delete?">Delete</a>
+                        <a class="btn btn-danger card-link" href="/bill/delete/{{id}}" data-toggle="confirmation" data-title="Confirm delete?"><i class="fa fa-trash"></i>&nbsp;Delete Record</a>
                     </div>
                     {{else}}
                     <div class="card card-body bg-warning col-lg-10" style="margin: auto;">
@@ -116,16 +116,16 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-3">
-                            <a class="btn btn-warning" href="/bill/creditcard/{{id}}">Pay (Credit)</a>
+                            <a class="btn btn-warning" href="/bill/creditcard/{{id}}"><i class="fa fa-credit-card"></i>&nbsp;Pay (Credit)</a>
                         </div>
                         <div class="col-lg-3">
-                            <a class="btn btn-success" href="/bill/debitcard/{{id}}">Pay (Debit)</a>
+                            <a class="btn btn-success" href="/bill/debitcard/{{id}}"><i class="fa fa-credit-card"></i>&nbsp;Pay (Debit)</a>
                         </div>
                         <div class="col-lg-3">
-                            <a class="btn btn-primary" href="/bill/paypal/{{id}}">Pay (Paypal)</a>
+                            <a class="btn btn-primary" href="/bill/paypal/{{id}}"><i class="fa fa-cc-paypal"></i>&nbsp;Pay (Paypal)</a>
                         </div>
                         <div class="col-lg-3">
-                            <a class="btn btn-danger card-link" href="/bill/delete/{{id}}" data-toggle="confirmation" data-title="Confirm delete?">Delete</a>
+                            <a class="btn btn-danger card-link" href="/bill/delete/{{id}}" data-toggle="confirmation" data-title="Confirm delete?"><i class="fa fa-trash"></i>&nbsp;Delete Record</a>
                         </div>
                     </div>
                     {{/if}}

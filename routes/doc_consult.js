@@ -30,6 +30,7 @@ router.get('/doctorConsultation', (req, res) => {
         })
 
     })
+
    
 });
 
