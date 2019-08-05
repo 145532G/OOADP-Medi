@@ -7,6 +7,7 @@ const Sequelize = require('sequelize');
 const Op = Sequelize.Op
 const alertMessage = require('../helpers/messenger');
 const Queue = require('../models/QueueNo');
+const UserModel = require('../models/user');
 
 
 
@@ -14,8 +15,19 @@ const Queue = require('../models/QueueNo');
 router.get('/doctorConsultation', (req, res) => {
     medicine.findAll({
 
-    }).then((result)=>{
-        res.render('./templates/doc_consult',{result});
+    }).then((medicineListResult)=>{
+        Queue.findOne({ //find one user where id = userId is in queue
+            where: {
+                userId: 1 
+            },
+            include:[UserModel]
+        }).then(QueueUserResult=>{
+            res.render('./templates/doc_consult',{
+                userinfo:req.user,
+                result:medicineListResult,
+                QueueUserResult
+            });
+        })
 
     })
    

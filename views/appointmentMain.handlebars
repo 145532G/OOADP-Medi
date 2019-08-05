@@ -5,7 +5,12 @@
         <a href="/appointmentBooking/{{userinfo.id}}" type="button" class="rounded btn-lg btn-primary float-right">Create Appointment</a>
         
         <P>
-            <img src="/image/user/profileImage/1.jpg"class="img-fluid img-thumbnail shadow-sm icon-profile">
+            {{#if userinfo.image}}
+                <img src="/image/user/profileImage/{{userinfo.image}}"class="img-fluid img-thumbnail shadow-sm icon-profile">
+            {{/if}}
+            {{#unless userinfo.image}}
+                <img src="/image/user/profileImage/default.png"class="img-fluid img-thumbnail shadow-sm icon-profile">
+            {{/unless}}
             Name: {{userinfo.firstName}} {{userinfo.lastName}} ({{userinfo.identificationNumber}})
         </P>
         <br>
