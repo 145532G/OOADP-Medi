@@ -18,7 +18,7 @@ router.get('/doctorConsultation', (req, res) => {
     }).then((medicineListResult)=>{
         Queue.findOne({ //find one user where id = userId is in queue
             where: {
-                userId: 1 
+                userId: req.user.id
             },
             include:[UserModel]
         }).then(QueueUserResult=>{
