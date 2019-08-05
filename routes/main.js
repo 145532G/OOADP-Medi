@@ -8,7 +8,7 @@ const UserModel = require('../models/user');
 const ReminderModel = require('../models/reminder')
 const AppointmentModel = require('../models/appointment')
 const MedicalLocationModel = require('../models/medicalLocation')
-const op = require('sequelize').Op
+const Op = require('sequelize').Op
 const con_med = require('../models/consultation_med')
 const medicine = require('../models/medicine')
 const consultationModel = require('../models/consultation');
@@ -108,6 +108,24 @@ router.get('/dashboard', (req, res) => {
     let title = 'Dashboard'
     let userinfo = req.user;
     if (userinfo) { // if user found
+        /*
+        var messagebird = require('messagebird')('850BsPzdMGZI49dEOyr0AAGm8');
+            messagebird.messages.create({
+                originator : 'Bob',
+                recipients : [ '+6584613836' ],
+                body : 'Hello World, I am a text message and I was hatched by Javascript code!'
+            },
+            function (err, response) {
+                if (err) {
+                    console.log("ERROR:");
+                    console.log(err);
+                } else {
+                    console.log("SUCCESS:");
+                    console.log(response);
+                }
+            });
+        */
+
         res.render('dashboard', {
             title,
             userinfo
@@ -288,7 +306,7 @@ router.get('/profileRemovalAction/:user_id', (req, res) => {
     
 });
 
-router.get('/appointmentMain', (req, res) => {
+router.get('/appointment', (req, res) => {
     let userinfo = req.user;
     if(!userinfo){
         res.redirect('/')
@@ -297,7 +315,9 @@ router.get('/appointmentMain', (req, res) => {
         AppointmentModel.findAll({ // find everything from appointment table
             where:{
                 userId: req.user.id,// where userId field in appointment table equals to current logged in user
-                status: "Open" // only show appointments that are open
+                status: {
+                    [Op.or]: ['Open', 'Confirmed']// only show appointments that are open or confirmed
+                } 
             },
             order: [
                 ['dateTime', 'ASC']
@@ -312,7 +332,7 @@ router.get('/appointmentMain', (req, res) => {
                 appointmentResult[i]["dayOnly"] = moment(appointmentResult[i].dateTime).format('dddd')
                 
             }
-            res.render('appointmentMain',{
+            res.render('appointment',{
                 userinfo,
                 appointmentResult
             });
@@ -331,7 +351,7 @@ router.get('/appointmentBooking/:user_id', (req, res) => {
                 }
             }).then(userResult => {
         
-                res.render('appointment', {
+                res.render('appointmentBooking', {
                     userinfo: req.user,
                     medicalLocationResult,
                     userResult
@@ -387,7 +407,7 @@ router.post('/appointmentBookingAction', (req,res)=>{
     
             }).then(appointmentResult =>{
                 alertMessage(res, 'success', 'Appointment booked successfully.', 'fa fa-check', true);
-                res.redirect('/appointmentMain');
+                res.redirect('/appointment');
             })
         }
         else{
@@ -413,7 +433,7 @@ router.get('/appointmentReschedule/:appointment_id', (req, res) => {
                     var formattedDate = moment(appointmentResult.dateTime).format('YYYY-MM-DD')
                     var formattedTime = moment(appointmentResult.dateTime).format('hh:mm A') // HH for 24 hour format, hh for 12 hour format. mm for minutes MM is for months >:(
                     let userResult = appointmentResult["user"]
-                    res.render('appointment', {
+                    res.render('appointmentBooking', {
                         userinfo: req.user,
                         userResult,
                         medicalLocationResult,
@@ -459,11 +479,11 @@ router.post('/appointmentRescheduleAction/:appointment_id', (req,res)=>{
             .then(function(result){
                 if (result){
                     alertMessage(res, 'success', 'Appointment rescheduled.', 'fa fa-check', true);
-                    res.redirect('/appointmentMain/');
+                    res.redirect('/appointment/');
                 }
             }).catch(function (error) { // catch the error, consolelog error and render fail
                 alertMessage(res, 'danger', 'Unsuccessful:'+error.message, 'fa fa-check', true);
-                res.redirect('/appointmentMain/');
+                res.redirect('/appointment/');
                 console.log("Error message:", error.message);
             });
         }
@@ -492,7 +512,7 @@ router.get('/appointmentCancelAction/:appointment_id', (req, res) => {
                 }
             }).then(value =>{
                 alertMessage(res, 'success', 'Appointment cancelled.', 'fa fa-check', true);
-                res.redirect('/appointmentMain')
+                res.redirect('/appointment')
             });
         }
         else if (result.userId == req.user.id){
@@ -506,7 +526,7 @@ router.get('/appointmentCancelAction/:appointment_id', (req, res) => {
                 }
             }).then(value =>{
                 alertMessage(res, 'success', 'Appointment cancelled.', 'fa fa-check', true);
-                res.redirect('/appointmentMain')
+                res.redirect('/appointment')
             });
         }
         else{
@@ -515,6 +535,12 @@ router.get('/appointmentCancelAction/:appointment_id', (req, res) => {
     })
     
     
+});
+
+router.get('/reminder', (req, res) => {
+    res.render('./reminder',{
+        userinfo:req.user
+    });
 });
 
 router.get('/doctorConsultation', (req, res) => {
@@ -538,7 +564,7 @@ router.get('/collection', (req, res) => {
 
         medicine.findAll({  
             where:{
-                medicine_id: {[op.in]: id}
+                medicine_id: {[Op.in]: id}
             },
             raw: true
         }).then(data => {
@@ -562,6 +588,18 @@ router.get('/collection', (req, res) => {
     })
    
     
+});
+
+router.get('/adminProfile', (req, res) => {
+    if (!req.user ) {
+        res.redirect('../')
+    }
+    else if (req.user.userLevel != "Healthcare Admin"){
+        res.redirect('../')
+    }
+    else {
+        
+    }
 });
 
 router.get('/symptomanswer', (req, res) => {

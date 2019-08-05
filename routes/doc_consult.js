@@ -64,7 +64,7 @@ router.post('/doc_consult', (req, res)=>{
         });
 
        
-    
+        res.redirect('/doctorConsultation')
     })
     
     
