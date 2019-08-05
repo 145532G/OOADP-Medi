@@ -2,14 +2,6 @@
     <br>
     <div class="container col-10">
         <div class="card-columns">
-            {{#if HealthcareAdmin}}
-            <div class="card bg-light">
-                <div class="card-body text-center">
-                    <h4 class="card-title"><a href="/profile" class="card-link">Profile</a></h4>
-                    <p class="card-text">{{ userinfo.email }}Profile page: <a href="/profile" class="card-link"> link</a></p>
-                </div>
-            </div>
-            {{/if}}
             <div class="card bg-light">
                 <div class="card-body text-center">
                     <h4 class="card-title"><a href="/profile" class="card-link">Profile</a></h4>
@@ -18,7 +10,7 @@
             </div>
             <div class="card bg-light">
                 <div class="card-body text-center">
-                    <h4 class="card-title"><a href="/reminders" class="card-link">Reminders</a></h4>
+                    <h4 class="card-title"><a href="/reminder" class="card-link">Reminders</a></h4>
                     <p class="card-text">Mon, 2pm - calcium tablet 35mg 1pc</p>
                     <p class="card-text">Daily, 6pm - paracetamol tablet 20mg 2pc</p>
                 </div>
@@ -49,5 +41,9 @@
                 </div>
             </div>
         </div>
+    <hr>
+    {{#if healthcareAdmin}}
+        healthcareAdmin
+    {{/if}}
     </div>
 </div>

@@ -107,39 +107,25 @@ router.get('/signOut', function (req, res) {
 router.get('/dashboard', (req, res) => {
     let title = 'Dashboard'
     let userinfo = req.user;
-    if (userinfo) { // if user found
-        /*
-        var messagebird = require('messagebird')('850BsPzdMGZI49dEOyr0AAGm8');
-            messagebird.messages.create({
-                originator : 'Bob',
-                recipients : [ '+6584613836' ],
-                body : 'Hello World, I am a text message and I was hatched by Javascript code!'
-            },
-            function (err, response) {
-                if (err) {
-                    console.log("ERROR:");
-                    console.log(err);
-                } else {
-                    console.log("SUCCESS:");
-                    console.log(response);
-                }
-            });
-        */
-
+    if (!req.user) {
+        alertMessage(res, 'danger', 'Invalid authorization, please sign in.', true); 
+        res.redirect('../')
+    }
+    else{
+        if(req.user.userLevel == "Healthcare Admin"){
+            var healthcareAdmin = true;
+        }
         res.render('dashboard', {
             title,
-            userinfo
+            userinfo,
+            healthcareAdmin
         });
-    } else {
-        res.render('unauthorised', {
-            message: 'Unauthorised user.'
-        })
     }
 
 });
 
 router.get('/profile', (req, res) => {
-    var profileRetrieve = "NULL" // var to tell profile handlebar to retrive and display
+    var profileRetrieve = true; // var to tell profile handlebar to retrive and display
     if (!req.user) {
         res.redirect('../')
     } else {
@@ -176,12 +162,12 @@ router.get('/profileUpdate/:user_id', (req, res) => {
     if (!req.user) {
         res.redirect('../')
     }
-    var profileUpdate = "NULL" // var to tell profile handlebar to update
+    var profileUpdate = true; // var to tell profile handlebar to update
     const profileUpdateTargetID = req.params.user_id;
     const profileUpdateChangerID = req.user.id;
     const profileUpdateChangerUserLevel = req.user.userLevel;
     if (profileUpdateChangerID == profileUpdateTargetID) {
-        var patient = "Null"
+        var patient = true;
         UserModel.findOne({
             where: {
                 id: profileUpdateTargetID
@@ -209,7 +195,7 @@ router.get('/profileUpdate/:user_id', (req, res) => {
         });
     }
     else if (profileUpdateChangerUserLevel == "Healthcare Admin"){
-        var healthcareAdmin = "Null"
+        var healthcareAdmin = true;
         UserModel.findOne({
             where: {
                 id: profileUpdateTargetID
@@ -619,8 +605,22 @@ router.get('/patientinformation', (req, res) => {
 })
 
 
-
-
+//Populate admin account username:admin@medified.com password:admin@medified.com
+bcrypt.genSalt(10, function (err, salt) {
+    // bcrypt.hash(passwordToStore, saltThatWasGenerated) (errorobj, salt+saltedpassword)
+    bcrypt.hash('admin@medified.com', salt, function (err, hashpassword) {
+        UserModel.findOrCreate({
+            where:{
+                email:'admin@medified.com',
+                password:hashpassword,
+                userLevel:'Healthcare Admin',
+                firstName:'Admin',
+                lastName:'Medified',
+                identificationNumber:'S0000000Z'
+            }
+        })
+    })
+})
 
 
 module.exports = router;
