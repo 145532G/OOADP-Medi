@@ -64,7 +64,7 @@ router.get('/symptomRecording', (req, res) => {
                 result = object[i+1].question;
                 break;
             } else {
-                console.log(err)
+                res.render('./templates/symptomanswers')
             }
         }
     }
