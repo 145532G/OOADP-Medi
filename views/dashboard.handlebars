@@ -5,7 +5,8 @@
             <div class="card bg-light">
                 <div class="card-body text-center">
                     <h4 class="card-title"><a href="/profile" class="card-link">Profile</a></h4>
-                    <p class="card-text">{{ userinfo.email }}Profile page: <a href="/profile" class="card-link"> link</a></p>
+                    <p class="card-text">{{ userinfo.email }}Profile page: <a href="/profile" class="card-link">
+                            link</a></p>
                 </div>
             </div>
             <div class="card bg-light">
@@ -41,9 +42,28 @@
                 </div>
             </div>
         </div>
-    <hr>
-    {{#if healthcareAdmin}}
-        healthcareAdmin
-    {{/if}}
+        <hr>
+        {{#if healthcareAdmin}}
+        <div class="card-deck">
+            <div class="card">
+                <div class="card-body">
+                    <a href="adminShowUsers"><h5 class="card-title mb-4">Show all Users</h5></a>
+                    <p class="card-text">This page shows all users that are registered on this website.</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <a href="adminShowUsers"><h5 class="card-title mb-4">Show all Users</h5></a>
+                    <p class="card-text">This page shows all users that are registered on this website.</p>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <a href="adminShowUsers"><h5 class="card-title mb-4">Show all Users</h5></a>
+                    <p class="card-text">This page shows all users that are registered on this website.</p>
+                </div>
+            </div>
+        </div>
+        {{/if}}
     </div>
 </div>

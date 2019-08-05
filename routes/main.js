@@ -392,8 +392,15 @@ router.post('/appointmentBookingAction', (req,res)=>{
                 medicalLocationId
     
             }).then(appointmentResult =>{
+                
                 alertMessage(res, 'success', 'Appointment booked successfully.', 'fa fa-check', true);
-                res.redirect('/appointment');
+                if (appointmentResult.bookedBy != appointmentResult.userId){
+                    res.redirect('/adminShowUserAppointments/'+appointmentResult.userId);
+                }
+                else{
+                    res.redirect('/appointment');
+                }
+                
             })
         }
         else{
@@ -576,7 +583,7 @@ router.get('/collection', (req, res) => {
     
 });
 
-router.get('/adminProfile', (req, res) => {
+router.get('/adminShowUsers', (req, res) => {
     if (!req.user ) {
         res.redirect('../')
     }
@@ -584,7 +591,95 @@ router.get('/adminProfile', (req, res) => {
         res.redirect('../')
     }
     else {
+        UserModel.findAll().then(findAllUsersResult=>{
+            res.render('adminShowUsers',{
+                userinfo: req.user,
+                findAllUsersResult
+            })
+        })
+    }
+});
+
+router.post('/adminProfileSearch', (req, res) => {
+    if (!req.user ) {
+        res.redirect('../')
+    }
+    else if (req.user.userLevel != "Healthcare Admin"){
+        res.redirect('../')
+    }
+    else {
+        UserModel.findOne({
+            where:{
+                identificationNumber:req.body.inputIdentificationNumber
+            }
+        }).then(userResult=>{
+            if (userResult){
+                res.redirect('profileUpdate/'+userResult.id)
+            }
+            else{
+                alertMessage(res, 'danger', 'No profile with the identification number found.', 'fa fa-check', true);
+                res.redirect('adminShowUsers/')
+            }
+            
+        })
+    }
+});
+
+router.get('/adminShowUserAppointments/:user_id', (req, res) => {
+    if (!req.user ) {
+        res.redirect('../')
+    }
+    else if (req.user.userLevel != "Healthcare Admin"){
+        res.redirect('../')
+    }
+    else {
+        UserModel.findOne({
+            where:{
+                id : req.params.user_id
+            }
+        }).then(userResult=>{
+            AppointmentModel.findAll({ // find everything from appointment table
+                where:{
+                    userId: req.params.user_id,// where userId field in appointment table equals to current logged in user
+                },
+                order: [
+                    ['dateTime', 'ASC']
+                ],
+                include:[MedicalLocationModel]
+            }).then(appointmentResult=>{
+                //console.log(appointmentResult[0]["medicalLocation"]["name"])
+                // splitting dateTime for formatting
+                for (i in appointmentResult){
+                    appointmentResult[i]["dateOnly"] = moment(appointmentResult[i].dateTime).format('Do MMMM YYYY')
+                    appointmentResult[i]["timeOnly"] = moment(appointmentResult[i].dateTime).format('hh:mm A')
+                    appointmentResult[i]["dayOnly"] = moment(appointmentResult[i].dateTime).format('dddd')
+                    
+                }
+                res.render('appointment',{
+                    userinfo:req.user,
+                    userResult,
+                    appointmentResult
+                });
+            })
+        })
         
+    }
+});
+
+router.get('/adminMedicalLocation', (req, res) => {
+    if (!req.user ) {
+        res.redirect('../')
+    }
+    else if (req.user.userLevel != "Healthcare Admin"){
+        res.redirect('../')
+    }
+    else {
+        UserModel.findAll().then(findAllUsersResult=>{
+            res.render('adminShowUsers',{
+                userinfo: req.user,
+                findAllUsersResult
+            })
+        })
     }
 });
 
@@ -609,16 +704,16 @@ router.get('/patientinformation', (req, res) => {
 bcrypt.genSalt(10, function (err, salt) {
     // bcrypt.hash(passwordToStore, saltThatWasGenerated) (errorobj, salt+saltedpassword)
     bcrypt.hash('admin@medified.com', salt, function (err, hashpassword) {
-        UserModel.findOrCreate({
-            where:{
-                email:'admin@medified.com',
-                password:hashpassword,
-                userLevel:'Healthcare Admin',
-                firstName:'Admin',
-                lastName:'Medified',
-                identificationNumber:'S0000000Z'
-            }
-        })
+        UserModel.create({
+            email:'admin@medified.com',
+            password:hashpassword,
+            userLevel:'Healthcare Admin',
+            firstName:'Admin',
+            lastName:'Medified',
+            identificationNumber:'S0000000Z'
+        }).catch(function(error) {
+            //leave empty sequelize will report dupe entry if not caught
+          })
     })
 })
 

@@ -6,6 +6,9 @@ const appointmentModel = require('./appointment')
 const consultation= connection.sequelizeConnection.define('consultation',{ 
     date: {
         type: Sequelize.DATE
+    },
+    doctorId: {
+        type: Sequelize.INTEGER
     }
     
     

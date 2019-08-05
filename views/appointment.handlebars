@@ -2,8 +2,13 @@
     <br>
     <div class="container col-lg-8 mx-auto border bg-light rounded mb-4 shadow-sm">
         <br>
-        <a href="/appointmentBooking/{{userinfo.id}}" type="button" class="rounded btn-lg btn-primary float-right">Create Appointment</a>
-        
+        {{#unless userResult}}
+            <a href="/appointmentBooking/{{userinfo.id}}" type="button" class="rounded btn-lg btn-primary float-right">Create Appointment</a>
+        {{/unless}}
+
+        {{#if userResult}}
+            <a href="/appointmentBooking/{{userResult.id}}" type="button" class="rounded btn-lg btn-primary float-right">Create Appointment</a>
+        {{/if}}
         <P>
             {{#if userinfo.image}}
                 <img src="/image/user/profileImage/{{userinfo.image}}"class="img-fluid img-thumbnail shadow-sm icon-profile">
@@ -11,7 +16,13 @@
             {{#unless userinfo.image}}
                 <img src="/image/user/profileImage/default.png"class="img-fluid img-thumbnail shadow-sm icon-profile">
             {{/unless}}
-            Name: {{userinfo.firstName}} {{userinfo.lastName}} ({{userinfo.identificationNumber}})
+            Name: 
+            {{#unless userResult}}
+                {{userinfo.firstName}} {{userinfo.lastName}} ({{userinfo.identificationNumber}})
+            {{/unless}}
+            {{#if userResult}}
+                {{userResult.firstName}} {{userResult.lastName}} ({{userResult.identificationNumber}})
+            {{/if}}
         </P>
         <br>
     </div>
