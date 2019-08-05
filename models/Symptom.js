@@ -25,10 +25,7 @@ const Symptom = connection.sequelizeConnection.define('symptom', {
     question: {
         type: Sequelize.STRING
     },
-    answer_yes: {
-        type: Sequelize.STRING
-    },
-    answer_no: {
+    SymptomTempList: {
         type: Sequelize.STRING
     },
 });

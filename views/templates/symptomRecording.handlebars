@@ -1,12 +1,19 @@
 <link rel="stylesheet" href="/css/symptomchecker.css">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-<div class="container">
-    <div class="form">
-        <form>
-            <label></label><br>
-            <input type="text" name="symptomquestioninsert" placeholder="Type the question here"><br>
-            <input type="submit" value="Submit">
+<div class="wholeForm">
+    <div class="questionQuestion">
+        {{#if result}}
+        <h2 id="questionHeading">{{question}}</h1>
+        {{/if}}
+    </div>
+    <div class="formContainer">
+        <form class="formForm">
+            <input type="radio" name="answerOne" id="answer" value="Answer one">Yes<br>
+            <input type="radio" name="answerTwo" id="answer" value="Answer two">No<br>
+            </br></br>
+            <input type="button" value="Back" id="submitBack" />
+            <input type="button" value="Next" id="submitNext" />
         </form>
     </div>
 </div>

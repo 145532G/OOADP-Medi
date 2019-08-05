@@ -2,11 +2,16 @@
 
 <div class="container">
     <div class="card card-body">
-        <h3 id="title">BILL PAYMENT</h3>
+        <h2 id="title">Bill Payment</h2>
+        <p style="text-align: center;">
+            <small class="text-muted">Please fill in our online form and we will verify your payment of any bills.
+                <br> You may only use credit card, debit card or Paypal to make the necessary payments. 
+                <br> Payment must be made within 7 days of record. For further enquiries, please contact us. </small>
+        </p>
         <form action="" method="post" id="payBill">
             <div class="form-group">
                 <label for="prefix">Prefix *</label>
-                <select class="form-control" name="prefix" id="prefix" style="display: block;" readonly >
+                <select class="form-control" name="prefix" id="prefix" style="display: block;" readonly>
                     <option>Mr.</option>
                     <option>Ms.</option>
                     <option>Mrs.</option>
@@ -16,15 +21,17 @@
             </div>
             <div class="form-group">
                 <label for="fName">First Name *</label>
-                <input type="text" class="form-control" name="first_name" id="first_name" rows="1" style="display: block;" ></input>
+                <input type="text" class="form-control" name="first_name" id="first_name" rows="1" style="display: block;"></input>
             </div>
             <div class="form-group">
                 <label for="lName">Last Name *</label>
-                <input type="text" class="form-control" name="last_name" id="last_name" rows="1" style="display: block;" ></input>
+                <input type="text" class="form-control" name="last_name" id="last_name" rows="1" style="display: block;"></input>
             </div>
             <div class="form-group">
-                <label for="country"><i class="fa fa-globe"></i> Country of Residence *</label>
-                <select class="form-control" name="country" id="country" style="display:block;" >
+                <label for="country">
+                    <i class="fa fa-globe"></i> Country of Residence *</label>
+                <select class="form-control" name="country" id="country" style="display:block;">
+                    <option value="" hidden>Please select your country of residence.</option>
                     <option value="Afghanistan">Afghanistan</option>
                     <option value="Albania">Albania</option>
                     <option value="Algeria">Algeria</option>
@@ -214,7 +221,7 @@
                     <option value="Senegal">Senegal</option>
                     <option value="Seychelles">Seychelles</option>
                     <option value="Sierra">Sierra Leone</option>
-                    <option value="Singapore" selected>Singapore</option>
+                    <option value="Singapore">Singapore</option>
                     <option value="Slovakia">Slovakia (Slovak Republic)</option>
                     <option value="Slovenia">Slovenia</option>
                     <option value="Solomon Islands">Solomon Islands</option>
@@ -267,43 +274,52 @@
                 </select>
             </div>
             <div class="form-group">
-                <label for="NRIC"><i class="fa fa-address-book"></i> NRIC or Passport No *</label>
-                <input type="text" class="form-control" name="nric" id="nric" rows="1" style="display: block;" >
-                </input> 
-            </div>
-            <div class="form-group">
-                <label for="email"><i class="fa fa-envelope-o"></i> Email *</label>
-                <input type="text" class="form-control" name="email" id="email" rows="1" style="display: block;" >
+                <label for="NRIC">
+                    <i class="fa fa-address-book"></i> NRIC or Passport No *</label>
+                <input type="text" class="form-control" name="nric" id="nric" rows="1" style="display: block;" placeholder="(e.g. T1234567A)">
                 </input>
             </div>
             <div class="form-group">
-                <label for="address"><i class="fa fa-home"></i> Address (Optional)</label>
+                <label for="email">
+                    <i class="fa fa-envelope-o"></i> Email *</label>
+                <input type="text" class="form-control" name="email" id="email" rows="1" style="display: block;" placeholder="(e.g. abc@gmail.com)">
+                </input>
+            </div>
+            <div class="form-group">
+                <label for="address">
+                    <i class="fa fa-home"></i> Address (Optional)</label>
                 <textarea type="text" class="form-control" name="address" id="address" rows="7" style="display: block;"></textarea>
             </div>
             <div class="form-group">
-                <label for="contact"><i class="fa fa-phone"></i> Contact No *</label>
-                <input type="number" class="form-control" name="contact_no" id="contact_no" rows="1" style="display: block;" >
+                <label for="contact">
+                    <i class="fa fa-phone"></i> Contact No *</label>
+                <input type="number" class="form-control" name="contact_no" id="contact_no" rows="1" style="display: block;" placeholder="(e.g. 98765432)">
             </div>
             <div class="form-group">
-                <label for="payment"><i class="fa fa-dollar"></i> Payment Method *</label>
+                <label for="payment">
+                    <i class="fa fa-dollar"></i> Payment Method *</label>
                 <div class="form-block">
-                <div class="form-check form-check-inline" style="display: inline-block;">
-                    <input class="form-check-input" type="radio" name="payment_method" id="creditcard" value="Credit Card">
-                    <label class="form-check-label"><i class="fa fa-credit-card" style="color:gold;"></i> Credit Card</label>
-                </div>
-                <div class="form-check form-check-inline" style="display: inline-block;">
-                    <input class="form-check-input" type="radio" name="payment_method" id="debitcard" value="Debit Card">
-                    <label class="form-check-label"><i class="fa fa-credit-card" style="color:green"></i> Debit Card</label>
-                </div>
-                <div class="form-check form-check-inline" style="display: inline-block;">
-                    <input class="form-check-input" type="radio" name="payment_method" id="paypal" value="Paypal">
-                    <label class="form-check-label"><i class="fa fa-cc-paypal" style="color:blue;"></i> Paypal</label>
-                </div>
+                    <div class="form-check form-check-inline" style="display: inline-block;">
+                        <input class="form-check-input" type="radio" name="payment_method" id="creditcard" value="Credit Card">
+                        <label class="form-check-label">
+                            <i class="fa fa-credit-card" style="color:gold;"></i> Credit Card</label>
+                    </div>
+                    <div class="form-check form-check-inline" style="display: inline-block;">
+                        <input class="form-check-input" type="radio" name="payment_method" id="debitcard" value="Debit Card">
+                        <label class="form-check-label">
+                            <i class="fa fa-credit-card" style="color:green"></i> Debit Card</label>
+                    </div>
+                    <div class="form-check form-check-inline" style="display: inline-block;">
+                        <input class="form-check-input" type="radio" name="payment_method" id="paypal" value="Paypal">
+                        <label class="form-check-label">
+                            <i class="fa fa-cc-paypal" style="color:blue;"></i> Paypal</label>
+                    </div>
                 </div>
             </div>
-            {{!-- <div class="form-group">
+            {{!--
+            <div class="form-group">
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="terms" id="terms" value="Terms and Conditions" >
+                    <input class="form-check-input" type="checkbox" name="terms" id="terms" value="Terms and Conditions">
                     <label class="form-check-label">I agree to the
                         <u>terms and conditions</u>.</label>
                 </div>

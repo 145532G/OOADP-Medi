@@ -3,6 +3,11 @@
 <div class="container">
 	<div class="card card-body">
 		<h3 id="title">Enter Payment Information</h3>
+		<p style="text-align: center;">
+            <small class="text-muted">Please fill in our online form and we will verify your payment of any bills.
+                <br> You have selected "Credit Card". You may click here to change your preferred method of payment. 
+				<br> Payment must be made within 7 days of record. For further enquiries, please contact us.</small>
+        </p>
 		<form action="/bill/saveCreditCard/{{bill.id}}?_method=PUT" method="post">
 		<input type="hidden" name="_method" value="PUT">
 			<div class="form-group">
