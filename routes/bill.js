@@ -13,30 +13,42 @@ function validateEmail(email) {
 }
 
 function moneyCheck(num) {
-    var regex  = /^\d+(?:\.\d{0,2})$/;
+    var regex = /^\d+(?:\.\d{0,2})$/;
     return regex.test(num)
 }
 
 router.get('/billList', (req, res) => {
+    if (req.user) {
         Bill.findAll({
+            where: {
+                userId: req.user.id
+            },
+            order: [
+                ['id', 'DESC']
+            ],
             raw: true
         }).then((bills) => {
             res.render('./templates/billList', {
                 bills: bills
             })
         })
-            .catch(err => console.log(err)) 
-    
+            .catch(err => console.log(err))
+    } else {
+        res.render('unauthorised', {
+            message: 'Unauthorised user.'
+        })
+    }
 });
 
 router.get('/billPayment', (req, res) => {
+    if (req.user) {
         res.render('./templates/billPayment');
-
+    } else {
+        res.render('unauthorised', {
+            message: 'Unauthorised user.'
+        })
+    }
 });
-
-router.get('/billList', (req, res) => {
-    res.render('./templates/billList');
-})
 
 router.post('/billPayment', (req, res) => {
     let prefix = req.body.prefix;
@@ -48,6 +60,7 @@ router.post('/billPayment', (req, res) => {
     let address = req.body.address;
     let contact_no = req.body.contact_no;
     let payment_method = req.body.payment_method;
+    let userId = req.user.id;
     // Multi-value components return array of strings or undefined
     if (first_name == "" || last_name == "" || country == "" || nric == "" || email == "" || contact_no == "" || payment_method == null) {
         res.render('./templates/billPayment', {
@@ -77,7 +90,7 @@ router.post('/billPayment', (req, res) => {
         res.render('./templates/billPayment', {
             error: 'Invalid email entered. Please try again.'
         })
-    } 
+    }
     else {
         if (address == "") {
             address = "Not Stated";
@@ -91,7 +104,8 @@ router.post('/billPayment', (req, res) => {
             email,
             address,
             contact_no,
-            payment_method
+            payment_method,
+            userId
         }).then(bill => {
             alertMessage(res, 'success', 'Bill record created', 'fa fa-check', true);
             res.redirect('/bill/billList')
@@ -101,23 +115,46 @@ router.post('/billPayment', (req, res) => {
 });
 
 router.get('/creditcard/:id', (req, res) => {
-    Bill.findOne({
-        where: {
-            id: req.params.id
-        }
-    }).then((bill) => {
-        res.render('./templates/creditcard', {
-            bill: bill
-        });
-    }).catch(err => console.log(err));
+    if (req.user) {
+        Bill.findOne({
+            where: {
+                id: req.params.id
+            }
+        }).then((bill) => {
+            if (!bill) {
+                alertMessage(res, 'info', 'Bill record does not exist!', 'fas fa-exclamation-circle', true)
+                res.redirect('/bill/billList')
+            } else {
+                res.render('./templates/creditcard', {
+                    bill: bill
+                });
+            }
+        }).catch(err => console.log(err));
+    } else {
+        res.render('unauthorised', {
+            message: 'Unauthorised user.'
+        })
+    }
 });
 
 router.get('/creditcard', (req, res) => {
-    res.render('./templates/creditcard');
+    if (req.user) {
+        res.render('./templates/creditcard');
+    } else {
+        res.render('unauthorised', {
+            message: 'Unauthorised user.'
+        })
+    }
 })
 
 router.get('/debitcard', (req, res) => {
-    res.render('./templates/debitcard');
+    if (req.user) {
+        res.render('./templates/debitcard');
+    } else {
+        res.render('unauthorised', {
+            message: 'Unauthorised user.'
+        })
+    }
 })
 
 router.put('/saveCreditCard/:id', (req, res) => {
@@ -129,6 +166,7 @@ router.put('/saveCreditCard/:id', (req, res) => {
     let cardExpiry = moment(req.body.cardExpiry, 'YYYY-MM-DD');
     let cardVerify = req.body.cardVerify;
     let payment_method = 'Credit Card';
+
     if (creditcardtype == null || accountNo == "" || payAmt == "" || cardNo == "" || cardVerify == "") {
         Bill.findOne({
             where: {
@@ -183,7 +221,7 @@ router.put('/saveCreditCard/:id', (req, res) => {
                 bill: bill,
                 error: 'Invalid payment amount entered. Please try again.'
             });
-        }).catch(err => console.log(err));         
+        }).catch(err => console.log(err));
     } else if (moment(new Date(), 'YYYY-MM-DD').diff(moment(cardExpiry, 'YYYY-MM-DD')) > 0) {
         Bill.findOne({
             where: {
@@ -194,7 +232,7 @@ router.put('/saveCreditCard/:id', (req, res) => {
                 bill: bill,
                 error: 'You cannot use expired credit card. Please try again.'
             });
-        }).catch(err => console.log(err)); 
+        }).catch(err => console.log(err));
     } else {
         Bill.update({
             creditcardtype,
@@ -218,15 +256,27 @@ router.put('/saveCreditCard/:id', (req, res) => {
 });
 
 router.get('/debitcard/:id', (req, res) => {
-    Bill.findOne({
-        where: {
-            id: req.params.id
-        }
-    }).then((bill) => {
-        res.render('./templates/debitcard', {
-            bill: bill
-        });
-    }).catch(err => console.log(err));
+    if (req.user) {
+        Bill.findOne({
+            where: {
+                id: req.params.id
+            }
+        }).then((bill) => {
+            if (!bill) {
+                alertMessage(res, 'info', 'Bill record does not exist!', 'fas fa-exclamation-circle', true)
+                res.redirect('/bill/billList')
+            } else {
+                res.render('./templates/debitcard', {
+                    bill: bill
+                });
+
+            }
+        }).catch(err => console.log(err));
+    } else {
+        res.render('unauthorised', {
+            message: 'Unauthorised user.'
+        })
+    }
 });
 
 router.put('/saveDebitCard/:id', (req, res) => {
@@ -238,6 +288,7 @@ router.put('/saveDebitCard/:id', (req, res) => {
     let cardExpiry = moment(req.body.cardExpiry, 'YYYY-MM-DD');
     let cardVerify = req.body.cardVerify;
     let payment_method = 'Debit Card';
+
     if (debitcardtype == null || accountNo == "" || payAmt == "" || cardNo == "" || cardVerify == "") {
         Bill.findOne({
             where: {
@@ -292,7 +343,7 @@ router.put('/saveDebitCard/:id', (req, res) => {
                 bill: bill,
                 error: 'Invalid payment amount entered. Please try again.'
             });
-        }).catch(err => console.log(err));         
+        }).catch(err => console.log(err));
     } else if (moment(new Date(), 'YYYY-MM-DD').diff(moment(cardExpiry, 'YYYY-MM-DD')) > 0) {
         Bill.findOne({
             where: {
@@ -303,7 +354,7 @@ router.put('/saveDebitCard/:id', (req, res) => {
                 bill: bill,
                 error: 'You cannot use expired debit card. Please try again.'
             });
-        }).catch(err => console.log(err)); 
+        }).catch(err => console.log(err));
     } else {
         Bill.update({
             creditcardtype,
@@ -327,37 +378,52 @@ router.put('/saveDebitCard/:id', (req, res) => {
 })
 
 router.get('/paypal/:id', (req, res, next) => {
-    let payment_method = 'Paypal';
-    Bill.update({
-        payment_method
-    }, {
-            where: {
-                id: req.params.id
-            }
-        }).then(bill => {
-            res.redirect('https://www.paypal.com/in/signin');
-        }).catch(err => console.log(err))
-})
-
-router.get('/delete/:id', (req, res, next) => {
-    Bill.findOne({
-        where: {
-            id: req.params.id
-        },
-        attributes: ['id']
-    }).then((bill) => {
-        if (bill != null) {
-            Bill.destroy({
+    if (req.user) {
+        let payment_method = 'Paypal';
+        Bill.update({
+            payment_method
+        }, {
                 where: {
                     id: req.params.id
                 }
-            }).then(() => {
-                alertMessage(res, 'info', 'Record deleted', 'fa fa-trash', true);
-                res.redirect('/bill/billList');
-            }).catch(err => console.log(err));
-        }
-    })
+            }).then(bill => {
+                res.redirect('https://www.paypal.com/in/signin');
+            }).catch(err => console.log(err))
+    } else {
+        res.render('unauthorised', {
+            message: 'Unauthorised user.'
+        })
+    }
+})
 
+router.get('/delete/:id', (req, res, next) => {
+    if (req.user) {
+        Bill.findOne({
+            where: {
+                id: req.params.id
+            },
+            attributes: ['id']
+        }).then((bill) => {
+            if (!bill) {
+                alertMessage(res, 'info', 'Bill record does not exist!', 'fas fa-exclamation-circle', true)
+                res.redirect('/bill/billList')
+            }
+            else if (bill != null) {
+                Bill.destroy({
+                    where: {
+                        id: req.params.id
+                    }
+                }).then(() => {
+                    alertMessage(res, 'info', 'Record deleted', 'fa fa-trash', true);
+                    res.redirect('/bill/billList');
+                }).catch(err => console.log(err));
+            }
+        })
+    } else {
+        res.render('unauthorised', {
+            message: 'Unauthorised user.'
+        })
+    }
 })
 
 module.exports = router;

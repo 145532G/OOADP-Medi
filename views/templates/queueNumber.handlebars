@@ -31,21 +31,18 @@
 					</div>
 				</div>
 			</div>
-			{{/ifNotEquals}} {{/each}} {{else}}
-		</div>
+		
+		{{/ifNotEquals}} {{/each}} {{else}}
 		<div class="card card-body">
 			<h2>
 				<i class="fa fa-users" style="font-size:30px"></i> Queues</h2>
 			<h3>No queues pending</h3>
-
 			{{/if}}
 		</div>
 		<div class="card card-body">
 			<p id="title">Note: Queue number may not be called in sequence.</p>
 			<button id="addQueue" class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseQueue" style="margin-bottom: 10px;">
 				<i class="fa fa-plus-circle"></i> Add Queue Number</button>
-			<a id="updateQueue" class="btn btn-info card-link" type="button" href="/queue/queueUpdate">
-				<i class="fa fa-wrench"></i> Update Queue (Authorized Access Only!)</a>
 			<div id="collapseQueue" class="collapse">
 				<form action="" method="post">
 					<div class="form-group">
@@ -76,6 +73,9 @@
 						</div>
 					</div>
 			</div>
+			<a id="updateQueue" class="btn btn-info card-link" type="button" href="/queue/queueUpdate">
+				<i class="fa fa-wrench"></i> Update Queue (Authorized Access Only!)</a>
 		</div>
 		</form>
 	</div>
+</div>

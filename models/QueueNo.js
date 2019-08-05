@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const connection = require('../seqConn');
+const User = require('./user');
 
 const Queue = connection.sequelizeConnection.define('queue', {
     name: {
@@ -11,9 +12,6 @@ const Queue = connection.sequelizeConnection.define('queue', {
     travelOption: {
         type: Sequelize.STRING
     },
-    queueNo: {
-        type: Sequelize.STRING
-    },
     counterNo: {
         type: Sequelize.STRING
     },
@@ -21,5 +19,5 @@ const Queue = connection.sequelizeConnection.define('queue', {
         type: Sequelize.STRING
     }
 });
-
+Queue.belongsTo(User);
 module.exports = Queue;

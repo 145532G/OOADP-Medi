@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const connection = require('../seqConn');
+const User = require('./user');
 
 const BillPayment = connection.sequelizeConnection.define('bill', {
     prefix: {
@@ -51,5 +52,5 @@ const BillPayment = connection.sequelizeConnection.define('bill', {
         type: Sequelize.STRING
     }
 });
-
+BillPayment.belongsTo(User);
 module.exports = BillPayment;
