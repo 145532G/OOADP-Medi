@@ -1,34 +1,22 @@
 <link rel="stylesheet" href="/public/css/collection.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-
-
-
-
-
-
-
-
-
 <div class="search-container">
     <input type="text" placeholder="Search.." id="search">
     <button type="submit"><i class="fa fa-search"></i></button>
 </div>
 <hr>
-<div class="container">
+<div class="container bg-light border">
     <div class="row">
         <div class="col-sm-6">
         <br>
-            {{#if QueueUserResult.user.image}}
-                    <img src="/image/user/profileImage/{{QueueUserResult.user.image}}">
+            {{#if consultationResult.user.image}}
+                    <img src="/image/user/profileImage/{{consultationResult.user.image}}">
                     {{/if}}
-                    {{#unless QueueUserResult.user.image}}
+                    {{#unless consultationResult.user.image}}
                         <img src="/image/user/profileImage/default.png">
                     {{/unless}}
-                    <p id="p_name" name = "patient_name">Name : {{QueueUserResult.user.firstName}} {{QueueUserResult.user.lastName}}</p>
-                    <p id="p_queueNum" name = "patient_queue_number">Queue Number: {{QueueUserResult.id}}</p>
-                    <p id="p_nric" name = "patient_NIRC">NIRC : {{QueueUserResult.user.identificationNumber}}</p>
+                    <p id="p_name" name = "patient_name">Name : {{consultationResult.user.firstName}} {{consultationResult.user.lastName}}</p>
+                    <p id="p_queueNum" name = "patient_queue_number">Consultation Number: {{consultationResult.id}}</p>
+                    <p id="p_nric" name = "patient_NIRC">NIRC : {{consultationResult.user.identificationNumber}}</p>
             <div>
                 <table class="table table-bordered table-striped">
                     <thead>

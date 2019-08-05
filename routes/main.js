@@ -11,6 +11,8 @@ const MedicalLocationModel = require('../models/medicalLocation')
 const op = require('sequelize').Op
 const con_med = require('../models/consultation_med')
 const medicine = require('../models/medicine')
+const consultationModel = require('../models/consultation');
+
 /*
 router.get 2 parameters (directory, arrowfunction )
 arrowfunction 2 parameters (req,res) => {
@@ -520,16 +522,14 @@ router.get('/doctorConsultation', (req, res) => {
 });
 
 router.get('/collection', (req, res) => {
+    var consultationTarget = 2 //id of consultation model. 
     con_med.findAll({
         where: {
-            consultationId: 2
+            consultationId: consultationTarget
         },  
         order:[
             ['medicine_id','asc']
         ],
-    
-
-
     }).then((result)=>{
         let id = [];
         for (const med of result) {
@@ -543,7 +543,18 @@ router.get('/collection', (req, res) => {
             raw: true
         }).then(data => {
             console.log(data)
-            res.render('./templates/collection',{result: data});
+            consultationModel.findOne({
+                where:{
+                    id: consultationTarget
+                },
+                include:[UserModel]
+            }).then(consultationResult =>{
+                res.render('./templates/collection',{
+                    userinfo: req.user,
+                    result: data,
+                    consultationResult
+                });
+            })
         })
         // console.log(result)
         
