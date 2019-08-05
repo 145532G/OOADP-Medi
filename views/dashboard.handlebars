@@ -2,68 +2,85 @@
     <br>
     <div class="container col-10">
         <div class="card-columns">
-            <div class="card bg-light">
+            <div class="card bg-light border shadow">
                 <div class="card-body text-center">
                     <h4 class="card-title"><a href="/profile" class="card-link">Profile</a></h4>
+                    <hr>
                     <p class="card-text">{{ userinfo.email }}Profile page: <a href="/profile" class="card-link">
                             link</a></p>
                 </div>
             </div>
-            <div class="card bg-light">
+            <div class="card bg-light border shadow">
                 <div class="card-body text-center">
                     <h4 class="card-title"><a href="/reminder" class="card-link">Reminders</a></h4>
+                    <hr>
                     <p class="card-text">Mon, 2pm - calcium tablet 35mg 1pc</p>
                     <p class="card-text">Daily, 6pm - paracetamol tablet 20mg 2pc</p>
                 </div>
             </div>
-            <div class="card bg-light">
+            <div class="card bg-light border shadow">
                 <div class="card-body text-center">
                     <h4 class="card-title"><a href="/appointment" class="card-link">Upcoming appointments</a></h4>
+                    <hr>
                     <p class="card-text">23 May 2020 - Singapore General Hospital, Clinic A, Orthopaedics</p>
                     <p class="card-text">02 Apr 2021 - Eunos family medical clinic</p>
                 </div>
             </div>
-            <div class="card bg-light">
+            <div class="card bg-light border shadow">
                 <div class="card-body text-center">
                     <h4 class="card-title">Medications</h4>
+                    <hr>
                     <p class="card-text">Some text inside the fourth card</p>
                 </div>
             </div>
-            <div class="card bg-light">
+            <div class="card bg-light border shadow">
                 <div class="card-body text-center">
                     <h4 class="card-title">Bills</h4>
-                    <p class="card-text">Bill payment: <a href="/bill/billList" class="card-link"> link</a></p>
+                    <hr>
+                    <p class="card-text"><a href="/bill/billPayment" class="btn btn-primary form-control col-lg-8">View Payment Records</a></p>
+                    <p class="card-text"><a href="/bill/billList" class="btn btn-primary form-control col-lg-8">Pay Bills</a></p>
                 </div>
             </div>
-            <div class="card bg-light">
+            <div class="card bg-light border shadow">
                 <div class="card-body text-center">
                     <h4 class="card-title">View medical records</h4>
+                    <hr>
                     <p class="card-text">Some text inside the sixth card</p>
                 </div>
             </div>
         </div>
         <hr>
         {{#if healthcareAdmin}}
-        <div class="card-deck">
-            <div class="card">
-                <div class="card-body">
-                    <a href="adminShowUsers"><h5 class="card-title mb-4">Show all Users</h5></a>
-                    <p class="card-text">This page shows all users that are registered on this website.</p>
+        <div class="jumbotron bg-light border shadow text-center">
+            <h4 class="mb-5">Administrator Controls</h4>
+            <div class="card-deck">
+                <div class="card">
+                    <div class="card-body">
+                        <a href="adminShowUsers">
+                            <h5 class="card-title mb-4">Show all Users</h5>
+                        </a>
+                        <p class="card-text">This page shows all users that are registered on this website.</p>
+                    </div>
                 </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <a href="adminShowUsers"><h5 class="card-title mb-4">Show all Users</h5></a>
-                    <p class="card-text">This page shows all users that are registered on this website.</p>
+                <div class="card">
+                    <div class="card-body">
+                        <a href="adminShowMedicalLocation">
+                            <h5 class="card-title mb-4">Medical Locations</h5>
+                        </a>
+                        <p class="card-text">This page allows admin to add medical locations.</p>
+                    </div>
                 </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <a href="adminShowUsers"><h5 class="card-title mb-4">Show all Users</h5></a>
-                    <p class="card-text">This page shows all users that are registered on this website.</p>
+                <div class="card">
+                    <div class="card-body">
+                        <a href="">
+                            <h5 class="card-title mb-4">text</h5>
+                        </a>
+                        <p class="card-text">text.</p>
+                    </div>
                 </div>
             </div>
         </div>
+
         {{/if}}
     </div>
 </div>

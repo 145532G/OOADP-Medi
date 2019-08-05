@@ -23,5 +23,7 @@ const medicalLocation = connection.sequelizeConnection.define('medicalLocation',
     
 }, {
     // options
+    timestamps: true,
+    paranoid: true // Will not cause destory to remove row in database
 });
 module.exports = medicalLocation;

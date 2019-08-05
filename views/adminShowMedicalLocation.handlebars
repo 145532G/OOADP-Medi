@@ -1,0 +1,106 @@
+<div class="container-fluid">
+    <div class="container col-lg-10 mx-auto border bg-light rounded mt-5 p-5 shadow-sm">
+        <form action="/adminAddMedicalLocation" method="post">
+            <div class="form-row">
+                <div class="col-md-4 mb-3">
+                    <label for="validationDefault01">Country</label>
+                    <input type="text" class="form-control" name="inputCountry" placeholder="Required" required>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="validationDefault02">State</label>
+                    <input type="text" class="form-control" name="inputState" placeholder="Required" required>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="validationDefault02">Timezone</label>
+                    <input type="text" class="form-control" name="inputTimezone" placeholder="Required" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="col-md-4 mb-3">
+                    <label for="validationDefault03">Icon</label>
+                    <input type="text" class="form-control" name="inputIcon">
+                </div>
+                <div class="col-md-8 mb-3">
+                    <label for="validationDefault04">Name</label>
+                    <input type="text" class="form-control" name="inputName" placeholder="Required" required>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" type="submit">Add Medical Location</button>
+        </form>
+    </div>
+    <div class="container col-lg-10 mx-auto border bg-light rounded mt-5 shadow-sm">
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Medical Location Id</th>
+                    <th scope="col">Country</th>
+                    <th scope="col">State</th>
+                    <th scope="col">Timezone</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Icon</th>
+                    <th scope="col">Edit</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each adminShowMedicalLocationResult}}
+                <tr>
+                    <th scope="row">{{this.id}}</th>
+                    <td>{{this.country}}</td>
+                    <td>{{this.state}}</td>
+                    <td>{{this.timezone}}</td>
+                    <td>{{this.name}}</td>
+                    <td>{{this.icon}}</td>
+                    <td>
+                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                            data-target="#locationModal{{this.id}}">
+                            Edit Location
+                        </button>
+                    </td>
+                </tr>
+                <div class="modal fade" id="locationModal{{this.id}}" tabindex="-1" role="dialog"
+                    aria-labelledby="locationModal{{this.id}}Label" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <form class="form-inline" action="/adminEditMedicalLocation/{{this.id}}" method="post">
+
+                                    <label>Country</label>
+                                    <input type="text" class="form-control mb-2" name="inputCountry" placeholder="Required"
+                                        required>
+
+
+                                    <label>State</label>
+                                    <input type="text" class="form-control mb-2" name="inputState" placeholder="Required"
+                                        required>
+
+
+                                    <label>Timezone</label>
+                                    <input type="text" class="form-control mb-2" name="inputTimezone" placeholder="Required"
+                                        required>
+
+
+                                    <label>Icon</label>
+                                    <input type="text" class="form-control mb-2" name="inputIcon">
+
+                                    <label>Name</label>
+                                    <input type="text" class="form-control mb-5" name="inputName" placeholder="Required"
+                                        required>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary float-right">Save changes</button>
+                                </form>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+                </div>
+    </div>
+    {{/each}}
+    </tbody>
+    </table>
+</div>
+
+</div>

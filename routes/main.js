@@ -592,7 +592,7 @@ router.get('/adminShowUsers', (req, res) => {
     }
     else {
         UserModel.findAll().then(findAllUsersResult=>{
-            res.render('adminShowUsers',{
+            res.render('/adminShowUsers',{
                 userinfo: req.user,
                 findAllUsersResult
             })
@@ -618,7 +618,7 @@ router.post('/adminProfileSearch', (req, res) => {
             }
             else{
                 alertMessage(res, 'danger', 'No profile with the identification number found.', 'fa fa-check', true);
-                res.redirect('adminShowUsers/')
+                res.redirect('adminShowUsers')
             }
             
         })
@@ -666,7 +666,7 @@ router.get('/adminShowUserAppointments/:user_id', (req, res) => {
     }
 });
 
-router.get('/adminMedicalLocation', (req, res) => {
+router.get('/adminShowMedicalLocation', (req, res) => {
     if (!req.user ) {
         res.redirect('../')
     }
@@ -674,12 +674,102 @@ router.get('/adminMedicalLocation', (req, res) => {
         res.redirect('../')
     }
     else {
-        UserModel.findAll().then(findAllUsersResult=>{
-            res.render('adminShowUsers',{
+        MedicalLocationModel.findAll().then(adminShowMedicalLocationResult=>{
+            res.render('/adminShowMedicalLocation',{
                 userinfo: req.user,
-                findAllUsersResult
+                adminShowMedicalLocationResult
             })
         })
+        
+    }
+});
+
+router.post('/adminAddMedicalLocation', (req, res) => {
+    if (!req.user ) {
+        res.redirect('../')
+    }
+    else if (req.user.userLevel != "Healthcare Admin"){
+        res.redirect('../')
+    }
+    else {
+        let country = req.body.inputCountry
+        let state = req.body.inputState
+        let timezone = null
+        if (req.body.inputTimezone){
+            timezone = req.body.inputTimezone
+        }
+        let icon = null
+        if (req.body.inputIcon){
+            icon = req.body.inputIcon
+        }
+        let name = null
+        if (req.body.inputName){
+            name = req.body.inputName
+        }
+        MedicalLocationModel.create({
+            country,
+            state,
+            timezone,
+            icon,
+            name
+        }).catch(function(error) {
+            //
+            alertMessage(res, 'danger', 'Medical location registration unsuccessful.', true);
+            res.redirect('/adminShowMedicalLocation')
+        }).then(medicalLocationResult=>{
+            if (medicalLocationResult){
+                alertMessage(res, 'success', 'Medical location added sucessfully.', 'fa fa-check', true);
+                res.redirect('/adminShowMedicalLocation')
+            }
+        })
+
+        
+    }
+});
+
+router.post('/adminEditMedicalLocation/:location_id', (req, res) => {
+    if (!req.user ) {
+        res.redirect('../')
+    }
+    else if (req.user.userLevel != "Healthcare Admin"){
+        res.redirect('../')
+    }
+    else {
+        let country = req.body.inputCountry
+        let state = req.body.inputState
+        let timezone = null
+        if (req.body.inputTimezone){
+            timezone = req.body.inputTimezone
+        }
+        let icon = null
+        if (req.body.inputIcon){
+            icon = req.body.inputIcon
+        }
+        let name = null
+        if (req.body.inputName){
+            name = req.body.inputName
+        }
+        MedicalLocationModel.update({ 
+            country,
+            state,
+            timezone,
+            icon,
+            name }, { 
+                where: {
+                    id: req.params.location_id
+                } 
+            }).catch(function(error) {
+            //
+            alertMessage(res, 'danger', 'Medical location registration unsuccessful.', true);
+            res.redirect('/adminShowMedicalLocation')
+        }).then(medicalLocationResult=>{
+            if (medicalLocationResult){
+                alertMessage(res, 'success', 'Medical location added sucessfully.', 'fa fa-check', true);
+                res.redirect('/adminShowMedicalLocation')
+            }
+        })
+
+        
     }
 });
 
@@ -704,7 +794,7 @@ router.get('/patientinformation', (req, res) => {
 bcrypt.genSalt(10, function (err, salt) {
     // bcrypt.hash(passwordToStore, saltThatWasGenerated) (errorobj, salt+saltedpassword)
     bcrypt.hash('admin@medified.com', salt, function (err, hashpassword) {
-        UserModel.create({
+        UserModel.create({ // Changed from findOrCreate to create as the first keeps throwing errors due to unique constrains and also causes id to be used up even if not created
             email:'admin@medified.com',
             password:hashpassword,
             userLevel:'Healthcare Admin',
