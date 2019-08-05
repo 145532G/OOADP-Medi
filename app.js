@@ -13,6 +13,7 @@ const { formatDate } = require('./helpers/hbs');
 const { radioCheck } = require('./helpers/hbs');
 const { ifEquals } = require('./helpers/hbs');
 const { ifNotEquals } = require('./helpers/hbs');
+const { addSpace } = require('./helpers/hbs');
 
 
 //session stuff
@@ -54,7 +55,8 @@ app.engine('handlebars', exphbs({
 		formatDate: formatDate,
 		radioCheck: radioCheck,
 		ifEquals: ifEquals,
-		ifNotEquals: ifNotEquals
+		ifNotEquals: ifNotEquals,
+		addSpace: addSpace
 	},
 	defaultLayout: 'main' // Specify default template views/layout/main.handlebar 
 }));

@@ -19,5 +19,8 @@ module.exports = {
         else {
             return options.inverse(this);
         }
+    },
+    addSpace: function (string) {
+        return string.toString().replace(/\d{4}(?=.)/g, '$& ');
     }
 }
