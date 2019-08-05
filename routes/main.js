@@ -305,7 +305,6 @@ router.get('/appointmentMain', (req, res) => {
             //console.log(appointmentResult[0]["medicalLocation"]["name"])
             // splitting dateTime for formatting
             for (i in appointmentResult){
-                console.log(appointmentResult[i]["dateTime"])
                 appointmentResult[i]["dateOnly"] = moment(appointmentResult[i].dateTime).format('Do MMMM YYYY')
                 appointmentResult[i]["timeOnly"] = moment(appointmentResult[i].dateTime).format('hh:mm A')
                 appointmentResult[i]["dayOnly"] = moment(appointmentResult[i].dateTime).format('dddd')
