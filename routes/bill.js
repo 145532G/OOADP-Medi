@@ -7,6 +7,10 @@ function hasNumbers(t) {
     return /\d/.test(t);
 }
 
+function hasSpecial(str){
+    return !/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/g.test(str);
+   }
+
 function validateEmail(email) {
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
@@ -78,13 +82,17 @@ router.post('/billPayment', (req, res) => {
         res.render('./templates/billPayment', {
             error: 'First name cannot contain number. Please try again.'
         })
+    } else if (hasSpecial(first_name) == true) {
+        res.render('./templates/billPayment', {
+            error: 'First name cannot contain special characters. Please try again.'
+        })
     } else if (hasNumbers(last_name) == true) {
         res.render('./templates/billPayment', {
             error: 'Last name cannot contain number. Please try again.'
         })
-    } else if (hasNumbers(first_name) == true && hasNumbers(last_name) == true) {
+    } else if (hasSpecial(last_name) == true) {
         res.render('./templates/billPayment', {
-            error: 'First and last name cannot contain number. Please try again.'
+            error: 'Last name cannot contain special characters. Please try again.'
         })
     } else if (validateEmail(email) == false) {
         res.render('./templates/billPayment', {
