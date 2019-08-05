@@ -3,10 +3,13 @@
 <div class="container">
     <div class="card card-body">
         <div>
-            <h3>
+            <h3 id="title">
                 <i class="fa fa-money" style="font-size:30px;color:green;"></i> Bill Payment Records</h3>
-            <h5>Click
-                <a href="/bill/billPayment" class="card-link">here</a> to pay any pending bills.</h5>
+            <p style="text-align: center;">
+                <small class="text-muted">This is a list of all records of your pending bill payments.
+                    <br>Click
+                <a href="/bill/billPayment" class="card-link">here</a> to pay any pending bills.</small>
+            </p>
         </div>
         {{#if bills}} {{#each bills}}
 
@@ -104,7 +107,8 @@
                         </div>
                     </div>
                     <div style="margin-top: 10px;">
-                        <a class="btn btn-danger card-link" href="/bill/delete/{{id}}" data-toggle="confirmation" data-title="Confirm delete?"><i class="fa fa-trash"></i>&nbsp;Delete Record</a>
+                        <a class="btn btn-danger card-link" href="/bill/delete/{{id}}" data-toggle="confirmation" data-title="Confirm delete?">
+                            <i class="fa fa-trash"></i>&nbsp;Delete Record</a>
                     </div>
                     {{else}}
                     <div class="card card-body bg-warning col-lg-10" style="margin: auto;">
@@ -116,16 +120,20 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-3">
-                            <a class="btn btn-warning" href="/bill/creditcard/{{id}}"><i class="fa fa-credit-card"></i>&nbsp;Pay (Credit)</a>
+                            <a class="btn btn-warning" href="/bill/creditcard/{{id}}">
+                                <i class="fa fa-credit-card"></i>&nbsp;Pay (Credit)</a>
                         </div>
                         <div class="col-lg-3">
-                            <a class="btn btn-success" href="/bill/debitcard/{{id}}"><i class="fa fa-credit-card"></i>&nbsp;Pay (Debit)</a>
+                            <a class="btn btn-success" href="/bill/debitcard/{{id}}">
+                                <i class="fa fa-credit-card"></i>&nbsp;Pay (Debit)</a>
                         </div>
                         <div class="col-lg-3">
-                            <a class="btn btn-primary" href="/bill/paypal/{{id}}"><i class="fa fa-cc-paypal"></i>&nbsp;Pay (Paypal)</a>
+                            <a class="btn btn-primary" href="/bill/paypal/{{id}}">
+                                <i class="fa fa-cc-paypal"></i>&nbsp;Pay (Paypal)</a>
                         </div>
                         <div class="col-lg-3">
-                            <a class="btn btn-danger card-link" href="/bill/delete/{{id}}" data-toggle="confirmation" data-title="Confirm delete?"><i class="fa fa-trash"></i>&nbsp;Delete Record</a>
+                            <a class="btn btn-danger card-link" href="/bill/delete/{{id}}" data-toggle="confirmation" data-title="Confirm delete?">
+                                <i class="fa fa-trash"></i>&nbsp;Delete Record</a>
                         </div>
                     </div>
                     {{/if}}

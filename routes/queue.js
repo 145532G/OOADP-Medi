@@ -7,7 +7,7 @@ function hasNumbers(t) {
 }
 
 router.get('/queueUpdate', (req, res) => {
-    if (req.user) {
+    if (req.user.userLevel == "Healthcare Admin") {
         Queue.findAll({
             raw: true
         }).then((queues) => {
@@ -187,7 +187,7 @@ router.post('/queueNumber', (req, res) => {
                     currentQueue,
                     userId
                 }).then(queue => {
-                    alertMessage(res, 'success', 'Queue Added', 'fa fa-check', true);
+                    alertMessage(res, 'success', 'Queue Added.', 'fa fa-check', true);
                     res.redirect('/queue/queueNumber');
                 })
                     .catch(err => console.log(err))
@@ -201,7 +201,7 @@ router.post('/queueNumber', (req, res) => {
                     currentQueue,
                     userId
                 }).then(queue => {
-                    alertMessage(res, 'success', 'Queue Added', 'fa fa-check', true);
+                    alertMessage(res, 'success', 'Queue Added.','fa fa-check', true);
                     res.redirect('/queue/queueNumber');
                 })
                     .catch(err => console.log(err))

@@ -3,8 +3,14 @@
 <div class="container">
 	{{#if queues}}
 	<div class="card card-body">
-		<h2>
-			<i class="fa fa-users" style="font-size:30px"></i> Queues</h2>
+		<h1 id="title">
+			<i class="fa fa-users" style="font-size:30px"></i> Queue</h1>
+		<p style="text-align: center;">
+			<small class="text-muted">This is the current queue. Click "Add Queue Number" to register into the queue.
+				<br> Click "Update Queue" to update the current queue. Only healthcare admins have authorized access.
+				<br> You will be notified when your turn comes. You may also cancel your queue slot anytime.
+				<br> Queue number may not be called in sequence. </small>
+		</p>
 		{{#each queues}} {{#ifEquals currentQueue 'Yes'}}
 		<div class="row" style="margin: auto;">
 			<div class="card card-body">
@@ -40,7 +46,6 @@
 			{{/if}}
 		</div>
 		<div class="card card-body">
-			<p id="title">Note: Queue number may not be called in sequence.</p>
 			<button id="addQueue" class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseQueue" style="margin-bottom: 10px;">
 				<i class="fa fa-plus-circle"></i> Add Queue Number</button>
 			<div id="collapseQueue" class="collapse">
