@@ -541,7 +541,7 @@ router.get('/doctorConsultation', (req, res) => {
 });
 
 router.get('/collection', (req, res) => {
-    var consultationTarget = 2 //id of consultation model. 
+    var consultationTarget = 1 //id of consultation model. 
     con_med.findAll({
         where: {
             consultationId: consultationTarget
