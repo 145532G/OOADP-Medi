@@ -1,17 +1,47 @@
 <nav class="navbar fixed-top navbar-expand-lg navbar-light bg-white border-bottom rounded-bottom">
 	<a class="navbar-brand" href="/">Medified</a>
-	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
-		aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
+	 aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
 	</button>
 	<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 		<div class="navbar-nav">
-			<a class="nav-item nav-link active border-left" href="/">Home <span class="sr-only">(current)</span></a>
+			<a class="nav-item nav-link active border-left" href="/">Home
+				<span class="sr-only">(current)</span>
+			</a>
 			{{#if userinfo}}
 			<a class="nav-item nav-link" href="/dashboard">Dashboard</a>
 			<a class="nav-item nav-link" href="/appointment">Appointments</a>
-			{{/if}}
-			{{#unless userinfo}}
+			<a class="nav-item nav-link" href="/doctorConsultation">Consultations</a>
+			<a class="nav-item nav-link" href="/collection">Collection</a>
+			<a class="nav-item nav-link" href="/patientinformation">Patient</a>
+			<li class="nav-item dropdown">
+				<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="navbarDropdownMenuLink">Symptoms
+				</a>
+				<div class="dropdown-menu">
+					<a href="/symptom/symptom" class="dropdown-item">Symptoms</a>
+					<a href="/symptomanswer" class="dropdown-item">Symptom Answer</a>
+					<a href="/symptom/symptomInsert" class="dropdown-item">Insert Symptom</a>
+					<a href="/symptom/symptomRecording" class="dropdown-item">Record Symptom</a>
+				</div>
+			</li>
+			<li class="nav-item dropdown">
+				<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="navbarDropdownMenuLink">Queue
+				</a>
+				<div class="dropdown-menu">
+					<a href="/queue/queueNumber" class="dropdown-item">View Queue</a>
+					<a href="/queue/queueUpdate" class="dropdown-item">Update Queue</a>
+				</div>
+			</li>
+			<li class="nav-item dropdown">
+				<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" id="navbarDropdownMenuLink">Bills
+				</a>
+				<div class="dropdown-menu">
+					<a href="/bill/billPayment" class="dropdown-item">Pay Bill</a>
+					<a href="/bill/billList" class="dropdown-item">View Bill Records</a>
+				</div>
+			</li>
+			{{/if}} {{#unless userinfo}}
 			<a class="nav-item nav-link" href="/signIn">Sign In</a>
 			<a class="nav-item nav-link" href="/signUp">Sign Up</a>
 			{{/unless}}
@@ -23,11 +53,13 @@
 	{{#if userinfo}}
 	<div>Welcome back, {{userinfo.firstName}} {{userinfo.lastName}} &nbsp</div>
 
-	<li class="dropdown no-list-style"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Settings
-			<i class="fas fa-users-cog"></i></a>
+	<li class="dropdown no-list-style">
+		<a class="dropdown-toggle" data-toggle="dropdown" href="#">Settings
+			<i class="fas fa-users-cog"></i>
+		</a>
 		<div class="dropdown-menu dropdown-menu-right mt-3" aria-labelledby="dropdownMenuButton">
 			<a class="dropdown-item" href="/profile">Profile</a>
-			
+
 			<a class="dropdown-item" href="/profileupdate/{{userinfo.id}}">Settings</a>
 			<div class="dropdown-divider"></div>
 			<a class="dropdown-item" href="/signOut">Sign Out</a>
