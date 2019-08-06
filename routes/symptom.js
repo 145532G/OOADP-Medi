@@ -14,7 +14,8 @@ router.get('/symptom', (req, res) => {
 
 
 router.post('/symptomInsert', (req, res) => {
-    let question = req.body.symptomquestioninsert;
+    if (req.user.userLevel == "Healthcare Admin"){
+        let question = req.body.symptomquestioninsert;
     console.log(question)
     symptom.create({
         question,
@@ -24,6 +25,27 @@ router.post('/symptomInsert', (req, res) => {
         res.redirect('/symptom/symptomInsert');
     })
     .catch(err => console.log(err))
+    }
+    else{
+        res.redirect('/')
+    }
+});
+
+router.get('/symptomInsert', (req, res) => {
+    if (req.user.userLevel == "Healthcare Admin"){
+        symptom.findAll({
+        })
+        .then((result)=>{
+            console.log(symptom);
+            res.render('./templates/symptomInsert',{
+                result
+            });
+        })
+        .catch(err => console.log(err))
+    }
+    else{
+        res.redirect('/')
+    }
 });
 
 router.post('/symptomDestroy/:symptom_id', (req, res) => {
@@ -34,19 +56,6 @@ router.post('/symptomDestroy/:symptom_id', (req, res) => {
     })
     res.redirect('/symptom/symptomInsert')
 });
-
-router.get('/symptomInsert', (req, res) => {
-    symptom.findAll({
-        })
-        .then((result)=>{
-            console.log(symptom);
-            res.render('./templates/symptomInsert',{
-                result
-            });
-        })
-        .catch(err => console.log(err))
-});
-
 
 router.get('/symptomInserttemp', (req, res) => {
     symptom.create({
