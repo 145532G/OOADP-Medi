@@ -536,52 +536,7 @@ router.get('/reminder', (req, res) => {
     });
 });
 
-router.get('/doctorConsultation', (req, res) => {
-    res.render('./templates/doc_consult');
-});
 
-router.get('/collection', (req, res) => {
-    var consultationTarget = 1 //id of consultation model. 
-    con_med.findAll({
-        where: {
-            consultationId: consultationTarget
-        },  
-        order:[
-            ['medicine_id','asc']
-        ],
-    }).then((result)=>{
-        let id = [];
-        for (const med of result) {
-            id.push(med.medicine_id);
-        }
-
-        medicine.findAll({  
-            where:{
-                medicine_id: {[Op.in]: id}
-            },
-            raw: true
-        }).then(data => {
-            console.log(data)
-            consultationModel.findOne({
-                where:{
-                    id: consultationTarget
-                },
-                include:[UserModel]
-            }).then(consultationResult =>{
-                res.render('./templates/collection',{
-                    userinfo: req.user,
-                    result: data,
-                    consultationResult
-                });
-            })
-        })
-        // console.log(result)
-        
-
-    })
-   
-    
-});
 
 router.get('/adminShowUsers', (req, res) => {
     if (!req.user ) {
@@ -773,22 +728,52 @@ router.post('/adminEditMedicalLocation/:location_id', (req, res) => {
     }
 });
 
-router.get('/symptomanswer', (req, res) => {
-    res.render('./templates/symptomanswers');
+router.get('/doctorConsultation', (req, res) => {
+    res.render('./templates/doc_consult');
 });
 
-router.get('/symptomInsert', (req, res) => {
-    res.render('./templates/symptomInsert');
+router.get('/collection', (req, res) => {
+    var consultationTarget = 1 //id of consultation model. 
+    con_med.findAll({
+        where: {
+            consultationId: consultationTarget
+        },  
+        order:[
+            ['medicine_id','asc']
+        ],
+    }).then((result)=>{
+        let id = [];
+        for (const med of result) {
+            id.push(med.medicine_id);
+        }
+
+        medicine.findAll({  
+            where:{
+                medicine_id: {[Op.in]: id}
+            },
+            raw: true
+        }).then(data => {
+            console.log(data)
+            consultationModel.findOne({
+                where:{
+                    id: consultationTarget
+                },
+                include:[UserModel]
+            }).then(consultationResult =>{
+                res.render('./templates/collection',{
+                    userinfo: req.user,
+                    result: data,
+                    consultationResult
+                });
+            })
+        })
+        // console.log(result)
+        
+
+    })
+   
+    
 });
-
-router.get('/symptom', (req, res) => {
-    res.render('./templates/symptom');
-});
-
-router.get('/patientinformation', (req, res) => {
-    res.render('./templates/patientinformation');
-})
-
 
 //Populate admin account username:admin@medified.com password:admin@medified.com
 bcrypt.genSalt(10, function (err, salt) {
