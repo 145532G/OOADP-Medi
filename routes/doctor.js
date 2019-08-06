@@ -3,7 +3,9 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/patientinformation', (req, res) => {
-    res.render('./templates/patientinformation');
+    res.render('./templates/patientinformation',{
+        userinfo: req.user
+    });
 });
 
 router.post('/patientinformation', (req, res) => {

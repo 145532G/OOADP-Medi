@@ -7,7 +7,8 @@ router.get('/symptom', (req, res) => {
         })
         .then((result)=>{
             res.render('./templates/symptom',{
-                result
+                result,
+                userinfo:req.user,
             });
     })
 });
@@ -38,6 +39,7 @@ router.get('/symptomInsert', (req, res) => {
         .then((result)=>{
             console.log(symptom);
             res.render('./templates/symptomInsert',{
+                userinfo: req.user,
                 result
             });
         })
@@ -114,7 +116,8 @@ router.get('/symptomRecording', (req, res) => {
             let questionNumber = result[1].SymptomTempList.length
             questionResult = result[questionNumber].question
             res.render('./templates/symptomRecording',{
-                questionResult
+                questionResult,
+                userinfo: req.user
             })
         } else {
             for (i = 1; i ;i++) {

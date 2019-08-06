@@ -23,9 +23,10 @@ router.get('/doctorConsultation', (req, res) => {
             include:[UserModel]
         }).then(QueueUserResult=>{
             res.render('./templates/doc_consult',{
-                userinfo:req.user,
+                
                 result:medicineListResult,
-                QueueUserResult
+                QueueUserResult,
+                userinfo: req.user,
             });
         })
 
