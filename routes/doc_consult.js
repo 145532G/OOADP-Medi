@@ -26,7 +26,7 @@ router.get('/doctorConsultation', (req, res) => {
                 
                 result:medicineListResult,
                 QueueUserResult,
-                userinfo: req.user,
+                userinfo:req.user,
             });
         })
 
