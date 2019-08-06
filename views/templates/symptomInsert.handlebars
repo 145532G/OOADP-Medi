@@ -15,11 +15,11 @@
 <div class="container">
     <div class="form">
         <div class="inline">
-            <form action="/symptom/symptomDelete" method="POST">
-                <input type="button" value="Delete">   
+            <form action="/symptom/symptomDestroy/{{this.id}}" method="POST">
+                <input type="submit" value="Delete">   
             </form>
             <form action="/symptom/symptomEdit" method="POST">
-                <input type="button" value="Edit">
+                <input type="submit" value="Edit">
             </form>
         </div>  
         <p>{{question}}</p>

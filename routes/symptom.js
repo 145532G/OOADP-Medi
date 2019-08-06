@@ -26,6 +26,14 @@ router.post('/symptomInsert', (req, res) => {
     .catch(err => console.log(err))
 });
 
+router.post('/symptomDestroy/:symptom_id', (req, res) => {
+    symptom.destroy({
+        where: {
+            id: req.params.symptom_id
+        }
+    })
+    res.redirect('/symptom/symptomInsert')
+});
 
 router.get('/symptomInsert', (req, res) => {
     symptom.findAll({
