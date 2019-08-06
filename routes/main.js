@@ -592,7 +592,7 @@ router.get('/adminShowUsers', (req, res) => {
     }
     else {
         UserModel.findAll().then(findAllUsersResult=>{
-            res.render('/adminShowUsers',{
+            res.render('adminShowUsers',{
                 userinfo: req.user,
                 findAllUsersResult
             })
@@ -675,7 +675,7 @@ router.get('/adminShowMedicalLocation', (req, res) => {
     }
     else {
         MedicalLocationModel.findAll().then(adminShowMedicalLocationResult=>{
-            res.render('/adminShowMedicalLocation',{
+            res.render('adminShowMedicalLocation',{
                 userinfo: req.user,
                 adminShowMedicalLocationResult
             })
