@@ -7,10 +7,6 @@ function hasNumbers(t) {
     return /\d/.test(t);
 }
 
-function hasSpecial(str){
-    return !/[~`!#$%\^&*+=\-\[\]\\';,/{}|\\":<>\?]/g.test(str);
-   }
-
 function validateEmail(email) {
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
@@ -33,7 +29,8 @@ router.get('/billList', (req, res) => {
             raw: true
         }).then((bills) => {
             res.render('./templates/billList', {
-                bills: bills
+                bills: bills,
+                userinfo: req.user
             })
         })
             .catch(err => console.log(err))
@@ -46,7 +43,9 @@ router.get('/billList', (req, res) => {
 
 router.get('/billPayment', (req, res) => {
     if (req.user) {
-        res.render('./templates/billPayment');
+        res.render('./templates/billPayment', {
+            userinfo: req.user
+        });
     } else {
         res.render('unauthorised', {
             message: 'Unauthorised user.'
@@ -68,35 +67,33 @@ router.post('/billPayment', (req, res) => {
     // Multi-value components return array of strings or undefined
     if (first_name == "" || last_name == "" || country == "" || nric == "" || email == "" || contact_no == "" || payment_method == null) {
         res.render('./templates/billPayment', {
-            error: 'Missing field(s). Please try again.'
+            error: 'Missing field(s). Please try again.',
+            userinfo: req.user
         })
     } else if (nric.length < 9) {
         res.render('./templates/billPayment', {
-            error: 'NRIC or passport number must contain 9 or more characters. Please try again.'
+            error: 'NRIC or passport number must contain 9 or more characters. Please try again.',
+            userinfo: req.user
         })
     } else if (contact_no.length < 8) {
         res.render('./templates/billPayment', {
-            error: 'Contact number must contain 8 or more digits. Please try again.'
+            error: 'Contact number must contain 8 or more digits. Please try again.',
+            userinfo: req.user
         })
     } else if (hasNumbers(first_name) == true) {
         res.render('./templates/billPayment', {
-            error: 'First name cannot contain number. Please try again.'
-        })
-    } else if (hasSpecial(first_name) == true) {
-        res.render('./templates/billPayment', {
-            error: 'First name cannot contain special characters. Please try again.'
+            error: 'First name cannot contain number. Please try again.',
+            userinfo: req.user
         })
     } else if (hasNumbers(last_name) == true) {
         res.render('./templates/billPayment', {
-            error: 'Last name cannot contain number. Please try again.'
-        })
-    } else if (hasSpecial(last_name) == true) {
-        res.render('./templates/billPayment', {
-            error: 'Last name cannot contain special characters. Please try again.'
+            error: 'Last name cannot contain number. Please try again.',
+            userinfo: req.user
         })
     } else if (validateEmail(email) == false) {
         res.render('./templates/billPayment', {
-            error: 'Invalid email entered. Please try again.'
+            error: 'Invalid email entered. Please try again.',
+            userinfo: req.user
         })
     }
     else {
@@ -134,7 +131,8 @@ router.get('/creditcard/:id', (req, res) => {
                 res.redirect('/bill/billList')
             } else {
                 res.render('./templates/creditcard', {
-                    bill: bill
+                    bill: bill,
+                    userinfo: req.user
                 });
             }
         }).catch(err => console.log(err));
@@ -147,7 +145,9 @@ router.get('/creditcard/:id', (req, res) => {
 
 router.get('/creditcard', (req, res) => {
     if (req.user) {
-        res.render('./templates/creditcard');
+        res.render('./templates/creditcard', {
+            userinfo: req.user
+        });
     } else {
         res.render('unauthorised', {
             message: 'Unauthorised user.'
@@ -157,7 +157,9 @@ router.get('/creditcard', (req, res) => {
 
 router.get('/debitcard', (req, res) => {
     if (req.user) {
-        res.render('./templates/debitcard');
+        res.render('./templates/debitcard', {
+            userinfo: req.user
+        });
     } else {
         res.render('unauthorised', {
             message: 'Unauthorised user.'
@@ -183,7 +185,8 @@ router.put('/saveCreditCard/:id', (req, res) => {
         }).then((bill) => {
             res.render('./templates/creditcard', {
                 bill: bill,
-                error: 'Missing field(s). Please try again.'
+                error: 'Missing field(s). Please try again.',
+                userinfo: req.user
             });
         }).catch(err => console.log(err));
     } else if (cardVerify.length != 3) {
@@ -194,7 +197,8 @@ router.put('/saveCreditCard/:id', (req, res) => {
         }).then((bill) => {
             res.render('./templates/creditcard', {
                 bill: bill,
-                error: 'Card verification code must only contain 3 digits. Please try again.'
+                error: 'Card verification code must only contain 3 digits. Please try again.',
+                userinfo: req.user
             });
         }).catch(err => console.log(err));
     } else if (accountNo.length < 8 || accountNo.length > 19) {
@@ -205,7 +209,8 @@ router.put('/saveCreditCard/:id', (req, res) => {
         }).then((bill) => {
             res.render('./templates/creditcard', {
                 bill: bill,
-                error: 'Account number must contain between 8 to 19 digits. Please try again.'
+                error: 'Account number must contain between 8 to 19 digits. Please try again.',
+                userinfo: req.user
             });
         }).catch(err => console.log(err));
     } else if (cardNo.length < 13 || cardNo.length > 19) {
@@ -216,7 +221,8 @@ router.put('/saveCreditCard/:id', (req, res) => {
         }).then((bill) => {
             res.render('./templates/creditcard', {
                 bill: bill,
-                error: 'Credit card number must contain between 13 to 19 digits. Please try again.'
+                error: 'Credit card number must contain between 13 to 19 digits. Please try again.',
+                userinfo: req.user
             });
         }).catch(err => console.log(err));
     } else if (moneyCheck(payAmt) == false) {
@@ -227,7 +233,8 @@ router.put('/saveCreditCard/:id', (req, res) => {
         }).then((bill) => {
             res.render('./templates/creditcard', {
                 bill: bill,
-                error: 'Invalid payment amount entered. Please try again.'
+                error: 'Invalid payment amount entered. Please try again.',
+                userinfo: req.user
             });
         }).catch(err => console.log(err));
     } else if (moment(new Date(), 'YYYY-MM-DD').diff(moment(cardExpiry, 'YYYY-MM-DD')) > 0) {
@@ -238,7 +245,8 @@ router.put('/saveCreditCard/:id', (req, res) => {
         }).then((bill) => {
             res.render('./templates/creditcard', {
                 bill: bill,
-                error: 'You cannot use expired credit card. Please try again.'
+                error: 'You cannot use expired credit card. Please try again.',
+                userinfo: req.user
             });
         }).catch(err => console.log(err));
     } else {
@@ -275,7 +283,8 @@ router.get('/debitcard/:id', (req, res) => {
                 res.redirect('/bill/billList')
             } else {
                 res.render('./templates/debitcard', {
-                    bill: bill
+                    bill: bill,
+                    userinfo: req.user
                 });
 
             }
@@ -305,7 +314,8 @@ router.put('/saveDebitCard/:id', (req, res) => {
         }).then((bill) => {
             res.render('./templates/debitcard', {
                 bill: bill,
-                error: 'Missing field(s). Please try again.'
+                error: 'Missing field(s). Please try again.',
+                userinfo: req.user
             });
         }).catch(err => console.log(err));
     } else if (cardVerify.length != 3) {
@@ -316,7 +326,8 @@ router.put('/saveDebitCard/:id', (req, res) => {
         }).then((bill) => {
             res.render('./templates/debitcard', {
                 bill: bill,
-                error: 'Card verification code must only contain 3 digits. Please try again.'
+                error: 'Card verification code must only contain 3 digits. Please try again.',
+                userinfo: req.user
             });
         }).catch(err => console.log(err));
     } else if (accountNo.length < 8 || accountNo.length > 19) {
@@ -327,7 +338,8 @@ router.put('/saveDebitCard/:id', (req, res) => {
         }).then((bill) => {
             res.render('./templates/debitcard', {
                 bill: bill,
-                error: 'Account number must contain between 8 to 19 digits. Please try again.'
+                error: 'Account number must contain between 8 to 19 digits. Please try again.',
+                userinfo: req.user
             });
         }).catch(err => console.log(err));
     } else if (cardNo.length < 13 || cardNo.length > 19) {
@@ -338,7 +350,8 @@ router.put('/saveDebitCard/:id', (req, res) => {
         }).then((bill) => {
             res.render('./templates/debitcard', {
                 bill: bill,
-                error: 'Debit card number must contain between 13 to 19 digits. Please try again.'
+                error: 'Debit card number must contain between 13 to 19 digits. Please try again.',
+                userinfo: req.user
             });
         }).catch(err => console.log(err));
     } else if (moneyCheck(payAmt) == false) {
@@ -349,7 +362,8 @@ router.put('/saveDebitCard/:id', (req, res) => {
         }).then((bill) => {
             res.render('./templates/debitcard', {
                 bill: bill,
-                error: 'Invalid payment amount entered. Please try again.'
+                error: 'Invalid payment amount entered. Please try again.',
+                userinfo: req.user
             });
         }).catch(err => console.log(err));
     } else if (moment(new Date(), 'YYYY-MM-DD').diff(moment(cardExpiry, 'YYYY-MM-DD')) > 0) {
@@ -360,7 +374,8 @@ router.put('/saveDebitCard/:id', (req, res) => {
         }).then((bill) => {
             res.render('./templates/debitcard', {
                 bill: bill,
-                error: 'You cannot use expired debit card. Please try again.'
+                error: 'You cannot use expired debit card. Please try again.',
+                userinfo: req.user
             });
         }).catch(err => console.log(err));
     } else {

@@ -12,7 +12,8 @@ router.get('/queueUpdate', (req, res) => {
             raw: true
         }).then((queues) => {
             res.render('./templates/queueUpdate', {
-                queues: queues
+                queues: queues,
+                userinfo: req.user
             })
         })
             .catch(err => console.log(err))
@@ -25,7 +26,7 @@ router.get('/queueUpdate', (req, res) => {
 });
 
 router.get('/remove/:id', (req, res, next) => {
-    if (req.user) {
+    if (req.user.userLevel == "Healthcare Admin") {
         Queue.findOne({
             where: {
                 id: req.params.id
@@ -51,7 +52,7 @@ router.get('/remove/:id', (req, res, next) => {
 });
 
 router.get('/next/:id', (req, res, next) => {
-    if (req.user) {
+    if (req.user.userLevel == "Healthcare Admin") {
         Queue.destroy({
             where: {
                 currentQueue: 'Yes'
@@ -86,7 +87,7 @@ router.get('/next/:id', (req, res, next) => {
 
 
 router.get('/removeAll', (req, res, next) => {
-    if (req.user) {
+    if (req.user.userLevel == "Healthcare Admin") {
         Queue.findAll({
             raw: true
         }).then((queues) => {
@@ -114,7 +115,8 @@ router.get('/queueNumber', (req, res) => {
             raw: true
         }).then((queues) => {
             res.render('./templates/queueNumber', {
-                queues: queues
+                queues: queues,
+                userinfo: req.user
             })
         })
             .catch(err => console.log(err))
@@ -149,7 +151,8 @@ router.post('/queueNumber', (req, res) => {
         }).then((queues) => {
             res.render('./templates/queueNumber', {
                 queues: queues,
-                error: 'Missing field(s). Please try again.'
+                error: 'Missing field(s). Please try again.',
+                userinfo: req.user
             });
         }).catch(err => console.log(err));
     } else if (nric.length < 9) {
@@ -158,7 +161,8 @@ router.post('/queueNumber', (req, res) => {
         }).then((queues) => {
             res.render('./templates/queueNumber', {
                 queues: queues,
-                error: 'NRIC must contain 9 or more characters. Please try again.'
+                error: 'NRIC must contain 9 or more characters. Please try again.',
+                userinfo: req.user
             });
         }).catch(err => console.log(err));
     } else if (hasNumbers(name)) {
@@ -167,7 +171,8 @@ router.post('/queueNumber', (req, res) => {
         }).then((queues) => {
             res.render('./templates/queueNumber', {
                 queues: queues,
-                error: 'Name cannot contain number. Please try again.'
+                error: 'Name cannot contain number. Please try again.',
+                userinfo: req.user
             });
         }).catch(err => console.log(err));
     }
